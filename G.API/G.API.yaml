@@ -1,9 +1,8 @@
 swagger: '2.0'
 info:
-  description: This is a simple API
+  description: The API for group Algol's scheduler application
   version: 1.0.0
   title: G.API
-  # put the contact info for your development or API team
   contact:
     email: jppetitti@wpi.edu
 
@@ -23,7 +22,7 @@ tags:
 
 paths:
   /createschedule:
-     put:
+     post:
       tags:
       - organizers
       summary: creates a new schedule
@@ -40,14 +39,16 @@ paths:
         schema:
           $ref: '#/definitions/Schedule'
       responses:
-        201:
+        200:
           description: schedule created
+          schema:
+            $ref: '#/definitions/Schedule'
         400:
           description: invalid input
         409:
           description: an existing schedule already exists
   /deleteschedule:
-    delete:
+    post:
       tags:
       - organizers
       summary: deletes an existing schedule
@@ -55,13 +56,13 @@ paths:
       description: Deletes an existing schedule based on the ID supplied
       parameters:
       - name: id
-        in: path
+        in: query
         description: ID of schedule to delete
         required: true
         type: string
         format: uuid
       - name: secretCode
-        in: path
+        in: query
         description: secret code for this schedule
         required: true
         type: string
@@ -85,13 +86,13 @@ paths:
         starting date-time of the time slot
       parameters:
       - name: scheduleID
-        in: path
+        in: query
         description: ID of the schedule this timeslot is in
         required: true
         type: string
         format: uuid
       - name: beginDateTime
-        in: path
+        in: query
         description: starting date and time for the timeslot to close
         required: true
         type: string
@@ -114,13 +115,13 @@ paths:
         starting date-time of the time slot
       parameters:
       - name: scheduleID
-        in: path
+        in: query
         description: ID of the schedule this timeslot is in
         required: true
         type: string
         format: uuid
       - name: beginDateTime
-        in: path
+        in: query
         description: starting date and time for the timeslot to open
         required: true
         type: string
@@ -134,28 +135,28 @@ paths:
     post:
       tags:
       - organizers
-      - participant
+      - participants
       summary: cancels a meeting
       operationId: cancelMeeting
       description: allows the organizer to cancel an existing meeting
       parameters:
       - name: scheduleID
-        in: path
+        in: query
         description: ID of the schedule this meeting is in
         required: true
         type: string
         format: uuid
       - name: beginDateTime
-        in: path
+        in: query
         description: starting date and time for the meeting to cancel
         required: true
         type: string
         format: date-time
       - name: secretCode
-        in: path
+        in: query
         description: |
           the secret code either for the schedule (if you're the organizer) or for the
-          meeting (if you're the participant)
+          time slot (if you're the participant)
         required: true
         type: string
       responses:
@@ -170,8 +171,8 @@ paths:
   /showweekschedule:
     get:
       tags:
-      - participant
-      - organizer
+      - participants
+      - organizers
       summary: gets a weekly schedule
       operationId: showWeekSchedule
       description: retreives a weekly schedule for a given schedule ID
@@ -194,7 +195,9 @@ paths:
         200:
           description: all meetings in the week
           schema:
-            $ref: '#/definitions/WeeklySchedule'
+            type: array
+            items:
+              $ref: '#/definitions/TimeSlot'
         400:
           description: invalid request
         default:
@@ -202,25 +205,25 @@ paths:
   /extendendingdate:
     post:
       tags:
-      - organizer
+      - organizers
       summary: extends the ending date of a schedule
       operationId: extendEndingDate
       description: extends the ending date of the schedule with the given ID
       parameters:
       - name: scheduleID
-        in: path
+        in: query
         description: ID of the schedule this meeting is in
         required: true
         type: string
         format: uuid
       - name: newEndDate
-        in: path
+        in: query
         description: the new ending date for the schedule
         required: true
         type: string
         format: date-time
       - name: secretCode
-        in: path
+        in: query
         description: the secret code for the schedule
         required: true
         type: string
@@ -236,25 +239,25 @@ paths:
   /extendstartingdate:
     post:
       tags:
-      - organizer
+      - organizers
       summary: extends the starting date of a schedule
       operationId: extendStartingDate
       description: extends the starting date of the schedule with the given ID
       parameters:
       - name: scheduleID
-        in: path
+        in: query
         description: ID of the schedule this meeting is in
         required: true
         type: string
         format: uuid
       - name: newStartDate
-        in: path
+        in: query
         description: the new starting date for the schedule
         required: true
         type: string
         format: date-time
       - name: secretCode
-        in: path
+        in: query
         description: the secret code for the schedule
         required: true
         type: string
@@ -268,25 +271,25 @@ paths:
         default:
           description: unexpected error
   /createmeeting:
-    put:
+    post:
       tags:
-      - participant
+      - participants
       summary: creates a meeting
       operationId: createMeeting
       description: creates a meeting in the given time slot
       parameters:
       - name: scheduleID
-        in: path
+        in: query
         description: ID of the schedule this meeting is in
         required: true
         type: string
         format: uuid
       - name: name
-        in: path
+        in: query
         type: string
         required: true
       - name: when
-        in: path
+        in: query
         type: string
         format: date-time
         required: true
@@ -294,7 +297,7 @@ paths:
         201:
           description: meeting created
           schema:
-            $ref: '#/definitions/Meeting'
+            $ref: '#/definitions/TimeSlot'
         400:
           description: invalid input
         409:
@@ -304,7 +307,7 @@ paths:
   /searchopentimeslot:
     get:
       tags:
-      - participant
+      - participants
       summary: searches for open time slots
       operationId: searchOpenTimeSlot
       description: searches the schedule with the given ID for open times slots
@@ -334,20 +337,20 @@ paths:
         default:
           description: unexpected error
   /deleteoldschedules:
-    delete:
+    post:
       tags:
       - admins
       summary: deletes schedules
       operationId: deleteOldSchedules
       description: deletes schedules older than N days old
       parameters:
-      - in: path
+      - in: query
         name: age
         description: number of days old to delete schedules older than
         required: true
         type: integer
         minimum: 0
-      - in: path
+      - in: query
         name: adminPassword
         description: the administrator password
         required: true
@@ -400,7 +403,6 @@ definitions:
   Schedule:
     type: object
     required:
-    - id
     - name
     - startDateTime
     - endDateTime
@@ -409,7 +411,7 @@ definitions:
       id:
         type: string
         format: uuid
-        example: 398d9f4e-1ca5-23a9-390ac9e0fdbb
+        example: 398d9f4e-1ca5-23a9-3cc9-390ac9e0fdbb
       name:
         type: string
         example: John's Schedule
@@ -427,37 +429,10 @@ definitions:
       secretCode:
         type: string
         example: Qk3sjxZsKJujdsGasprUmA
-      meetings:
-        type: array
-        items:
-          $ref: '#/definitions/Meeting'
       timeSlots:
         type: array
         items:
           $ref: '#/definitions/TimeSlot'
-  WeeklySchedule:
-    type: object
-    required:
-    - parentID
-    - monday
-    - timeslots
-    properties:
-      parentID:
-        type: string
-        format: uuid
-        example: 398d9f4e-1ca5-23a9-390ac9e0fdbb
-      monday:
-        type: string
-        format: date-time
-        example: 2018-19-11T00:00:00.000Z
-      timeslots:
-        type: array
-        items:
-          $ref: '#/definitions/TimeSlot'
-      meetings:
-        type: array
-        items:
-          $ref: '#/definitions/Meeting'
   TimeSlot:
     type: object
     required:
@@ -468,22 +443,12 @@ definitions:
         type: string
         format: date-time
         example: 2018-20-11T10:30:00.000Z
-      isOpened:
+      isOpen:
         type: boolean
-        example: false
-      meeting:
-        $ref: '#/definitions/Meeting'
-  Meeting:
-    type: object
-    required:
-    - withWhom
-    - timeSlot
-    properties:
-      withWhom:
+        example: true
+      requester:
         type: string
         example: John Reily Knox
-      timeSlot:
-        $ref: '#/definitions/TimeSlot'
       secretCode:
         type: string
         example: qzKRnlwnK5y6TgCqfgrmJQ

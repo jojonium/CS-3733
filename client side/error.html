@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>404 Error: File Not Found</title>
+		<link rel="stylesheet" href="styles/main.css" type="text/css">
+		<link rel="stylesheet" href="styles/jquery-ui.min.css">
+		<script src="scripts/jquery.js"></script>
+		<script src="scripts/jquery-ui.min.js"></script>
+	</head>
+	<body>
+		<header>
+			<div class="header-holder">
+				<h1>Algol Meeting Scheduler</h1>
+			</div>
+		</header>
+		
+		<main>
+			<center>
+				<h1>404</h1>
+				<h2>That's an error</h2>
+			</center>
+			
+		</main>
+		
+		<footer>
+			<div class="fbox">
+				<div class="item" id="about">
+					<h2>About</h2>
+					
+					<p>The Algol Schedule Planner allows you to easily create and manage a meeting schedule. You can send your schedule to others and they can quickly and simply sign up for a time to meet with you.</p>
+					
+					<p>This project is <a href="https://www.gnu.org/philosophy/free-sw.en.html">free software</a>, released under the terms of the MIT License. All source code can be seen <a href="#">here.</a>
+					
+					<p>For a tutorial on how to use the site, click <a href="#">here</a>.</p>
+					
+					<p>See <a href="#">here</a> for information on the API.</p>
+				</div>
+				
+				<div class="item" id="team">
+					<h2>Team</h2>
+					
+					<ul>
+						<li><a href="https://justcheng.com/" target="_blank">Justin Cheng</a> &mdash; Java Expert, full stack developer</li>
+						<li><a href="#">Matthew Hagan</a> &mdash; AWS Guru, back end developer</li>
+						<li><a href="#">Andrew Levy</a> &mdash; GUI God, front end developer</li>
+						<li><a href="https://josephpetitti.com" target="_blank">Joseph Petitti</a> &mdash; Team Lead, full stack developer</li>
+					</ul>
+					
+					<p>This website was created as part of a project for CS 3733 - Software Engineering at WPI.</p>
+				</div>
+			</div>
+			
+			<center><p id="copyright">© 2018 Justin Cheng, Matthew Hagan, Andrew Levy, and Joseph Petitti</p></center>
+		</footer>
+		
+		<script>
+			$( function() {
+				$("#start-date").datepicker();
+				$("#end-date").datepicker();
+				$("#duration").selectmenu();
+			});
+  </script>
+	</body>
+</html>

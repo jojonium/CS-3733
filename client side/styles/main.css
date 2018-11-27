@@ -1,0 +1,89 @@
+html {
+	margin: 0 auto;
+	padding: 0px;
+	background-color: #182162;
+	font-family: Lato, "noto sane", "sans serif";
+	font-size: 1em;
+}
+
+body {
+	padding: 0px 20px;
+	max-width: 75em;
+	margin: 0 auto;
+}
+
+.header-holder {
+	background-color: #00aa00;
+	color: white;
+	padding: 20px 10px;
+}
+
+header h1 {
+	margin: 0;
+	font-size: 250%
+}
+
+
+main {
+	padding: 1.6em;
+	background-color: white;
+	/*min-height: 600px;*/
+	border-radius: 0 0 10px 10px;
+}
+
+main {
+	font-size: 130%;
+}
+
+p, footer ul{
+	font-size: 120%;
+}
+
+footer {
+	color: #d3d3d3;
+}
+
+footer div.fbox {
+	display: flex;
+	flex-direction: row;
+}
+
+footer a {
+	color: white;
+	text-decoration: none;
+}
+
+footer div.item {
+	padding: 20px;
+}
+
+footer div#about {
+	flex-grow: .75;
+}
+
+footer div#team {
+	flex-grow: 2;
+}
+
+footer p#copyright {
+	font-size: .8em;
+}
+
+div#index-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+div.index-box {
+	margin: 10px;
+	border: 1px solid black;
+	padding: 10px 10px 10px 50px;
+	box-shadow: 5px 5px 20px 1px #888888;
+	flex-grow: 1;
+	flex-basis: 12em;
+}
+
+
+

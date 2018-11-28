@@ -15,7 +15,7 @@ body {
 .header-holder {
 	background-color: #00aa00;
 	color: white;
-	padding: 20px 10px;
+	padding: 20px 20px;
 }
 
 header h1 {
@@ -23,6 +23,10 @@ header h1 {
 	font-size: 250%
 }
 
+header h1 a {
+	color: white;
+	text-decoration: none;
+}
 
 main {
 	padding: 1.6em;
@@ -77,13 +81,44 @@ div#index-container {
 }
 
 div.index-box {
-	margin: 10px;
-	border: 1px solid black;
-	padding: 10px 10px 10px 50px;
-	box-shadow: 5px 5px 20px 1px #888888;
 	flex-grow: 1;
 	flex-basis: 12em;
 }
 
+table.weekly-schedule {
+	width: 100%;
+	border-collapse: collapse;
+	border: 1px solid #d3d3d3;
+}
 
+table.weekly-schedule td, table.weekly-schedule th {
+	text-align: center;
+	padding: 10px;
+}
 
+table.weekly-schedule td.open {
+	background-color: #00dd00;
+	cursor: pointer;
+}
+
+table.weekly-schedule td.closed, table.weekly-schedule td.filled {
+	background-color: #cccccc;
+	cursor: default;
+}
+
+table.weekly-schedule td.open:hover {
+	background-color: green;
+	color: white;
+}
+
+table.weekly-schedule th {
+	cursor: default;
+}
+
+div.input-box {
+	margin: 10px;
+	border: 1px solid black;
+	padding: 10px 30px 30px 50px;
+	box-shadow: 5px 5px 20px 1px #888888;
+	border-radius: 10px;
+}

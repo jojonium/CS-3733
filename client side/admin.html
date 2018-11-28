@@ -2,21 +2,30 @@
 <html lang="en-US">
 	<head>
 		<meta charset="utf-8">
-		<title>System Administrator Landing Page</title>
+		<title>System Administration</title>
 		<link rel="stylesheet" href="styles/main.css" type="text/css">
+		<link rel="stylesheet" href="styles/jquery-ui.min.css">
+		<script src="scripts/jquery.js"></script>
+		<script src="scripts/jquery-ui.min.js"></script>
 	</head>
 	
 	<body>
 		<header>
 			<div class="header-holder">
-				<h1>System Administrator Landing Page</h1>
+				<h1><a href="index.html">Algol Meeting Scheduler</a></h1>
 			</div>
 		</header>
 
 		<main>
-			<h2>Heading 2</h2>
-			
-			<p>This is a basic HTML stub for the System Administrator's landing page</p>
+			<h2>System Administration</h2>
+					<form id="deleteSchedules">
+						<p><input class="ui-button ui-widget ui-corner-all" type="submit" value="Delete"> schedules older than <input type="number" id="delete-value" placeholder="365"> days old.</p>
+					</form>
+					
+					
+					<form id="retrieveSchedules">
+						<p><input class="ui-button ui-widget ui-corner-all" type="submit" value="Retrieve"> schedules made in the last <input type="number" id="retrieve-value" placeholder="24"> hours.</p>
+					</form>
 		</main>
 		
 		<footer>

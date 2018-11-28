@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Weekly Schedule - Algol Meeting Planner</title>
+        <link rel="stylesheet" href="styles/main.css" type="text/css">
+		<link rel="stylesheet" href="styles/jquery-ui.min.css">
+		<link rel="stylesheet" href="styles/fontawesome.min.css" type="text/css">
+		<link rel="stylesheet" href="styles/solid.min.css" type="text/css">
+		<script src="scripts/jquery.js"></script>
+		<script src="scripts/schedule.js"></script>
+		<script src="scripts/jquery-ui.min.js"></script>
+	</head>
+	<body>
+		<header>
+			<div class="header-holder">
+				<h1><a href="index.html">Algol Meeting Scheduler</a></h1>
+			</div>
+		</header>
+		
+		<main>
+			<div width="100%" class="input-box">
+				<h1 id="meeting-name">Meeting Name</h1>
+				<table border="1" class="weekly-schedule">
+					<tr>
+						<th>Time</th>
+						<th>Monday</th> 
+						<th>Tuesday</th>
+						<th>Wedneday</th> 
+						<th>Thursday</th>
+						<th>Friday</th>
+					</tr>
+					<tr id="12:00">
+						<th>12:00</th>
+						<td>Closed</td> 
+						<td>Open</td>
+						<td>Open</td> 
+						<td>Open</td>
+						<td>Open</td>
+					</tr>
+					<tr id="12:15">
+						<th>12:15</th>
+						<td>Closed</td> 
+						<td>John R. Knox</td>
+						<td>Open</td> 
+						<td>Open</td>
+						<td>Open</td>
+					</tr>
+					<tr id="12:30">
+						<th>12:30</th>
+						<td>Closed</td> 
+						<td>Open</td>
+						<td>Open</td> 
+						<td>Closed</td>
+						<td>Open</td>
+					</tr>
+					<tr id="12:45">
+						<th>12:45</th>
+						<td>Open</td> 
+						<td>Open</td>
+						<td>Closed</td> 
+						<td>Open</td>
+						<td>Open</td>
+					</tr>
+					<tr id="1:00">
+						<th>1:00</th>
+						<td>Open</td> 
+						<td>Open</td>
+						<td>Open</td> 
+						<td>Open</td>
+						<td>Open</td>
+					</tr>
+					<tr id="1:15">
+						<th>1:15</th>
+						<td>Open</td> 
+						<td>Open</td>
+						<td>Open</td> 
+						<td>Steve Buscemi</td>
+						<td>Open</td>
+					</tr>
+					<tr id="1:30">
+						<th>1:30</th>
+						<td>Open</td> 
+						<td>Open</td>
+						<td>Open</td> 
+						<td>Open</td>
+						<td>Open</td>
+					</tr>
+					<tr id="1:45">
+						<th>1:45</th>
+						<td>Open</td> 
+						<td>Open</td>
+						<td>Open</td> 
+						<td>Open</td>
+						<td>Open</td>
+					</tr>
+				</table>
+			</div>
+			
+			<div style="display: flex; flex-direction: row; justify-content: space-between; padding: 30px;">
+				<button class="ui-button ui-widget ui-corner-all"><span class="fas fa-chevron-left"></span> Previous Week</button>
+				<button class="ui-button ui-widget ui-corner-all">Next Week <span class="fas fa-chevron-right"></span></button>
+			</div>
+			<div class="input-box">
+				<h2>Search For Open Timeslots</h2>
+				<form id="seach-open-timeslots">
+					<p>Filter by: <span style="font-size: 60%"><select id="month-filter">
+						<option disabled selected>Month</option>
+						<option>January</option>
+						<option>February</option>
+						<option>March</option>
+						<option>April</option>
+						<option>May</option>
+						<option>June</option>
+						<option>July</option>
+						<option>August</option>
+						<option>September</option>
+						<option>October</option>
+						<option>November</option>
+						<option>December</option>
+					</select></span>,
+					
+					<span style="font-size: 60%"><select id="year-filter">
+						<option disabled selected>Year</option>
+						<option>2016</option>
+						<option>2017</option>
+						<option>2018</option>
+					</select></span>,
+					
+					<span style="font-size: 60%"><select id="day-of-week-filter">
+						<option disabled selected>Day of Week</option>
+						<option>Monday</option>
+						<option>Tuesday</option>
+						<option>Wednesday</option>
+						<option>Thursday</option>
+						<option>Friday</option>
+					</select></span>,
+					
+					<span style="font-size: 60%"><select id="day-of-month-filter">
+						<option disabled selected>Day of Month</option>
+						<option>3</option>
+						<option>4</option>
+						<option>5</option>
+						<option>6</option>
+						<option>7</option>
+						<option>8</option>
+						<option>9</option>
+						<option>10</option>
+						<option>11</option>
+					</select></span>,
+					
+					<span style="font-size: 60%"><select id="time-slot-filter">
+						<option disabled selected>Time Slot</option>
+						<option>12:00</option>
+						<option>12:15</option>
+						<option>12:30</option>
+						<option>12:45</option>
+						<option>1:00</option>
+						<option>1:15</option>
+						<option>1:30</option>
+						<option>1:45</option>
+					</select></span>
+					</p>
+					
+					<button class="ui-button ui-widget ui-corner-all">Go</button>
+					
+					<p>Filters are all optional, and you can combine them for more specific results</p>
+					
+					
+				</form>
+			</div>
+		</main>
+		
+		<script>
+			$(function() {
+				$("#month-filter").selectmenu();
+				$("#year-filter").selectmenu();
+				$("#day-of-week-filter").selectmenu();
+				$("#day-of-month-filter").selectmenu();
+				$("#time-slot-filter").selectmenu();
+			});
+		</script>
+		
+		<footer>
+			<div class="fbox">
+				<div class="item" id="about">
+					<h2>About</h2>
+					
+					<p>This website was created as part of a project created for CS 3733 - Software Engineering at WPI</p>
+					
+					<p>This project is <a href="https://www.gnu.org/philosophy/free-sw.en.html">free software</a>, released under the terms of the MIT License. All source code can be seen <a href="#">here</a>
+					
+					<p>For a tutorial on how to use the site, click <a href="#">here</a></p>
+					
+					<p>See <a href="#">here</a> for information on the API</p>
+				</div>
+				
+				<div class="item" id="team">
+					<h2>Team</h2>
+					
+					<ul>
+						<li><a href="#">Justin Cheng</a> &mdash; Java Expert, full stack developer</li>
+						<li><a href="#">Matthew Hagan</a> &mdash; AWS Guru, back end developer</li>
+						<li><a href="#">Andrew Levy</a> &mdash; GUI God, front end developer</li>
+						<li><a href="#">Joseph Petitti</a> &mdash; Team Lead, full stack developer</li>
+					</ul>
+				</div>
+			</div>
+			
+			<center><p id="copyright">© 2018 Justin Cheng, Matthew Hagan, Andrew Levy, and Joseph Petitti</p></center>
+		</footer>
+    </body>
+</html>

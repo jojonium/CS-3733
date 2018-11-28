@@ -20,7 +20,16 @@
 		</header>
 		
 		<main>
-			<div width="100%" class="input-box">
+		
+			<div id="dialog-form" title="Schedule Meeting" style="display: none">
+				<p>Create a meeting on <span id="day-span"></span> at <span id="time-span"></span></p>
+				<form>
+					<label for="name">Name: </label>
+					<input type="text" name="name" id="name" placeholder="Jane Smith" class="text ui-widget-content ui-corner-all">
+					<!-- Allow form submission with keyboard without duplicating the dialog button -->
+					<input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+				</form>
+			</div>
 				<h1 id="meeting-name">Meeting Name</h1>
 				<table border="1" class="weekly-schedule">
 					<tr>
@@ -96,8 +105,7 @@
 						<td>Open</td>
 					</tr>
 				</table>
-			</div>
-			
+				
 			<div style="display: flex; flex-direction: row; justify-content: space-between; padding: 30px;">
 				<button class="ui-button ui-widget ui-corner-all"><span class="fas fa-chevron-left"></span> Previous Week</button>
 				<button class="ui-button ui-widget ui-corner-all">Next Week <span class="fas fa-chevron-right"></span></button>
@@ -179,6 +187,20 @@
 				$("#day-of-week-filter").selectmenu();
 				$("#day-of-month-filter").selectmenu();
 				$("#time-slot-filter").selectmenu();
+				
+				dialog = $("#dialog-form").dialog({
+					autoOpen: false,
+					height: 250,
+					width: 400,
+					buttons: {
+						"Schedule Meeting": scheduleMeeting,
+						Cancel: function() {
+							dialog.dialog("close");
+						}
+					},
+					close: function() {
+					}
+				});
 			});
 		</script>
 		

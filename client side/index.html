@@ -55,15 +55,16 @@
 								</td>
 							</tr>
 						</table>
-						<input class="ui-button ui-widget ui-corner-all" id="cs-submit"  value="Submit" onClick="JavaScript:handleCreateSchedule(this)">
+						<button class="ui-button ui-widget ui-corner-all" type="button" onClick="JavaScript:handleCreateSchedule(this)">Create Schedule</button>
 					</form>
 				</div>
 				
 				<div class="index-box input-box" id="enter-code-box">
 					<h2>View Existing Schedule</h2>
 					<form name="enterCodeForm">
-						<p>Enter code: <input type="text" placeholder="12345" name="code" id="code"/></p>
-						<input class="ui-button ui-widget ui-corner-all" id="enterCodeSubmit" value="Go" onClick="JavaScript:handleGetSchedule(this)">
+						<p>Schedule ID: <input type="text" placeholder="4V8br35" name="sid" id="sid"/></p>
+						<p>Secret code (optional): <input type="text" name="secret-code" id="code"></p>
+						<button type="button" class="ui-button ui-widget ui-corner-all" id="enterCodeSubmit" onClick="JavaScript:handleGetSchedule(this)">Go</button>
 					</form>
 				</div>
 				

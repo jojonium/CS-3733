@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Algol Klotski</title>
+		<link rel="shortcut icon" href="icon.ico" type="image/x-icon">
+		<link rel="stylesheet" href="styles/main.css" type="text/css">
+		<link rel="stylesheet" href="styles/jquery-ui.min.css">
+		<script src="scripts/jquery.js"></script>
+		<script src="scripts/jquery-ui.min.js"></script>
+		<script src="scripts/klotski.js"></script>
+	</head>
+	<body>
+		<header>
+			<div class="header-holder">
+				<h1><a href="index.html"><img src="images/AlgolLogoW.png"></img> <span style="text-decoration: line-through; font-weight: 400;">Meeting Scheduler</span> Klotski</a></h1>
+			</div>
+		</header>
+		
+		<main>
+			<div id="message"></div>
+			<div style="float: left; width: 150px">
+			<button id="reset" onclick="reset()">Reset Puzzle</button>
+			</div>
+			<div style="float: right">
+			<button id="config-1" class="config" onclick="config(1)" style="background-color: #34d058">Configuration 1</button>
+			<button id="config-2" class="config" onclick="config(2)">Configuration 2</button>
+			<button id="config-3" class="config" onclick="config(3)">Configuration 3</button>
+			<button id="config-4" class="config" onclick="config(4)">Configuration 4</button>
+			</div>
+
+			<center id="canvas-holder"></center>
+
+			<center id="score-holder">
+			<h2>Moves: <span id="moves"></span></h2>
+			<h2 id="game-over"></h2>
+			<button id="play-again" style="display: none" onclick="reset()">Play Again?</button>
+			</center>
+			
+			<h2>Instructions</h2>
+			
+			<p>The goal of this game is to release the large 2x2 tile from the board through the opening 
+			   centered on the bottom. To select a piece, click on it. Then it can be moved in any
+			   direction with the arrow keys, WASD, or HJKL. You can also click and drag to with the 
+			   mouse to move pieces. Only the large 2x2 tile can leave the board, so you must plan 
+			   carefully to complete the puzzle in the fewest moves.</p>
+			   
+			<style>
+				button.config {
+				width: 150px;
+				display: block;
+				margin: 5px;
+			}
+
+			#canvas {
+				border: 1px solid black;
+				margin: 15px;
+			}
+			
+			#canvas-holder {
+				overflow: auto;
+				max-height: 800px;
+				min-height: 400px;
+				margin-top: 20px;
+			}
+			
+			#message {
+				font-size: 80px;
+				color: #ffff00;
+				font-weight: 700;
+				position: absolute;
+				width: 20%;
+				left: 40%;
+				top: 400px;
+				transform: rotate(-15deg);
+				text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+				user-select: none;
+			}
+			
+			#score-holder {
+				position: relative;
+				top: -20px;
+				margin: 0, 0, 0, 0;
+			}
+			
+			main button, .button-like {
+				background-color: #a89cc8;
+				color: #fff;
+				border-radius: 4px;
+				padding: 10px;
+				width: 100px;
+				font-size: 1em;
+				border: 1px solid black;
+			}
+
+			main button.button-a {
+				background-color: #5f4d93;
+				width: 200px;
+			}
+
+			main button a {
+				text-decoration: none;
+				color: #FFF;
+			}
+
+			button:disabled, .disabled {
+				background-color: #d3d3d3;
+				color: #eeeeee;
+				border-color: #bbbbbb;
+			}
+			</style>
+		</main>
+		
+		<footer>
+			<div class="fbox">
+				<div class="item" id="about">
+					<h2>About</h2>
+					
+					<p>The Algol Schedule Planner allows you to easily create and manage a meeting schedule. You can send your schedule to others and they can quickly and simply sign up for a time to meet with you.</p>
+					
+					<p>This project is <a href="https://www.gnu.org/philosophy/free-sw.en.html">free software</a>, released under the terms of the MIT License. All source code can be seen <a href="#">here.</a>
+					
+					<p>For a tutorial on how to use the site, click <a href="#">here</a>.</p>
+					
+					<p>See <a href="#">here</a> for information on the API.</p>
+				</div>
+				
+				<div class="item" id="team">
+					<h2>Team</h2>
+					
+					<ul>
+						<li><a href="https://justcheng.com/" target="_blank">Justin Cheng</a> &mdash; Java Expert, full stack developer</li>
+						<li><a href="#">Matthew Hagan</a> &mdash; AWS Guru, back end developer</li>
+						<li><a href="#">Andrew Levy</a> &mdash; GUI God, front end developer</li>
+						<li><a href="https://josephpetitti.com" target="_blank">Joseph Petitti</a> &mdash; Team Lead, full stack developer</li>
+					</ul>
+					
+					<p>This website was created as part of a project for CS 3733 - Software Engineering at WPI.</p>
+				</div>
+			</div>
+			
+			<center><p id="copyright">© 2018 Justin Cheng, Matthew Hagan, Andrew Levy, and Joseph Petitti</p></center>
+		</footer>
+		
+		<script>
+			$( function() {
+				$("#start-date").datepicker();
+				$("#end-date").datepicker();
+				$("#duration").selectmenu();
+			});
+  </script>
+	</body>
+</html>

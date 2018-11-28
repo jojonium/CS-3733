@@ -1,0 +1,93 @@
+import java.sql.*;
+
+public class ScheduleDAO {
+    
+    java.sql.Connection conn;
+
+
+
+    public ScheduleDAO() {
+
+        try {
+            conn = DatabaseUtil.connect() // will need DatabaseUtil class
+        } catch (Exception e) {
+            conn = null;
+        }
+
+    }
+
+    public Schedule getSchedule(String id) throws Exception {
+
+        try {
+
+            Schedule schedule = null;
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Schedules WHERE id=?;");
+
+            ps.setString(1, id);
+
+            ResultSet resultSet = ps.executeQuery();
+
+            while (resultSet.next()) {
+                schedule = createSchedule(resultSet);    // create schedule fcn
+            }
+
+            resultSet.close();
+            ps.close();
+
+            return schedule;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Failed in getting schedule: " + e.getMessage());
+        }
+
+    }
+
+    public boolean addSchedule(Schedule schedule) throws Exception{
+
+        try {
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Schedules WHERE name=?;");
+            ps.setString(1, schedule.id);
+            ResultSet resultSet = ps.executeQuery();
+
+            // already present?
+            while (resultSet.next()) {
+
+                Schedule s = createSchedule(resultSet);
+                resultSet.close();
+                return false;
+            }
+
+            ps = conn.prepareStatement("INSERT INTO Schedules (name, startDate, endDate, startTime, endTime, duration) values(?,?,?,?,?,?) ");
+
+            ps.setString(1, schedule.name);
+            ps.setString(2, schedule.startDate);
+            ps.setString(3, schedule.endDate);
+            ps.setString(4, schedule.startTime);
+            ps.setString(5, schedule.endTime);
+            ps.setInteger(6, schedule.duration); // regex minutes
+            ps.execute();
+            return true;
+
+        } catch (Exception e) {
+            throw new Exception("Failed to insert schedule: " + e.getMessage());
+        }
+
+    }
+
+
+
+    private Schedule createSchedule(ResultSet resultSet) throws Exception {
+
+        String name = resultSet.getString("name");
+        String startDate = resultSet.getString("startDate");
+        String endDate = resultSet.getString("endDate");
+        String startTime = resultSet.getString("startTime");
+        String endTime = resultSet.getString("endTime");
+        int duration = resultSet.getInteger("duration"); // regex minutes
+
+        return new Schedule(name, startDate, endDate, startTime, endTime, duration);
+
+    }
+
+
+}

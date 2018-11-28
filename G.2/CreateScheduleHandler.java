@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.lang.Object;
 import java.time.LocalDateTime;
 
 import org.json.simple.JSONObject;
@@ -25,8 +24,7 @@ import com.google.gson.Gson;
 
 
 ///NOTE: needs to be updated with proper path for our project DAOs'
-import edu.wpi.cs.heineman.db.ConstantsDAO;
-import edu.wpi.cs.heineman.model.Constant;
+import ScheduleDAO;
 
 /**
  * Found gson JAR file from

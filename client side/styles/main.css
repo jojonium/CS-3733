@@ -23,6 +23,11 @@ header h1 {
 	font-size: 250%
 }
 
+header img {
+	height: 70px;
+	vertical-align: middle;
+}
+
 header h1 a {
 	color: white;
 	text-decoration: none;
@@ -121,4 +126,16 @@ div.input-box {
 	padding: 10px 30px 30px 50px;
 	box-shadow: 5px 5px 20px 1px #888888;
 	border-radius: 10px;
+}
+
+input[type=text] {
+	font-size: 1em;
+}
+
+.ui-selectmenu-button {
+	max-width: 150px;
+}
+
+.ui-menu-item, .ui-menu, .ui-menu-item-wrapper {
+	width: 100%;
 }

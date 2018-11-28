@@ -1,6 +1,30 @@
+var showWeekUrl = "I need this from Matt";
+
 $(document).ready(function() {
-	colorTable();
+	var xhr = new XMLHttpRequest();
+	var sid = location.search.substring(1).match(/scheduleID=(.*)/)[1];
+	console.log(sid);
+	xhr.open("GET", showWeekUrl + "?scheduleID=" + sid, true);
+	xhr.send();
+
+	console.log("sent");
+
+	xhr.onloadend = function() {
+		if (xhr.readyState == XMLHttpRequest.DONE) {
+			console.log("XHR: " + xhr.responseText);
+			processResponse(xhr.responseText);
+			colorTable();
+		} else {
+			// handle errors here
+		}
+	};
 });
+
+var processResponse = function(result) {
+	console.log("res: " + result);
+	var js = JSON.parse(result);
+	console.log("js: " + js);
+};
 
 var colorTable = function() {
 	$("table.weekly-schedule tr td").each(function() {

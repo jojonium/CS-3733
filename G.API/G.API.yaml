@@ -34,16 +34,22 @@ paths:
         type: string
         description: the name of the schedule
         required: true
-      - name: startDateTime
+      - name: startDate
         in: query
         type: string
-        format: date-time
-        description: the starting date and starting time for the schedule
-      - name: endDateTime
+        description: the starting date for the schedule
+      - name: endDate
         in: query
         type: string
-        format: date-time
-        description: the ending date and ending time for the schedule
+        description: the ending date for the schedule
+      - name: startTime
+        in: query
+        type: string
+        description: the starting time for the schedule
+      - name: endTime
+        in: query
+        type: string
+        description: the ending time for the schedule
       - name: duration
         in: query
         type: integer

@@ -190,7 +190,6 @@ paths:
         description: a date within the week you want to retreive
         type: string
         format: date-time
-        required: true
       responses:
         200:
           description: all meetings in the week

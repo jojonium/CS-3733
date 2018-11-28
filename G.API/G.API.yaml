@@ -28,16 +28,26 @@ paths:
       summary: creates a new schedule
       operationId: createSchedule
       description: Creates a new schedule
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
-      - in: body
-        name: schedule
-        description: schedule to add
-        schema:
-          $ref: '#/definitions/Schedule'
+      - name: name
+        in: query
+        type: string
+        description: the name of the schedule
+        required: true
+      - name: startDateTime
+        in: query
+        type: string
+        format: date-time
+        description: the starting date and starting time for the schedule
+      - name: endDateTime
+        in: query
+        type: string
+        format: date-time
+        description: the ending date and ending time for the schedule
+      - name: duration
+        in: query
+        type: integer
+        description: the duration of meetings in this schedule
       responses:
         201:
           description: schedule created
@@ -48,7 +58,7 @@ paths:
         409:
           description: an existing schedule already exists
   /deleteschedule:
-    post:
+    delete:
       tags:
       - organizers
       summary: deletes an existing schedule
@@ -97,9 +107,24 @@ paths:
         required: true
         type: string
         format: date-time
+      - name: allAtTime
+        in: query
+        description: do you want to close all time slots at the same time?
+        type: boolean
+      - name: allOnDate
+        in: query
+        description: do you want to close all time slots on the same date?
+        type: boolean
+      - name: secretCode
+        in: query
+        description: secret code for this schedule
+        required: true
+        type: string
       responses:
-        204:
+        200:
           description: time slot closed
+          schema:
+            $ref: '#/definitions/TimeSlot'
         400:
           description: invalid input
         default:
@@ -126,9 +151,24 @@ paths:
         required: true
         type: string
         format: date-time
+      - name: secretCode
+        in: query
+        description: secret code for this schedule
+        required: true
+        type: string
+      - name: allAtTime
+        in: query
+        description: do you want to open all time slots at the same time?
+        type: boolean
+      - name: allOnDate
+        in: query
+        description: do you want to open all time slots on the same date?
+        type: boolean
       responses:
-        204:
+        200:
           description: time slot opened
+          schema:
+            $ref: '#/definitions/TimeSlot'
         400:
           description: invalid input
   /cancelmeeting:
@@ -314,6 +354,8 @@ paths:
       - application/json
       parameters:
       - in: query
+        # we need specification so we know how to parse this, but I don't know how to
+        # specify that
         name: searchString
         description: pass an optional search string for looking up time slots
         required: false
@@ -355,8 +397,11 @@ paths:
         required: true
         type: string
       responses:
-        204:
+        200:
           description: schedules deleted
+          schema:
+            type: number
+            description: the number of schedules deleted
         400:
           description: invalid input
         401:

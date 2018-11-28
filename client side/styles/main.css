@@ -135,6 +135,11 @@ div.input-box {
 	border-radius: 10px;
 }
 
+#create-box a {
+	text-decoration: none;
+	color: #454545;
+}
+
 input[type=text] {
 	font-size: 1em;
 }

@@ -25,23 +25,23 @@
 						<table>
 							<tr>
 								<td>Start date: </td>
-								<td><input type="text" id="start-date" name="sdate" placeholder="10/23/2018"></td>
+								<td><input type="text" id="start-date" maxlength="10" name="sdate" placeholder="10/23/2018"></td>
 							</tr>
 							<tr>
 								<td>End date: </td>
-								<td><input type="text" id="end-date" name="edate" placeholder="12/14/2018"></td>
+								<td><input type="text" id="end-date" maxlength="10" name="edate" placeholder="12/14/2018"></td>
 							</tr>
 							<tr>
 								<td>Start time: </td>
-								<td><input type="text" id="stime" name="stime" placeholder="9:00"></td>
+								<td><input type="text" id="stime" name="stime" maxlength="5" placeholder="9:00"></td>
 							</tr>
 							<tr>
 								<td>End time: </td>
-								<td><input type="text" id="etime" name="etime" placeholder="17:00"></td>
+								<td><input type="text" id="etime" name="etime" maxlength="5" placeholder="17:00"></td>
 							</tr>
 							<tr>
 								<td>Name: </td>
-								<td><input type="text" id="name" name="name" placeholder="Heineman's Schedule"></td>
+								<td><input type="text" id="name" name="name" maxlength="32" placeholder="Heineman's Schedule"></td>
 							</tr>
 							<tr>
 								<td> Meeting time: </td>
@@ -62,8 +62,8 @@
 				<div class="index-box input-box" id="enter-code-box">
 					<h2>View Existing Schedule</h2>
 					<form name="enterCodeForm">
-						<p>Schedule ID: <input type="text" placeholder="4Vr8b5" name="sid" id="sid"/></p>
-						<p>Secret code (optional): <input type="text" name="secret-code" id="code"></p>
+						<p>Schedule ID: <input type="text" placeholder="4Vr8b5" maxlength="6" name="sid" id="sid"/></p>
+						<p>Secret code (optional): <input type="text" name="secret-code" maxlength="32" id="code"></p>
 						<button type="button" class="ui-button ui-widget ui-corner-all" id="enterCodeSubmit" onClick="JavaScript:handleGetSchedule(this)">Go</button>
 					</form>
 				</div>

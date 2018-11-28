@@ -51,7 +51,7 @@ var handleCreateSchedule = function(e) {
 	queryString += "&startTime=" + stimeArg;
 	queryString += "&endTime=" + etimeArg;
 	queryString += "&duration=" + durationArg;
-	alert("query " + queryString);
+	console.log("query " + queryString);
 	var xhr = new XMLHttpRequest();
 	xhr.open("POST", createScheduleUrl + queryString, true);
 
@@ -60,6 +60,16 @@ var handleCreateSchedule = function(e) {
 		console.log(xhr.request);
 		if (xhr.readyState == XMLHttpRequest.DONE) {
 			console.log("XHR: " + xhr.responseText);
+			var mySecret = "8Bj3v9"; // TODO
+			var mySid = "0239jf0329jf"; // TODO	
+			$("#create-box").append("<p>Success!</p>");
+			$("#create-box").append("<p>In case you want to " +
+				"modify this schedule in the future, your " +
+				"secret code is <b>" + mySecret + "</b>.</p>");
+			$("#create-box").append('<a href="schedule.html?' +
+				'scheduleID=' + mySid + '"><button class="' +
+				'ui-button ui-widget ui-corner-all" ' +
+				'type="button">View Schedule</a></button?');
 			// do something
 		}
 	}

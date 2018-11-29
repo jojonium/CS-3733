@@ -6,8 +6,10 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 //import java.util.Iterator;
 //import java.util.NoSuchElementException;
-import java.util.Random;
+//import java.util.Random;
 import java.util.StringTokenizer;
+
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
 
 public class Schedule {
 	private String secretCode;
@@ -20,7 +22,7 @@ public class Schedule {
 	public final int duration;
 	private ArrayList<TimeSlot> timeSlots;
 
-
+	public LambdaLogger logger = null;
 	// month/day/year 
 	public Schedule (String name, String startDate, String endDate,
 			String startTime, String endTime, int duration ) { 
@@ -30,20 +32,31 @@ public class Schedule {
 		StringTokenizer stEDate = new StringTokenizer(endDate,"/");
 		StringTokenizer stSTime = new StringTokenizer(startTime,":");
 		StringTokenizer stETime = new StringTokenizer(endTime,":");
-
+		
+		
 		int sMonth = Integer.parseInt(stSDate.nextToken("/"));
+		logger.log("Parse sMonth: " + sMonth + "\n");
 		int sDay = Integer.parseInt(stSDate.nextToken("/"));
+		logger.log("Parse sDay: " + sDay + "\n");
 		int sYear = Integer.parseInt(stSDate.nextToken());
+		logger.log("Parse sYear: " + sYear + "\n");
 
 		int eMonth = Integer.parseInt(stEDate.nextToken("/"));
+		logger.log("Parse eMonth: " + eMonth + "\n");
 		int eDay = Integer.parseInt(stEDate.nextToken("/"));
+		logger.log("Parse eDay: " + eDay + "\n");
 		int eYear = Integer.parseInt(stEDate.nextToken());
-
+		logger.log("Parse eYear: " + eYear + "\n");
+		
 		int sHour = Integer.parseInt(stSTime.nextToken(":"));
+		logger.log("Parse sHour: " + sHour + "\n");
 		int sMin = Integer.parseInt(stSTime.nextToken());
+		logger.log("Parse sMin: " + sMin + "\n");
 
 		int eHour = Integer.parseInt(stETime.nextToken(":"));
+		logger.log("Parse eHour: " + eHour + "\n");
 		int eMin = Integer.parseInt(stETime.nextToken());
+		logger.log("Parse eMin: " + eMin + "\n");
 
 		this.name = name;
 		this.startDate = LocalDate.of(sYear, sMonth, sDay);
@@ -64,18 +77,19 @@ public class Schedule {
 		}*/
 
 		// unique value generations
-		this.secretCode = generateCode();
-		this.id = generateCode();
-
+//		this.secretCode = generateCode();
+//		this.id = generateCode();
+		this.secretCode = "itwork";
+		this.id = "yework";
 	}
 
-	private static String generateCode(){
+	/*private static String generateCode(){
 
 		String code = "";
 		Random r = new Random();
 		//48-57, 65-90, 97-122
 		for (int i = 0; i < 6; i++) {
-
+			
 			if ((r.nextInt(3)+1) == 1) {
 				code += Character.toString((char) (r.nextInt(58-48) + 48));
 			}
@@ -90,7 +104,7 @@ public class Schedule {
 
 		return code;
 
-	}
+	}*/
 
 	public String getSecretCode() {
 		return secretCode;

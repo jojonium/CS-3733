@@ -24,7 +24,7 @@ import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 
 import com.google.gson.Gson;
 
-import edu.wpi.cs.algol.db.ScheduleDAO;
+//import edu.wpi.cs.algol.db.ScheduleDAO;
 import edu.wpi.cs.algol.model.Schedule;
 
 /**
@@ -43,7 +43,7 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 		if (logger != null) { logger.log("in createSchedule"); }
 
 		//variable setup
-		ScheduleDAO daoS = new ScheduleDAO();
+		//ScheduleDAO daoS = new ScheduleDAO();
 		/*int startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute, durationInt;
 		
 		//parse the date Strings from the format: MM/DD/YYYY
@@ -81,10 +81,11 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 		// 20 min
 		String[] durationArray = duration.split(" ");
 		int durationInt = Integer.parseInt(durationArray[0]);
-		
+		logger.log("Parsed duration to get integer \n");
 		//creating the schedule
 		s = new Schedule(name, dateStart, dateEnd, timeStart, timeEnd, durationInt);
-		return daoS.addSchedule(s);
+		
+		return true;//daoS.addSchedule(s);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -139,7 +140,7 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 
 		if (!processed) {
 			CreateScheduleRequest req = new Gson().fromJson(body, CreateScheduleRequest.class);
-			logger.log("New Req for not preocessed" + req.toString() + "\n");
+			logger.log("New Req for not precessed" + req.toString() + "\n");
 
 			CreateScheduleResponse resp;
 			try {

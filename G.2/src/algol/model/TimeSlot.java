@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 public class TimeSlot {
 	
 	
-	private String secretCode;
+	private String secretCode; 
 	private LocalDateTime beginDateTime;
 	private boolean isOpen;
 	private String requester;
@@ -41,7 +41,7 @@ public class TimeSlot {
 
 		String code = "";
 		Random r = new Random();
-		//48-57, 65-90, 97-122
+		// # 48-57, A 65-90,a 97-122
 		for (int i = 0; i < 6; i++) {
 
 			if ((r.nextInt(3)+1) == 1) {

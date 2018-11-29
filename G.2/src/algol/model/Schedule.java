@@ -1,7 +1,11 @@
 package algol.model;
 
+import java.awt.List;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.StringTokenizer;
 
@@ -14,8 +18,8 @@ public class Schedule {
 	private LocalTime startTime;
 	private LocalTime endTime;
 	public final int duration;
-	private TimeSlot[] timeSlots;
-	
+	private ArrayList<TimeSlot> timeSlots;
+
 
 	// month/day/year 
 	public Schedule (String name, String startDate, String endDate,
@@ -26,21 +30,21 @@ public class Schedule {
 		StringTokenizer stEDate = new StringTokenizer(endDate,"/");
 		StringTokenizer stSTime = new StringTokenizer(startTime,":");
 		StringTokenizer stETime = new StringTokenizer(endTime,":");
-		
+
 		int sMonth = Integer.parseInt(stSDate.nextToken());
 		int sDay = Integer.parseInt(stSDate.nextToken());
 		int sYear = Integer.parseInt(stSDate.nextToken());
-		
+
 		int eMonth = Integer.parseInt(stEDate.nextToken());
 		int eDay = Integer.parseInt(stEDate.nextToken());
 		int eYear = Integer.parseInt(stEDate.nextToken());
-		
+
 		int sHour = Integer.parseInt(stSTime.nextToken());
 		int sMin = Integer.parseInt(stSTime.nextToken());
-		
+
 		int eHour = Integer.parseInt(stETime.nextToken());
 		int eMin = Integer.parseInt(stETime.nextToken());
-		
+
 		this.name = name;
 		this.startDate = LocalDate.of(sYear, sMonth, sDay);
 		this.endDate = LocalDate.of(eYear, eMonth, eDay);
@@ -49,8 +53,16 @@ public class Schedule {
 		this.duration = duration;
 
 		// timeslot generation
-		
-		
+		for (LocalDate date = this.startDate; date.isBefore(this.endDate); date = date.plusDays(1)) {
+
+			for(LocalTime time = this.startTime; time.isBefore(this.endTime); time = time.plusMinutes(duration)) {
+
+				this.
+
+			}
+
+		}
+
 		// unique value generations
 		this.secretCode = generateCode();
 		this.id = generateCode();
@@ -136,7 +148,37 @@ public class Schedule {
 		return duration;
 	}
 
+	private class TimeSlotIterator implements Iterator<TimeSlot> {
+		private int pointer;
+		private int lastSlot;
+		
+		
+		public TimeSlotIterator(int start, int lastSlot) {
+			this.pointer = start;
+			this.lastSlot = lastSlot;
+		}
+
+		@Override
+		public boolean hasNext() {
+			// TODO Auto-generated method stub
+			return this.pointer != lastSlot;
+		}
+
+		@Override
+		public TimeSlot next() {
+			// TODO Auto-generated method stub
+			if(this.hasNext()) {
+				int current = pointer;
+				pointer++;
+				return timeSlots.get(current);
+			}
+			throw new NoSuchElementException();
+			
+		}
+	}
+	public Iterator<TimeSlot> iterator() {
+		return new TimeSlotIterator(0,this.timeSlots.size());
+	}
 
 
-	
 }

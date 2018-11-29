@@ -6,7 +6,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 //import java.util.Iterator;
 //import java.util.NoSuchElementException;
-//import java.util.Random;
+import java.util.Random;
 
 
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
@@ -98,13 +98,12 @@ public class Schedule {
 		}*/
 
 		// unique value generations
-//		this.secretCode = generateCode();
-//		this.id = generateCode();
-		this.secretCode = "itwork";
-		this.id = "yework";
+		this.secretCode = generateCode();
+		this.id = generateCode();
+
 	}
 
-	/*private static String generateCode(){
+	private static String generateCode(){
 
 		String code = "";
 		Random r = new Random();
@@ -125,7 +124,7 @@ public class Schedule {
 
 		return code;
 
-	}*/
+	}
 
 	public String getSecretCode() {
 		return secretCode;

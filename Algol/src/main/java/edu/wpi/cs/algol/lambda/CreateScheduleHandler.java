@@ -116,7 +116,7 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 			String method = (String) event.get("httpMethod");
 			if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 				logger.log("Options request");
-				response = new CreateScheduleResponse("name", 200);  // OPTIONS needs a 200 response
+				response = new CreateScheduleResponse("name", 201);  // OPTIONS needs a 200 response
 		        responseJson.put("body", new Gson().toJson(response));
 		        logger.log(responseJson.toJSONString()+ "\n");
 		        processed = true;
@@ -146,12 +146,11 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 			try {
 				if (createSchedule(req.name, req.startDate, req.endDate, req.startTime, req.endTime, req.duration)) {
 					logger.log("createSchedule miraculously turned true");
-					resp = new CreateScheduleResponse("Successfully created schedule:" + req.name
-							+"\n" + "code: " + s.getSecretCode() + "id: " + s.getId() );
+					resp = new CreateScheduleResponse(s.getSecretCode(), s.getId());
 					logger.log("Successful creation of schedule");
 				} else {
-					resp = new CreateScheduleResponse("Unable to create schedule: " + req.name, 422);
-					logger.log("Unable to create schedule:  " + req.name + " 422" + "\n" );
+					resp = new CreateScheduleResponse("Unable to create schedule: " + req.name, 400);
+					logger.log("Unable to create schedule:  " + req.name + " 400" + "\n" );
 				}
 			} catch (Exception e) {
 				resp = new CreateScheduleResponse("Unable to create schedule: " + req.name + "(" + e.getMessage() + ")", 400);

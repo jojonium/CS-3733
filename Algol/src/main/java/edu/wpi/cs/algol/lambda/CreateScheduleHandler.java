@@ -153,8 +153,8 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 					logger.log("Unable to create schedule:  " + req.name + " 422" + "\n" );
 				}
 			} catch (Exception e) {
-				resp = new CreateScheduleResponse("Unable to create schedule: " + req.name + "(" + e.getMessage() + ")", 403);
-				logger.log("Unable to create schedule:  " + req.name + " 403" + "\n" );
+				resp = new CreateScheduleResponse("Unable to create schedule: " + req.name + "(" + e.getMessage() + ")", 400);
+				logger.log("Unable to create schedule:  " + req.name + " 400. Error Message: " + e.getMessage()+ "\n" );
 			}
 
 			// compute proper response

@@ -78,7 +78,7 @@ public class Hello implements RequestStreamHandler {
 					resp = new HelloResponse("This name is too long: " + req.name, 422);
 				}
 			} catch (Exception e) {
-				resp = new HelloResponse("Unable to say hello to: " + req.name + " because of (" + e.getMessage() + ")", 403);
+				resp = new HelloResponse("Unable to say hello to: " + req.name + " because of (" + e.getMessage() + ")", 400);
 			}
 
 			// compute proper response

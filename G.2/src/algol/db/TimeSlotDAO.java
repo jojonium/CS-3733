@@ -22,13 +22,14 @@ public class TimeSlotDAO {
 
 	}
 
-	public TimeSlot getTimeSlot(Schedule schedule, LocalDateTime beginDateTime ) throws Exception {
+	public TimeSlot getTimeSlot(String scheduleID, LocalDateTime beginDateTime ) throws Exception {
 
 		try {
 
 			TimeSlot timeSlot = null;
-			PreparedStatement ps = conn.prepareStatement("SELECT * FROM TimeSlots WHERE =?;");
-			ps.setString();
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM TimeSlots WHERE scheduleID =? AND beginDateTime =?;");
+			ps.setString(1, scheduleID);
+			ps.setString(2, beginDateTime.toString());
 			ResultSet resultSet = ps.executeQuery();
 
 			while (resultSet.next()) {
@@ -55,8 +56,8 @@ public class TimeSlotDAO {
 			ps.setString(1, timeSlot.getRequester());
 			ps.setString(2, timeSlot.isOpen() ? "true" : "false");
 			ps.setString(3, timeSlot.getSecretCode()); 
-			ps.setString(4, timeSlot.getBeginDateTime()); 
-			ps.setString(5, timeSlot.getSchedule().getId()); 		// Schedule ID	
+			ps.setString(4, timeSlot.getBeginDateTime().toString()); 
+			ps.setString(5, timeSlot.getScheduleId()); 		// Schedule ID	
 			int valsAffected = ps.executeUpdate();
 			ps.close();
 
@@ -79,8 +80,10 @@ public class TimeSlotDAO {
 
 	public TimeSlot createTimeSlot(ResultSet resultSet) throws Exception {
 		
+		String beginDateTime = resultSet.getString("beginDateTime");
+		String scheduleID = resultSet.getString("scheduleID");
 		
-		return new TimeSlot();
+		return new TimeSlot(beginDateTime, scheduleID);
 	}
 
 

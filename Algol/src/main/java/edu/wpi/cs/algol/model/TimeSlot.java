@@ -41,17 +41,17 @@ public class TimeSlot {
 
 		String code = "";
 		Random r = new Random();
-		// # 48-57, A 65-90,a 97-122
+		//48-57, 65-90, 97-122
 		for (int i = 0; i < 6; i++) {
 
 			if ((r.nextInt(3)+1) == 1) {
-				code += Character.toString((char) (r.nextInt(48-58) + 48));
+				code += Character.toString((char) (r.nextInt(58-48) + 48));
 			}
 			else if ((r.nextInt(3)+1) == 1) {
-				code += Character.toString((char) (r.nextInt(65-91) + 65));
+				code += Character.toString((char) (r.nextInt(91-65) + 65));
 			}
 			else {
-				code += Character.toString((char) (r.nextInt(97-123) + 97));
+				code += Character.toString((char) (r.nextInt(123-97) + 97));
 			}
 
 		}

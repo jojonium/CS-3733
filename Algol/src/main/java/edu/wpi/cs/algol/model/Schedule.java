@@ -31,18 +31,18 @@ public class Schedule {
 		StringTokenizer stSTime = new StringTokenizer(startTime,":");
 		StringTokenizer stETime = new StringTokenizer(endTime,":");
 
-		int sMonth = Integer.parseInt(stSDate.nextToken());
-		int sDay = Integer.parseInt(stSDate.nextToken());
+		int sMonth = Integer.parseInt(stSDate.nextToken("/"));
+		int sDay = Integer.parseInt(stSDate.nextToken("/"));
 		int sYear = Integer.parseInt(stSDate.nextToken());
 
-		int eMonth = Integer.parseInt(stEDate.nextToken());
-		int eDay = Integer.parseInt(stEDate.nextToken());
+		int eMonth = Integer.parseInt(stEDate.nextToken("/"));
+		int eDay = Integer.parseInt(stEDate.nextToken("/"));
 		int eYear = Integer.parseInt(stEDate.nextToken());
 
-		int sHour = Integer.parseInt(stSTime.nextToken());
+		int sHour = Integer.parseInt(stSTime.nextToken(":"));
 		int sMin = Integer.parseInt(stSTime.nextToken());
 
-		int eHour = Integer.parseInt(stETime.nextToken());
+		int eHour = Integer.parseInt(stETime.nextToken(":"));
 		int eMin = Integer.parseInt(stETime.nextToken());
 
 		this.name = name;
@@ -77,13 +77,13 @@ public class Schedule {
 		for (int i = 0; i < 6; i++) {
 
 			if ((r.nextInt(3)+1) == 1) {
-				code += Character.toString((char) (r.nextInt(48-58) + 48));
+				code += Character.toString((char) (r.nextInt(58-48) + 48));
 			}
 			else if ((r.nextInt(3)+1) == 1) {
-				code += Character.toString((char) (r.nextInt(65-91) + 65));
+				code += Character.toString((char) (r.nextInt(91-65) + 65));
 			}
 			else {
-				code += Character.toString((char) (r.nextInt(97-123) + 97));
+				code += Character.toString((char) (r.nextInt(123-97) + 97));
 			}
 
 		}
@@ -178,6 +178,13 @@ public class Schedule {
 	}
 	public Iterator<TimeSlot> iterator() {
 		return new TimeSlotIterator(0,this.timeSlots.size());
+	}
+
+	@Override
+	public String toString() {
+		return "Schedule [secretCode=" + secretCode + ", id=" + id + ", name=" + name + ", startDate=" + startDate
+				+ ", endDate=" + endDate + ", startTime=" + startTime + ", endTime=" + endTime + ", duration="
+				+ duration + ", timeSlots=" + timeSlots + "]";
 	}
 
 

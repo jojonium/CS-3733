@@ -34,7 +34,7 @@ import edu.wpi.cs.algol.model.Schedule;
 public class CreateScheduleHandler implements RequestStreamHandler {
 
 	public LambdaLogger logger = null;
-
+	public Schedule s;
 	/** Load from RDS, if it exists
 	 * 
 	 * @throws Exception 
@@ -78,12 +78,12 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 		startDate.of(startYear, startMonth, startDay, startHour, startMinute);
 		LocalDateTime endDate = new LocalDateTime();
 		endDate.of(endYear, endMonth, endDay, endHour, endMinute);*/
-		
+		// 20 min
 		String[] durationArray = duration.split(" ");
 		int durationInt = Integer.parseInt(durationArray[0]);
 		
 		//creating the schedule
-		Schedule s = new Schedule(name, dateStart, dateEnd, timeStart, timeEnd, durationInt);
+		s = new Schedule(name, dateStart, dateEnd, timeStart, timeEnd, durationInt);
 		return daoS.addSchedule(s);
 	}
 	
@@ -91,7 +91,7 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 	@Override
 	public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
 		logger = context.getLogger();
-		logger.log("Loading Java Lambda handler to create constant");
+		logger.log("Loading Java Lambda handler to create a schedule");
 
 		JSONObject headerJson = new JSONObject();
 		headerJson.put("Content-Type",  "application/json");  // not sure if needed anymore?
@@ -140,7 +140,8 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 			CreateScheduleResponse resp;
 			try {
 				if (createSchedule(req.name, req.dateStart, req.dateEnd, req.timeStart, req.timeEnd, req.duration)) {
-					resp = new CreateScheduleResponse("Successfully created schedule:" + req.name);
+					resp = new CreateScheduleResponse("Successfully created schedule:" + req.name
+							+"\n" + "code: " + s.getSecretCode() + "id: " + s.getId() );
 				} else {
 					resp = new CreateScheduleResponse("Unable to create schedule: " + req.name, 422);
 				}

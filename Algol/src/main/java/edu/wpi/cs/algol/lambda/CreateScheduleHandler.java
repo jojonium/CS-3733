@@ -91,7 +91,7 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 	@Override
 	public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
 		logger = context.getLogger();
-		logger.log("Loading Java Lambda handler to create a schedule");
+		logger.log("Loading Java Lambda handler to create a schedule \n");
 
 		JSONObject headerJson = new JSONObject();
 		headerJson.put("Content-Type",  "application/json");  // not sure if needed anymore?
@@ -110,13 +110,14 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 			JSONParser parser = new JSONParser();
 			JSONObject event = (JSONObject) parser.parse(reader);
-			logger.log("event:" + event.toJSONString());
+			logger.log("event:" + event.toJSONString() + "\n");
 			
 			String method = (String) event.get("httpMethod");
 			if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 				logger.log("Options request");
 				response = new CreateScheduleResponse("name", 200);  // OPTIONS needs a 200 response
 		        responseJson.put("body", new Gson().toJson(response));
+		        logger.log(responseJson.toJSONString()+ "\n");
 		        processed = true;
 		        body = null;
 			} else {
@@ -126,9 +127,10 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 				}
 			}
 		} catch (ParseException pe) {
-			logger.log(pe.toString());
+			logger.log(pe.toString() + "\n");
 			response = new CreateScheduleResponse("Bad Request:" + pe.getMessage(), 422);  // unable to process input
 	        responseJson.put("body", new Gson().toJson(response));
+	        logger.log(responseJson.toJSONString()+ "\n");
 	        processed = true;
 	        body = null;
 		}
@@ -153,8 +155,8 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 	        responseJson.put("body", new Gson().toJson(resp));  
 		}
 		
-        logger.log("end result:" + responseJson.toJSONString());
-        logger.log(responseJson.toJSONString());
+        logger.log("end result:" + responseJson.toJSONString() + "\n");
+        logger.log(responseJson.toJSONString() + "\n");
         OutputStreamWriter writer = new OutputStreamWriter(output, "UTF-8");
         writer.write(responseJson.toJSONString());  
         writer.close();

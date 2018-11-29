@@ -7,7 +7,7 @@ public class CreateScheduleRequest {
 	String timeEnd;
 	String duration;
 	
-	public CreateScheduleRequest (String name, String dateStart, String dateEnd, String timeStart, String timeEnd,  String duration) {
+	public CreateScheduleRequest (String name, String dateStart, String dateEnd, String timeStart, String timeEnd, String duration) {
 		this.name = name;
 		this.dateStart = dateStart;
 		this.dateEnd = dateEnd;

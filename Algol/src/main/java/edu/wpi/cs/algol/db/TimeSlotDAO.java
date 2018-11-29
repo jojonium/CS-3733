@@ -3,7 +3,7 @@ package edu.wpi.cs.algol.db;
 import java.sql.*;
 import java.time.LocalDateTime;
 
-import edu.wpi.cs.algol.model.Schedule;
+//import edu.wpi.cs.algol.model.Schedule;
 import edu.wpi.cs.algol.model.TimeSlot;
 
 

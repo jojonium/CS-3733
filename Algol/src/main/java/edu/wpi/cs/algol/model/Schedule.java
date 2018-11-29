@@ -1,11 +1,11 @@
 package edu.wpi.cs.algol.model;
 
-import java.awt.List;
+//import java.awt.List;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+//import java.util.Iterator;
+//import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.StringTokenizer;
 
@@ -53,7 +53,7 @@ public class Schedule {
 		this.duration = duration;
 
 		// timeslot generation
-		for (LocalDate date = this.startDate; date.isBefore(this.endDate); date = date.plusDays(1)) {
+		/*for (LocalDate date = this.startDate; date.isBefore(this.endDate); date = date.plusDays(1)) {
 
 			for(LocalTime time = this.startTime; time.isBefore(this.endTime); time = time.plusMinutes(duration)) {
 
@@ -61,7 +61,7 @@ public class Schedule {
 
 			}
 
-		}
+		}*/
 
 		// unique value generations
 		this.secretCode = generateCode();
@@ -148,7 +148,7 @@ public class Schedule {
 		return duration;
 	}
 
-	private class TimeSlotIterator implements Iterator<TimeSlot> {
+	/*private class TimeSlotIterator implements Iterator<TimeSlot> {
 		private int pointer;
 		private int lastSlot;
 		
@@ -178,7 +178,7 @@ public class Schedule {
 	}
 	public Iterator<TimeSlot> iterator() {
 		return new TimeSlotIterator(0,this.timeSlots.size());
-	}
+	}*/
 
 	@Override
 	public String toString() {

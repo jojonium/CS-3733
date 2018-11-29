@@ -124,7 +124,9 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 				body = (String)event.get("body");
 				if (body == null) {
 					body = event.toJSONString();  // this is only here to make testing easier
+					
 				}
+				logger.log(body.toString()+ "\n");
 			}
 		} catch (ParseException pe) {
 			logger.log(pe.toString() + "\n");
@@ -137,22 +139,27 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 
 		if (!processed) {
 			CreateScheduleRequest req = new Gson().fromJson(body, CreateScheduleRequest.class);
-			logger.log(req.toString());
+			logger.log("New Req for not preocessed" + req.toString() + "\n");
 
 			CreateScheduleResponse resp;
 			try {
 				if (createSchedule(req.name, req.dateStart, req.dateEnd, req.timeStart, req.timeEnd, req.duration)) {
 					resp = new CreateScheduleResponse("Successfully created schedule:" + req.name
 							+"\n" + "code: " + s.getSecretCode() + "id: " + s.getId() );
+					logger.log("Successful creation of schedule");
 				} else {
 					resp = new CreateScheduleResponse("Unable to create schedule: " + req.name, 422);
+					logger.log("Unable to create schedule:  " + req.name + " 422" + "\n" );
 				}
 			} catch (Exception e) {
 				resp = new CreateScheduleResponse("Unable to create schedule: " + req.name + "(" + e.getMessage() + ")", 403);
+				logger.log("Unable to create schedule:  " + req.name + " 403" + "\n" );
 			}
 
 			// compute proper response
 	        responseJson.put("body", new Gson().toJson(resp));  
+	        
+	        logger.log( "\n"+ responseJson.toJSONString() + "\n");
 		}
 		
         logger.log("end result:" + responseJson.toJSONString() + "\n");

@@ -55,7 +55,7 @@ public class ScheduleDAO {
 			// already present?
 			while (resultSet.next()) {
 
-				Schedule s = createSchedule(resultSet);
+				//Schedule s = createSchedule(resultSet);
 				resultSet.close();
 				return false;
 			}

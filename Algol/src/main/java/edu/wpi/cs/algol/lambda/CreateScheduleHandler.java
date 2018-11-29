@@ -140,7 +140,7 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 
 		if (!processed) {
 			CreateScheduleRequest req = new Gson().fromJson(body, CreateScheduleRequest.class);
-			logger.log("New Req for not precessed" + req.toString() + "\n");
+			logger.log("New Req for !processed" + req.toString() + "\n");
 
 			CreateScheduleResponse resp;
 			try {
@@ -154,7 +154,7 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 				}
 			} catch (Exception e) {
 				resp = new CreateScheduleResponse("Unable to create schedule: " + req.name + "(" + e.getMessage() + ")", 400);
-				logger.log("Unable to create schedule:  " + req.name + " 400. Error Message: " + e.getMessage()+ "\n" );
+				logger.log("Unable to create schedule:  " + req.name + " 400. Error Message: " + e + "\n" );
 			}
 
 			// compute proper response

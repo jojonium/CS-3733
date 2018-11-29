@@ -1,4 +1,5 @@
 var showWeekUrl = "I need this from Matt";
+var dialog;
 
 $(document).ready(function() {
 	var xhr = new XMLHttpRequest();
@@ -13,11 +14,12 @@ $(document).ready(function() {
 		if (xhr.readyState == XMLHttpRequest.DONE) {
 			console.log("XHR: " + xhr.responseText);
 			processResponse(xhr.responseText);
-			colorTable();
 		} else {
 			// handle errors here
 		}
 	};
+	
+	colorTable();
 });
 
 var processResponse = function(result) {
@@ -47,5 +49,7 @@ var colorTable = function() {
 var scheduleMeeting = function(jq) {
 	var time = $('th:first-child', $(jq).parents('tr')).text();
 	var day = $(jq).closest('table').find('th').eq($(jq).index()).text();
-	alert("Meeting scheduled for " + day + " at " + time);
+	$("#day-span").text(day);
+	$("#time-span").text(time);
+	dialog.dialog("open");
 };

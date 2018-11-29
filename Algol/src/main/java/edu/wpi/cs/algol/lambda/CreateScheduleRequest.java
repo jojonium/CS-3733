@@ -1,22 +1,29 @@
 package edu.wpi.cs.algol.lambda;
 public class CreateScheduleRequest {
 	String name;
-	String dateStart;
-	String dateEnd;
-	String timeStart;
-	String timeEnd;
+	String startDate;
+	String endDate;
+	String startTime;
+	String endTime;
 	String duration;
 	
-	public CreateScheduleRequest (String name, String dateStart, String dateEnd, String timeStart, String timeEnd, String duration) {
+
+	public CreateScheduleRequest(String name, String startDate, String endDate, String startTime, String endTime,
+			String duration) {
+
 		this.name = name;
-		this.dateStart = dateStart;
-		this.dateEnd = dateEnd;
-		this.timeStart = timeStart;
-		this.timeEnd = timeEnd;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.startTime = startTime;
+		this.endTime = endTime;
 		this.duration = duration;
 	}
-	
+
+
+	@Override
 	public String toString() {
-		return "Create("+ name + "," + dateStart + "," + dateEnd + "," + timeStart + "," + timeEnd + "," + duration +  ")";
+		return "CreateScheduleRequest [name=" + name + ", startDate=" + startDate + ", endDate=" + endDate
+				+ ", startTime=" + startTime + ", endTime=" + endTime + ", duration=" + duration + "]";
 	}
+	
 }

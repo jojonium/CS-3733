@@ -81,7 +81,7 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 		// 20 min
 		
 		int durationInt = Integer.parseInt(duration.substring(0, 2));
-		logger.log("Parsed duration to get integer \n");
+		logger.log("Parsed duration to get integer: "+ durationInt+"\n");
 		//creating the schedule
 		s = new Schedule(name, dateStart, dateEnd, timeStart, timeEnd, durationInt);
 		
@@ -144,7 +144,7 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 
 			CreateScheduleResponse resp;
 			try {
-				if (createSchedule(req.name, req.dateStart, req.dateEnd, req.timeStart, req.timeEnd, req.duration)) {
+				if (createSchedule(req.name, req.startDate, req.endDate, req.startTime, req.endTime, req.duration)) {
 					logger.log("createSchedule miraculously turned true");
 					resp = new CreateScheduleResponse("Successfully created schedule:" + req.name
 							+"\n" + "code: " + s.getSecretCode() + "id: " + s.getId() );

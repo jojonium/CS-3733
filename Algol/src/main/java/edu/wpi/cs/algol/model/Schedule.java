@@ -7,7 +7,7 @@ import java.util.ArrayList;
 //import java.util.Iterator;
 //import java.util.NoSuchElementException;
 //import java.util.Random;
-import java.util.StringTokenizer;
+
 
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 
@@ -28,7 +28,7 @@ public class Schedule {
 			String startTime, String endTime, int duration ) { 
 		// date formatted "(\\d){1,2}([/]){1} (\\d){1,2} ([/]){1}(\\d){4}"
 		// time formatted "(\\d){1,2}([:]){1}(\\d){2}"
-		StringTokenizer stSDate = new StringTokenizer(startDate,"/");
+		/*StringTokenizer stSDate = new StringTokenizer(startDate,"/");
 		StringTokenizer stEDate = new StringTokenizer(endDate,"/");
 		StringTokenizer stSTime = new StringTokenizer(startTime,":");
 		StringTokenizer stETime = new StringTokenizer(endTime,":");
@@ -57,12 +57,33 @@ public class Schedule {
 		logger.log("Parse eHour: " + eHour + "\n");
 		int eMin = Integer.parseInt(stETime.nextToken());
 		logger.log("Parse eMin: " + eMin + "\n");
+		 */
+		int startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute;
+		String[] dateStartArray = startDate.split("/");
+		startYear = Integer.parseInt(dateStartArray[0]);
+		startMonth = Integer.parseInt(dateStartArray[1]);
+		startDay = Integer.parseInt(dateStartArray[2]);
+
+		String[] dateEndArray = endDate.split("/");
+		endYear = Integer.parseInt(dateEndArray[0]);
+		endMonth = Integer.parseInt(dateEndArray[1]);
+		endDay = Integer.parseInt(dateEndArray[2]);
+	
+
+
+		String[] timeStartArray = startTime.split(":");
+		startHour = Integer.parseInt(timeStartArray[0]);
+		startMinute = Integer.parseInt(timeStartArray[1]);
+
+		String[] timeEndArray = endTime.split(":");
+		endHour = Integer.parseInt(timeEndArray[0]);
+		endMinute = Integer.parseInt(timeEndArray[1]);
 
 		this.name = name;
-		this.startDate = LocalDate.of(sYear, sMonth, sDay);
-		this.endDate = LocalDate.of(eYear, eMonth, eDay);
-		this.startTime = LocalTime.of(sHour, sMin);
-		this.endTime = LocalTime.of(eHour, eMin);
+		this.startDate = LocalDate.of(startYear, startMonth, startDay);
+		this.endDate = LocalDate.of(endYear, endMonth, endDay);
+		this.startTime = LocalTime.of(startHour, startMinute);
+		this.endTime = LocalTime.of(endHour, endMinute);
 		this.duration = duration;
 
 		// timeslot generation

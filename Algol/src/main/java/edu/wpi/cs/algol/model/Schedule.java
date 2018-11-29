@@ -57,7 +57,7 @@ public class Schedule {
 
 			for(LocalTime time = this.startTime; time.isBefore(this.endTime); time = time.plusMinutes(duration)) {
 
-				this.
+				// loop and add timeslots
 
 			}
 

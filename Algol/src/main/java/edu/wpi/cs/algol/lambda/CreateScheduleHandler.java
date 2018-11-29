@@ -6,31 +6,32 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.time.LocalDateTime;
+
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.GetObjectRequest;
-import com.amazonaws.services.s3.model.S3Object;
+//import com.amazonaws.services.s3.AmazonS3;
+//import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+//import com.amazonaws.services.s3.model.GetObjectRequest;
+//import com.amazonaws.services.s3.model.S3Object;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
-import com.amazonaws.services.lambda.runtime.RequestHandler;
+//import com.amazonaws.services.lambda.runtime.RequestHandler;
 
 import com.google.gson.Gson;
 
 import edu.wpi.cs.algol.db.ScheduleDAO;
+import edu.wpi.cs.algol.model.Schedule;
 
 /**
  * Found gson JAR file from
  * https://repo1.maven.org/maven2/com/google/code/gson/gson/2.6.2/gson-2.6.2.jar
  */
-public class CreateScheduleHandler implements RequestHandler<S3Event, String> {
+public class CreateScheduleHandler implements RequestStreamHandler {
 
 	public LambdaLogger logger = null;
 
@@ -38,53 +39,55 @@ public class CreateScheduleHandler implements RequestHandler<S3Event, String> {
 	 * 
 	 * @throws Exception 
 	 */
-	boolean createSchedule(String name, String dateStart, String dateEnd, String timeStart, String timeEnd,  String duration) throws Exception {
+	boolean createSchedule(String name, String dateStart, String dateEnd, String timeStart, String timeEnd, String duration) throws Exception {
 		if (logger != null) { logger.log("in createSchedule"); }
 
 		//variable setup
 		ScheduleDAO daoS = new ScheduleDAO();
-		int startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute;
+		/*int startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute, durationInt;
 		
 		//parse the date Strings from the format: MM/DD/YYYY
-		if(dateStart.length() == 11){
+	
 			String[] dateStartArray = dateStart.split("/");
 			startYear = Integer.parseInt(dateStartArray[0]);
 			startMonth = Integer.parseInt(dateStartArray[1]);
 			startDay = Integer.parseInt(dateStartArray[2]);
-		}
-		if(dateEnd.length() == 11){
+	
 			String[] dateEndArray = dateEnd.split("/");
 			endYear = Integer.parseInt(dateEndArray[0]);
 			endMonth = Integer.parseInt(dateEndArray[1]);
 			endDay = Integer.parseInt(dateEndArray[2]);
-		}
+		
 
-		//parse the date Strings from the format: HH:MM
-		if(timeStart.length() == 5 || timeStart.length() == 6){
+	
 			String[] timeStartArray = timeStart.split(":");
 			startHour = Integer.parseInt(timeStartArray[0]);
 			startMinute = Integer.parseInt(timeStartArray[1]);
-		}
-		if(timeEnd.length() == 5 || timeEnd.length() == 6){
+	
 			String[] timeEndArray = timeEnd.split(":");
-			EndHour = Integer.parseInt(timeEndArray[0]);
-			EndMinute = Integer.parseInt(timeEndArray[1]);
-		}
+			endHour = Integer.parseInt(timeEndArray[0]);
+			endMinute = Integer.parseInt(timeEndArray[1]);
+		
 
 		//parse the duration away
 		String[] durationArray = duration.split(" ");
 		durationInt = Integer.parseInt(durationArray[0]);
 
 		//creating the localDateTime Objects
-		LocalDateTime startDate = new LocalDateTime();
+		DateTime startDate = new LocalDateTime();
 		startDate.of(startYear, startMonth, startDay, startHour, startMinute);
 		LocalDateTime endDate = new LocalDateTime();
-		endDate.of(endYear, endMonth, endDay, endHour, endMinute);
+		endDate.of(endYear, endMonth, endDay, endHour, endMinute);*/
+		
+		String[] durationArray = duration.split(" ");
+		int durationInt = Integer.parseInt(durationArray[0]);
+		
 		//creating the schedule
-		Schedule s = new Schedule(name, startDate.toLocalDate(), endDate.toLocalDate(), startDate.toLocalTime(), endDate.toLocalTime, durationInt);
+		Schedule s = new Schedule(name, dateStart, dateEnd, timeStart, timeEnd, durationInt);
 		return daoS.addSchedule(s);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
 		logger = context.getLogger();

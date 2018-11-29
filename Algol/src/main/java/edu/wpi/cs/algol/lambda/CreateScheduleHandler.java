@@ -79,11 +79,11 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 		LocalDateTime endDate = new LocalDateTime();
 		endDate.of(endYear, endMonth, endDay, endHour, endMinute);*/
 		// 20 min
-//		String[] durationArray = duration.split(" ");
-//		int durationInt = Integer.parseInt(durationArray[0]);
-//		logger.log("Parsed duration to get integer \n");
+		
+		int durationInt = Integer.parseInt(duration.substring(0, 2));
+		logger.log("Parsed duration to get integer \n");
 		//creating the schedule
-		//s = new Schedule(name, dateStart, dateEnd, timeStart, timeEnd, durationInt);
+		s = new Schedule(name, dateStart, dateEnd, timeStart, timeEnd, durationInt);
 		
 		return true;//daoS.addSchedule(s);
 	}
@@ -145,6 +145,7 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 			CreateScheduleResponse resp;
 			try {
 				if (createSchedule(req.name, req.dateStart, req.dateEnd, req.timeStart, req.timeEnd, req.duration)) {
+					logger.log("createSchedule miraculously turned true");
 					resp = new CreateScheduleResponse("Successfully created schedule:" + req.name
 							+"\n" + "code: " + s.getSecretCode() + "id: " + s.getId() );
 					logger.log("Successful creation of schedule");

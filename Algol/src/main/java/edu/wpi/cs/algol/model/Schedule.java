@@ -60,14 +60,14 @@ public class Schedule {
 		 */
 		int startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute;
 		String[] dateStartArray = startDate.split("/");
-		startYear = Integer.parseInt(dateStartArray[0]);
-		startMonth = Integer.parseInt(dateStartArray[1]);
-		startDay = Integer.parseInt(dateStartArray[2]);
+		startMonth = Integer.parseInt(dateStartArray[0]);
+		startDay = Integer.parseInt(dateStartArray[1]);
+		startYear = Integer.parseInt(dateStartArray[2]);
 
 		String[] dateEndArray = endDate.split("/");
-		endYear = Integer.parseInt(dateEndArray[0]);
-		endMonth = Integer.parseInt(dateEndArray[1]);
-		endDay = Integer.parseInt(dateEndArray[2]);
+		endMonth = Integer.parseInt(dateEndArray[0]);
+		endDay = Integer.parseInt(dateEndArray[1]);
+		endYear = Integer.parseInt(dateEndArray[2]);
 	
 
 

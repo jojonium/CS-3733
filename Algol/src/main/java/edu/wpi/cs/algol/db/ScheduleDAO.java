@@ -55,19 +55,24 @@ public class ScheduleDAO {
 			PreparedStatement ps;
 			
 			ps = conn.prepareStatement("INSERT INTO Schedules (name, startDate, endDate, startTime, endTime, duration) values(?,?,?,?,?,?) ");
-			// toString methods not exactly functional
+			logger.log("in addSchedule innitial declaration of conn: " + ps.toString() + "\n");
+
 			ps.setString(1, schedule.name);
+			logger.log("in addSchedule set name: " + ps.toString() + "\n");
 			ps.setString(2, schedule.getStartDate().toString());
+			logger.log("addSchedule set startDate: " + ps.toString() + "\n");
 			ps.setString(3, schedule.getEndDate().toString());
+			logger.log("in addSchedule set: endDate" + ps.toString() + "\n");
 			ps.setString(4, schedule.getStartTime().toString());
+			logger.log("in addSchedule setStartTime: " + ps.toString() + "\n");
 			ps.setString(5, schedule.getEndTime().toString());
 			ps.setInt(6, schedule.duration); 
-			logger.log("addSchedule method for ps: " + ps.toString() + "\n");
+			logger.log("in addSchedule setEndTime: " + ps.toString() + "\n");
 			ps.execute();
 			return true;
 
 		} catch (Exception e) {
-            throw new Exception("Failed to insert schedule: " + e.getMessage());
+            throw new Exception("Failed to insert schedule: " + e + "\n" + e.getMessage());
         }
 
 	}

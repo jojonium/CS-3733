@@ -13,8 +13,8 @@ public class ScheduleDAO {
 	
 	LambdaLogger logger = null;
 
-	public ScheduleDAO() {
-		/*logger = l;
+	public ScheduleDAO(LambdaLogger l) {
+		logger = l;
 		logger.log("ScheduleDAO constructor...\n");
 		try {
 			conn = DatabaseUtil.connect(); // will need DatabaseUtil class
@@ -22,7 +22,7 @@ public class ScheduleDAO {
 		} catch (Exception e) {
 			conn = null;
 			logger.log("Error in generating DAO, exception: " + e +"\n" +e.toString());
-		}*/
+		}
 
 	}
 

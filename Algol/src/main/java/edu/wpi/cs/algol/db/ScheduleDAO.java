@@ -13,8 +13,9 @@ public class ScheduleDAO {
 	
 	LambdaLogger logger = null;
 
-	public ScheduleDAO() {
-
+	public ScheduleDAO(LambdaLogger l) {
+		logger = l;
+		logger.log("ScheduleDAO constructor...\n");
 		try {
 			conn = DatabaseUtil.connect(); // will need DatabaseUtil class
 			logger.log("Generating ScheduleDAO, checking conn: " + conn.toString() + "\n");
@@ -55,7 +56,7 @@ public class ScheduleDAO {
 
 		try {
 			PreparedStatement ps;
-			
+			logger.log("made PreparedStatement ps\n");
 			ps = conn.prepareStatement("INSERT INTO Schedules (name, startDate, endDate, startTime, endTime, duration) values(?,?,?,?,?,?) ");
 			logger.log("in addSchedule innitial declaration of conn: " + ps.toString() + "\n");
 			

@@ -2,6 +2,7 @@ import {MDCRipple} from '@material/ripple';
 import {MDCTextField} from '@material/textfield';
 import {MDCSelect} from '@material/select';
 import {MDCDialog} from '@material/dialog';
+import {MDCLinearProgress} from '@material/linear-progress';
 
 new MDCTextField(document.querySelector('.name'));
 const startDate = new MDCTextField(document.querySelector('.start-date'));
@@ -20,13 +21,32 @@ const select = new MDCSelect(document.querySelector('.mdc-select'));
 const createScheduleSuccessDialog = new MDCDialog(document.querySelector('.create-schedule-success-dialog'));
 const createScheduleFailureDialog = new MDCDialog(document.querySelector('.create-schedule-failure-dialog'));
 
+const progressBar = new MDCLinearProgress(document.querySelector('.mdc-linear-progress'));
+progressBar.foundation_.close();
+
+
+/* hack to display placeholder text on form field focus */
+const nameInput = document.getElementById('name-input');
+const startDateInput = document.getElementById('start-date-input');
+const endDateInput = document.getElementById('end-date-input');
+const startTimeInput = document.getElementById('start-time-input');
+const endTimeInput = document.getElementById('end-time-input');
+startDateInput.addEventListener('focus', () => startDateInput.placeholder = "dd/MM/YYYY");
+startDateInput.addEventListener('blur', () => startDateInput.placeholder = "");
+endDateInput.addEventListener('focus', () => endDateInput.placeholder = "dd/MM/YYYY");
+endDateInput.addEventListener('blur', () => endDateInput.placeholder = "");
+startTimeInput.addEventListener('focus', () => startTimeInput.placeholder = "9:00");
+startTimeInput.addEventListener('blur', () => startTimeInput.placeholder = "");
+endTimeInput.addEventListener('focus', () => endTimeInput.placeholder = "17:00");
+endTimeInput.addEventListener('blur', () => endTimeInput.placeholder = "");
+
 
 /* do some simple form validation */
 startDate.listen('change', () => {
-	if (!document.querySelector('#start-date-input').value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
-		document.querySelector('#start-date-input').setCustomValidity("invalid");
+	if (!startDateInput.value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
+		startDateInput.setCustomValidity("invalid");
 	} else {
-		document.querySelector('#start-date-input').setCustomValidity("");
+		startDateInput.setCustomValidity("");
 	}
 });
 
@@ -54,11 +74,43 @@ endTime.listen('change', () => {
 	}
 });
 
+/* bind updateProgressBar */
+/* timeout is necessary so that the custom validation fires first */
+nameInput.addEventListener('change', () => setTimeout(() => updateProgressBar(), 1));
+startDateInput.addEventListener('change', () => setTimeout(() => updateProgressBar(), 1));
+endDateInput.addEventListener('change', () => setTimeout(() => updateProgressBar(), 1));
+startTimeInput.addEventListener('change', () => setTimeout(() => updateProgressBar(), 1));
+endTimeInput.addEventListener('change', () => setTimeout(() => updateProgressBar(), 1));
+
+
 /* use window namespace because it doesn't work otherwise */
+window.updateProgressBar = () => {
+	var progress = 0;
+	if (nameInput.checkValidity())
+		progress += .2;
+	if (startDateInput.checkValidity())
+		progress += .2;
+	if (endDateInput.checkValidity())
+		progress += .2;
+	if (startTimeInput.checkValidity())
+		progress += .2;
+	if (endTimeInput.checkValidity())
+		progress += .2;
+	progressBar.foundation_.setProgress(progress);
+	if (progress > 0) {
+		progressBar.foundation_.open();
+	} else {
+		progressBar.foundation_.close();
+	}
+}
+
 window.handleCreateSchedule = (e) => {
 	const createScheduleUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/createschedule";
 	var incFlag = false;
-
+	
+	document.querySelector('.create-schedule').disabled = "disabled";
+	document.querySelector('.mdc-linear-progress').className += ' mdc-linear-progress--indeterminate';
+	
 	// grab data from form fields
 	var form        = document.createScheduleForm;
 	var sdateArg    = form.sdate.value;
@@ -80,10 +132,12 @@ window.handleCreateSchedule = (e) => {
 	console.log(json);
 
 	var xhr = new XMLHttpRequest();
-	xhr.open("POST", createScheduleUrl, true);
+	setTimeout(() => {
+		xhr.open("POST", createScheduleUrl, true);
 	
-	// send the collected data as JSON
-	xhr.send(json);
+		// send the collected data as JSON
+		xhr.send(json);
+	}, 5000);
 
 	// handle the server's response
 	xhr.onloadend = function() {
@@ -102,6 +156,9 @@ window.handleCreateSchedule = (e) => {
 			} else if (respjson.httpCode == '400') {
 				createScheduleFailureDialog.open();
 			}
+			document.querySelector('.create-schedule').disabled = "";
+			document.querySelector('.mdc-linear-progress').classList.remove('mdc-linear-progress--indeterminate');
+			progressBar.foundation_.close();
 		}
 	}
 };

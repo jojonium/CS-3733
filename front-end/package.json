@@ -13,23 +13,25 @@
     "css-loader": "^0.28.0",
     "extract-loader": "^1.0.2",
     "file-loader": "^1.1.11",
-    "node-sass": "^4.9.0",
+    "node-sass": "^4.11.0",
     "sass-loader": "^6.0.4",
     "webpack": "^3.0.0",
     "webpack-dev-server": "^2.4.3"
   },
   "dependencies": {
     "@material/button": "^0.40.0",
+    "@material/dialog": "^0.41.0",
     "@material/drawer": "^0.40.0",
     "@material/elevation": "^0.40.0",
     "@material/image-list": "^0.40.0",
+    "@material/linear-progress": "^0.41.0",
     "@material/list": "^0.40.0",
-    "@material/ripple": "^0.40.0",
-    "@material/textfield": "^0.40.0",
-    "@material/typography": "^0.39.0",
-    "@material/select": "^0.41.0",
-    "@material/dialog": "^0.41.0",
     "@material/notched-outline": "^0.41.0",
-    "@material/shape": "^0.41.0"
+    "@material/ripple": "^0.40.0",
+    "@material/select": "^0.41.0",
+    "@material/shape": "^0.41.0",
+    "@material/textfield": "^0.40.1",
+    "@material/typography": "^0.39.0",
+    "@material/linear-progress": "^0.41.0"
   }
 }

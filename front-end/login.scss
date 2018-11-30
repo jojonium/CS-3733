@@ -7,7 +7,7 @@
 @import "@material/menu/mdc-menu";
 @import "@material/select/mdc-select";
 @import "@material/dialog/mdc-dialog";
-
+@import "@material/linear-progress/mdc-linear-progress";
 
 .header {
   text-align: center;
@@ -48,9 +48,12 @@
 }
 
 .index-item {
-	width: 400px;
-	padding: 40px;
+	width: 500px;
 	margin: 20px;
+}
+
+.index-item-interior {
+	padding: 40px;	
 }
 
 .index-container {

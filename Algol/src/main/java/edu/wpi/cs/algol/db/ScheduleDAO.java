@@ -67,7 +67,7 @@ public class ScheduleDAO {
 			ps.setString(3, schedule.getEndDate().toString());
 			ps.setString(4, schedule.getStartTime().toString());
 			ps.setString(5, schedule.getEndTime().toString());
-			ps.setInt(6, schedule.duration); // regex minutes
+			ps.setInt(6, schedule.duration); 
 			ps.execute();
 			return true;
 
@@ -86,7 +86,7 @@ public class ScheduleDAO {
 		String endDate = resultSet.getString("endDate");
 		String startTime = resultSet.getString("startTime");
 		String endTime = resultSet.getString("endTime");
-		int duration = resultSet.getInt("duration"); // regex minutes
+		int duration = Integer.parseInt(resultSet.getString("duration").substring(0, 2)); // regex minutes
 
 		return new Schedule(name, startDate, endDate, startTime, endTime, duration);
 

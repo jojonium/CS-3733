@@ -24,7 +24,7 @@ import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 
 import com.google.gson.Gson;
 
-//import edu.wpi.cs.algol.db.ScheduleDAO;
+import edu.wpi.cs.algol.db.ScheduleDAO;
 import edu.wpi.cs.algol.model.Schedule;
 
 /**
@@ -43,7 +43,7 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 		if (logger != null) { logger.log("in createSchedule"); }
 
 		//variable setup
-		//ScheduleDAO daoS = new ScheduleDAO();
+		ScheduleDAO daoS = new ScheduleDAO();
 		/*int startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute, durationInt;
 		
 		//parse the date Strings from the format: MM/DD/YYYY
@@ -85,7 +85,7 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 		//creating the schedule
 		s = new Schedule(name, dateStart, dateEnd, timeStart, timeEnd, durationInt);
 		
-		return true;//daoS.addSchedule(s);
+		return daoS.addSchedule(s);
 	}
 	
 	@SuppressWarnings("unchecked")

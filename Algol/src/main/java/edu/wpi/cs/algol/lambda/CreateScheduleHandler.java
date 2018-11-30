@@ -42,6 +42,7 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 	boolean createSchedule(String name, String dateStart, String dateEnd, String timeStart, String timeEnd, String duration) throws Exception {
 		if (logger != null) { logger.log("in createSchedule"); }
 
+		// test
 		//variable setup
 		ScheduleDAO daoS = new ScheduleDAO(logger);
 		/*int startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute, durationInt;

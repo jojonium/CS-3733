@@ -17,8 +17,10 @@ public class ScheduleDAO {
 
 		try {
 			conn = DatabaseUtil.connect(); // will need DatabaseUtil class
+			logger.log("Generating ScheduleDAO, checking conn: " + conn.toString() + "\n");
 		} catch (Exception e) {
 			conn = null;
+			logger.log("Error in generating DAO, exception: " + e +"\n" +e.toString());
 		}
 
 	}

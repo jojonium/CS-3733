@@ -56,7 +56,7 @@ public class ScheduleDAO {
 			
 			ps = conn.prepareStatement("INSERT INTO Schedules (name, startDate, endDate, startTime, endTime, duration) values(?,?,?,?,?,?) ");
 			logger.log("in addSchedule innitial declaration of conn: " + ps.toString() + "\n");
-
+			
 			ps.setString(1, schedule.name);
 			logger.log("in addSchedule set name: " + ps.toString() + "\n");
 			ps.setString(2, schedule.getStartDate().toString());

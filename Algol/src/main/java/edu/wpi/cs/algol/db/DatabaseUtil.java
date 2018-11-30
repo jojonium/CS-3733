@@ -37,7 +37,7 @@ public class DatabaseUtil {
 			//System.out.println("Database has been connected successfully.");
 			return conn;
 		} catch (Exception ex) {
-			throw new Exception("Failed in database connection");
+			throw new Exception("Failed in database connection: " + ex);
 		}
 	}
 }

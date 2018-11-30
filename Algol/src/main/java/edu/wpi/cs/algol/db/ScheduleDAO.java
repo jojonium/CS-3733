@@ -3,11 +3,15 @@ package edu.wpi.cs.algol.db;
 
 import java.sql.*;
 
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
+
 import edu.wpi.cs.algol.model.Schedule;
 
 public class ScheduleDAO {
 	
 	java.sql.Connection conn;
+	
+	LambdaLogger logger = null;
 
 	public ScheduleDAO() {
 
@@ -48,18 +52,8 @@ public class ScheduleDAO {
 	public boolean addSchedule(Schedule schedule) throws Exception{
 
 		try {
-			PreparedStatement ps = conn.prepareStatement("SELECT * FROM Schedules WHERE id=?;");
-			ps.setString(1, schedule.getId());
-			ResultSet resultSet = ps.executeQuery();
-
-			// already present?
-			while (resultSet.next()) {
-
-				//Schedule s = createSchedule(resultSet);
-				resultSet.close();
-				return false;
-			}
-				
+			PreparedStatement ps;
+			
 			ps = conn.prepareStatement("INSERT INTO Schedules (name, startDate, endDate, startTime, endTime, duration) values(?,?,?,?,?,?) ");
 			// toString methods not exactly functional
 			ps.setString(1, schedule.name);
@@ -68,6 +62,7 @@ public class ScheduleDAO {
 			ps.setString(4, schedule.getStartTime().toString());
 			ps.setString(5, schedule.getEndTime().toString());
 			ps.setInt(6, schedule.duration); 
+			logger.log("addSchedule method for ps: " + ps.toString() + "\n");
 			ps.execute();
 			return true;
 
@@ -77,7 +72,7 @@ public class ScheduleDAO {
 
 	}
 
-
+	//private static 
 
 	private Schedule createSchedule(ResultSet resultSet) throws Exception {
 		// update field types of visibility?

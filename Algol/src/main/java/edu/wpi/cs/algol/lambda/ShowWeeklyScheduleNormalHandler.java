@@ -64,7 +64,7 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 					body = event.toJSONString();  // this is only here to make testing easier
 					
 				}
-				logger.log(body.toString()+ "\n");
+				logger.log("JSON body: " + body.toString()+ "\n");
 			}
 		} catch (ParseException pe) {
 			logger.log(pe.toString() + "\n");
@@ -77,7 +77,7 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 
 		if (!processed) {
 			ShowWeeklyScheduleRequest req = new Gson().fromJson(body, ShowWeeklyScheduleRequest.class);
-			logger.log("New Req for !processed" + req.toString() + "\n");
+			logger.log("New Req for !processed: " + req.toString() + "\n");
 
 			ShowWeeklyScheduleResponse resp;
 			try {

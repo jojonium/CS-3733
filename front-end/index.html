@@ -9,10 +9,10 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
   <link rel="stylesheet" href="bundle-login.css">
 </head>
-<body class="shrine-login">
+<body>
   <section class="header">
     <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-    width="400px" height="157px" viewBox="0 0 866.000000 340.000000"
+    width="300px" height="118px" viewBox="0 0 866.000000 340.000000"
     preserveAspectRatio="xMidYMid meet">
         <g transform="translate(0.000000,340.000000) scale(0.100000,-0.100000)"
         fill="#000000" stroke="none">
@@ -132,7 +132,7 @@
         <form action="JavaScript:handleCreateSchedule(this)" name="createScheduleForm" id="createScheduleForm">
           <div class="mdc-text-field name">
             <input type="text" class="mdc-text-field__input" id="name-input" name="name" required minlength="3" maxlength="32">
-            <label class="mdc-floating-label" for="name-input">Schedule Name</label>
+            <label class="mdc-floating-label" for="name-input">Schedule name</label>
             <div class="mdc-line-ripple"></div>
           </div>
           
@@ -159,31 +159,31 @@
                 </li>
               </ul>
             </div>
-            <span class="mdc-floating-label">Duration</span>
+            <span class="mdc-floating-label">Meeting duration</span>
             <div class="mdc-line-ripple"></div>
           </div>
           
           <div class="mdc-text-field start-date">
             <input type="text" class="mdc-text-field__input" id="start-date-input" name="sdate" required minlength="8" maxlength="10">
-            <label class="mdc-floating-label" for="start-date-input">Start Date</label>
+            <label class="mdc-floating-label" for="start-date-input">Start date</label>
             <div class="mdc-line-ripple"></div>
           </div>
           
           <div class="mdc-text-field end-date">
             <input type="text" class="mdc-text-field__input" id="end-date-input" name="edate" required minlength="8" maxlength="10">
-            <label class="mdc-floating-label" for="end-date-input">End Date</label>
+            <label class="mdc-floating-label" for="end-date-input">End date</label>
             <div class="mdc-line-ripple"></div>
           </div>
           
           <div class="mdc-text-field start-time">
             <input type="text" class="mdc-text-field__input" id="start-time-input" name="stime" required minlength="4" maxlength="5">
-            <label class="mdc-floating-label" for="start-time-input">Start Time</label>
+            <label class="mdc-floating-label" for="start-time-input">Start time</label>
             <div class="mdc-line-ripple"></div>
           </div>
           
           <div class="mdc-text-field end-time">
             <input type="text" class="mdc-text-field__input" id="end-time-input" name="etime" required minlength="4" maxlength="5">
-            <label class="mdc-floating-label" for="end-time-input">End Time</label>
+            <label class="mdc-floating-label" for="end-time-input">End time</label>
             <div class="mdc-line-ripple"></div>
           </div>
           
@@ -203,28 +203,28 @@
           <div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
             <span class="mdc-linear-progress__bar-inner"></span>
           </div>
-        </div>
+        </div> <!-- progress bar -->
     </div> <!-- index-item -->
     
     
     <div class="mdc-elevation--z5 index-item">
       <div class="index-item-interior">
         <h2>View existing schedule</h2>
-        <form>
+        <form action="/schedule" name="viewScheduleForm" id="viewScheduleForm">
           <div class="mdc-text-field schedule-id">
-            <input type="text" class="mdc-text-field__input" id="schedule-id-input" name="schedule-id" required minlength="6" maxlength="6">
+            <input type="text" class="mdc-text-field__input" id="schedule-id-input" name="scheduleID" required minlength="6" maxlength="6">
             <label class="mdc-floating-label" for="schedule-id-input">Schedule ID</label>
             <div class="mdc-line-ripple"></div>
           </div>
           
           <div class="mdc-text-field secret-code">
-            <input type="text" class="mdc-text-field__input" id="secret-code-input" name="secret-code" minlength="6" maxlength="6">
+            <input type="text" class="mdc-text-field__input" id="secret-code-input" name="secretCode" minlength="6" maxlength="6">
             <label class="mdc-floating-label" for="secret-code-input">Secret code</label>
             <div class="mdc-line-ripple"></div>
           </div>
           
           <div class="button-container">
-            <button type="button" class="mdc-button mdc-button--raised view-schedule">
+            <button class="mdc-button mdc-button--raised view-schedule">
               View Schedule
             </button>
           </div>
@@ -234,6 +234,5 @@
   </div> <!-- index-container -->
   
   <script src="bundle-login.js" async></script>
-  <!--<script src="index.js"></script>-->
 </body>
 </html>

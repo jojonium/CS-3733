@@ -42,44 +42,8 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 	boolean createSchedule(String name, String dateStart, String dateEnd, String timeStart, String timeEnd, String duration) throws Exception {
 		if (logger != null) { logger.log("in createSchedule"); }
 
-		// test
 		//variable setup
 		ScheduleDAO daoS = new ScheduleDAO(logger);
-		/*int startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute, durationInt;
-		
-		//parse the date Strings from the format: MM/DD/YYYY
-	
-			String[] dateStartArray = dateStart.split("/");
-			startYear = Integer.parseInt(dateStartArray[0]);
-			startMonth = Integer.parseInt(dateStartArray[1]);
-			startDay = Integer.parseInt(dateStartArray[2]);
-	
-			String[] dateEndArray = dateEnd.split("/");
-			endYear = Integer.parseInt(dateEndArray[0]);
-			endMonth = Integer.parseInt(dateEndArray[1]);
-			endDay = Integer.parseInt(dateEndArray[2]);
-		
-
-	
-			String[] timeStartArray = timeStart.split(":");
-			startHour = Integer.parseInt(timeStartArray[0]);
-			startMinute = Integer.parseInt(timeStartArray[1]);
-	
-			String[] timeEndArray = timeEnd.split(":");
-			endHour = Integer.parseInt(timeEndArray[0]);
-			endMinute = Integer.parseInt(timeEndArray[1]);
-		
-
-		//parse the duration away
-		String[] durationArray = duration.split(" ");
-		durationInt = Integer.parseInt(durationArray[0]);
-
-		//creating the localDateTime Objects
-		DateTime startDate = new LocalDateTime();
-		startDate.of(startYear, startMonth, startDay, startHour, startMinute);
-		LocalDateTime endDate = new LocalDateTime();
-		endDate.of(endYear, endMonth, endDay, endHour, endMinute);*/
-		// 20 min
 		
 		int durationInt = Integer.parseInt(duration.substring(0, 2));
 		logger.log("Parsed duration to get integer: "+ durationInt+"\n");

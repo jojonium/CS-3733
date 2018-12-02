@@ -16,6 +16,8 @@ public class TimeSlot {
 	private String requester;
 	private String scheduleID;
 // 11/28/2018 12:12
+	
+	/* constructor for new TimeSlots */
 	public TimeSlot(String beginDateTime, String scheduleID) {
 		
 		StringTokenizer stDateTime = new StringTokenizer(beginDateTime);
@@ -37,6 +39,17 @@ public class TimeSlot {
 
 	}
 	
+	/* constructor for existing TimeSlots */
+	public TimeSlot(String secretCode, LocalDateTime beginDateTime, boolean isOpen, String requester, String scheduleID) {
+		this.secretCode = secretCode;
+		this.beginDateTime = beginDateTime;
+		this.isOpen = isOpen;
+		this.requester = requester;
+		this.scheduleID = scheduleID;
+	}
+
+
+
 	private static String generateCode(){
 
 		String code = "";

@@ -44,7 +44,7 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 
 		// test
 		//variable setup
-		ScheduleDAO daoS = new ScheduleDAO();
+		ScheduleDAO daoS = new ScheduleDAO(logger);
 		/*int startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute, durationInt;
 		
 		//parse the date Strings from the format: MM/DD/YYYY

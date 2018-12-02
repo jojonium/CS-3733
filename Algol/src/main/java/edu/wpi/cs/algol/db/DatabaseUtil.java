@@ -7,16 +7,16 @@ import java.sql.DriverManager;
 public class DatabaseUtil {
 	
 	// These are to be configured and NEVER stored in the code.
-	// once you retrieve this code, you can update
-	public final static String rdsMySqlDatabaseUrl = "cs3733algoldb.cv11t6aipqg5.us-east-2.rds.amazonaws.com";
+	// once you retrieve this code, you can update    
+	public final static String rdsMySqlDatabaseUrl = "algoldb.cv11t6aipqg5.us-east-2.rds.amazonaws.com";
 	public final static String dbUsername = "algolAdmin";
 	public final static String dbPassword = "algol:pass";
 		
 	public final static String jdbcTag = "jdbc:mysql://";
 	public final static String rdsMySqlDatabasePort = "3306";
-	public final static String multiQueries = "?allowMultiQueries=true";
+	public final static String multiQueries = "?allowMultiQueries=true&useSSL=false";
 	   
-	public final static String dbName = "cs3733algoldb";    // default created from MySQL WorkBench
+	public final static String dbName = "innodb";    // default created from MySQL WorkBench
 
 	// pooled across all usages.
 	static Connection conn;

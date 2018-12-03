@@ -5,7 +5,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { CreateScheduleRequest } from './create-schedule/create-schedule-request';
 import { CreateScheduleResponse } from './create-schedule/create-schedule-response';
-import { WeeklySchedule } from './view-weekly-schedule/weekly-schedule';
+import { ViewWeeklyScheduleResponse } from './view-weekly-schedule/view-weekly-schedule-response';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +17,7 @@ export class ScheduleService {
   ) { }
 
   private createScheduleUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/createschedule";
+  private viewWeeklyScheduleUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/viewweeklyschedule";
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -24,7 +25,7 @@ export class ScheduleService {
 
   /* POSTs a new schedule to the server */
   createSchedule(csRequest: CreateScheduleRequest): Observable<CreateScheduleResponse> {
-    console.log('CreateScheduleService.createSchedule(): Attempting to send...');
+    console.log('ScheduleService.createSchedule(): Attempting to send...');
     console.log(csRequest);
     console.log(JSON.stringify(csRequest));
 
@@ -34,14 +35,26 @@ export class ScheduleService {
         console.log(csResponse);
       }),
       catchError(this.handleError<CreateScheduleResponse>('createSchedule')));
-
   }
+
   
   /* GETs a schedule from the server */
-  getSchedule(id: string): Observable<WeeklySchedule> {
-    // TODO implement
-    return new Observable<WeeklySchedule>();
+  getSchedule(scheduleID: string): Observable<ViewWeeklyScheduleResponse> {
+    console.log('ScheduleService.getSchdeule(): Attempting to send with scheduleID=' + scheduleID);
+    
+    return this.http.get<ViewWeeklyScheduleResponse>(this.viewWeeklyScheduleUrl, {
+      params: {
+        "scheduleID": scheduleID
+      },
+    }).pipe(
+      tap((vwsResponse: ViewWeeklyScheduleResponse) => {
+        console.log('received vwsResponse:');
+        console.log(vwsResponse);
+      }),
+      catchError(this.handleError<ViewWeeklyScheduleResponse>('getSchedule')));
+    
   }
+  
 
 
 

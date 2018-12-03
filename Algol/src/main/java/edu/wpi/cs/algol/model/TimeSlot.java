@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Random;
-import java.util.StringTokenizer;
 
 
 public class TimeSlot {
@@ -20,32 +19,74 @@ public class TimeSlot {
 	/* constructor for new TimeSlots */
 	public TimeSlot(String beginDateTime, String scheduleID) {
 		
-		StringTokenizer stDateTime = new StringTokenizer(beginDateTime);
-
-		int month = Integer.parseInt(stDateTime.nextToken("/"));	// parsing might not work correctly
-		int day = Integer.parseInt(stDateTime.nextToken("/"));
-		int year = Integer.parseInt(stDateTime.nextToken());
+		String[] dateTime = beginDateTime.split("T");
+		String[] date = dateTime[0].split("-");
+		String[] time = dateTime[1].split(":");
 		
-		int hour = Integer.parseInt(stDateTime.nextToken(":"));
-		int min = Integer.parseInt(stDateTime.nextToken());
+		int year = Integer.parseInt(date[0]);	// parsing might not work correctly
+		int month = Integer.parseInt(date[1]);
+		int day = Integer.parseInt(date[2]);
+		
+		int hour = Integer.parseInt(time[0]);
+		int min = Integer.parseInt(time[1]);
 		
 		this.beginDateTime = LocalDateTime.of(LocalDate.of(year, month, day), 
 				LocalTime.of(hour, min));
 		this.scheduleID = scheduleID;
+		this.isOpen = true;
 
 		
 		// randomly generated code
-		this.secretCode = generateCode();
 
 	}
 	
-	/* constructor for existing TimeSlots */
-	public TimeSlot(String secretCode, LocalDateTime beginDateTime, boolean isOpen, String requester, String scheduleID) {
+	// for creating a meeting
+	public TimeSlot(String beginDateTime, String scheduleID, String requester) {
+		
+		String[] dateTime = beginDateTime.split("T");
+		String[] date = dateTime[0].split("-");
+		String[] time = dateTime[1].split(":");
+		
+		int year = Integer.parseInt(date[0]);	// parsing might not work correctly
+		int month = Integer.parseInt(date[1]);
+		int day = Integer.parseInt(date[2]);
+		
+		int hour = Integer.parseInt(time[0]);
+		int min = Integer.parseInt(time[1]);
+		
+		this.beginDateTime = LocalDateTime.of(LocalDate.of(year, month, day), 
+				LocalTime.of(hour, min));
+		
+		this.scheduleID = scheduleID;
+		this.requester = requester;
+		this.secretCode = generateCode();;
+		this.isOpen = false;
+		
+	}
+	
+	/* constructor for existing TimeSlots, prolly don't need though */
+	public TimeSlot(String secretCode, String beginDateTime, String isOpen, String requester, String scheduleID) {
+		
+		String[] dateTime = beginDateTime.split("T");
+		String[] date = dateTime[0].split("-");
+		String[] time = dateTime[1].split(":");
+		
+		int year = Integer.parseInt(date[0]);	// parsing might not work correctly
+		int month = Integer.parseInt(date[1]);
+		int day = Integer.parseInt(date[2]);
+		
+		int hour = Integer.parseInt(time[0]);
+		int min = Integer.parseInt(time[1]);
+		
+		this.beginDateTime = LocalDateTime.of(LocalDate.of(year, month, day), 
+				LocalTime.of(hour, min));
+		
 		this.secretCode = secretCode;
-		this.beginDateTime = beginDateTime;
-		this.isOpen = isOpen;
+		this.isOpen = Boolean.valueOf(isOpen);
 		this.requester = requester;
 		this.scheduleID = scheduleID;
+		
+	
 	}
 
 
@@ -111,6 +152,12 @@ public class TimeSlot {
 
 	public void setScheduleId(String scheduleID) {
 		this.scheduleID = scheduleID;
+	}
+
+	@Override
+	public String toString() {
+		return "TimeSlot [secretCode=" + secretCode + ", beginDateTime=" + beginDateTime + ", isOpen=" + isOpen
+				+ ", requester=" + requester + ", scheduleID=" + scheduleID + "]";
 	}
 
 

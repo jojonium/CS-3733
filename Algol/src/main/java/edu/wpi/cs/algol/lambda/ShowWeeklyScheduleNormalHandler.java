@@ -86,7 +86,7 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 				 * BEGIN PLACEHOLDER
 				 */
 				ArrayList<TimeSlot> ts = new ArrayList<TimeSlot>();
-				ts.add(new TimeSlot(null, LocalDateTime.of(2018, Month.NOVEMBER, 26, 9, 0, 0), true, null, req.scheduleID));
+				/*ts.add(new TimeSlot(null, LocalDateTime.of(2018, Month.NOVEMBER, 26, 9, 0, 0), true, null, req.scheduleID));
 				ts.add(new TimeSlot(null, LocalDateTime.of(2018, Month.NOVEMBER, 26, 9, 30, 0), true, null, req.scheduleID));
 				ts.add(new TimeSlot(null, LocalDateTime.of(2018, Month.NOVEMBER, 26, 10, 0, 0), false, null, req.scheduleID));
 				ts.add(new TimeSlot(null, LocalDateTime.of(2018, Month.NOVEMBER, 26, 10, 30, 0), true, null, req.scheduleID));
@@ -99,7 +99,7 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 				ts.add(new TimeSlot(null, LocalDateTime.of(2018, Month.NOVEMBER, 27, 10, 30, 0), true, null, req.scheduleID));
 				ts.add(new TimeSlot(null, LocalDateTime.of(2018, Month.NOVEMBER, 27, 11, 0, 0), true, null, req.scheduleID));
 				ts.add(new TimeSlot(null, LocalDateTime.of(2018, Month.NOVEMBER, 27, 11, 30, 0), false, null, req.scheduleID));
-				
+				*/
 				resp = new ShowWeeklyScheduleResponse(req.scheduleID, "An Example Schedule", "11/26/2018", "11/27/2018", "9:00",
 						"12:00", "30 minutes", ts);
 				logger.log("Created response: " + resp.toString() + "\n");

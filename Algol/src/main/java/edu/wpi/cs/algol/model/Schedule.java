@@ -3,7 +3,7 @@ package edu.wpi.cs.algol.model;
 //import java.awt.List;
 import java.time.LocalDate;
 import java.time.LocalTime;
-//import java.util.ArrayList;
+import java.util.ArrayList;
 //import java.util.Iterator;
 //import java.util.NoSuchElementException;
 import java.util.Random;
@@ -20,7 +20,7 @@ public class Schedule {
 	private LocalTime startTime;
 	private LocalTime endTime;
 	public final int duration;
-	//private ArrayList<TimeSlot> timeSlots;
+	private ArrayList<TimeSlot> timeSlots;
 
 	public LambdaLogger logger = null;
 	// month/day/year 
@@ -87,15 +87,15 @@ public class Schedule {
 		this.duration = duration;
 
 		// timeslot generation
-		/*for (LocalDate date = this.startDate; date.isBefore(this.endDate); date = date.plusDays(1)) {
+		for (LocalDate date = this.startDate; date.isBefore(this.endDate); date = date.plusDays(1)) {
 
 			for(LocalTime time = this.startTime; time.isBefore(this.endTime); time = time.plusMinutes(duration)) {
 
-				// loop and add timeslots
+				//timeSlots.add(new TimeSlot(,))
 
 			}
 
-		}*/
+		}
 
 		// unique value generations
 		this.secretCode = generateCode();

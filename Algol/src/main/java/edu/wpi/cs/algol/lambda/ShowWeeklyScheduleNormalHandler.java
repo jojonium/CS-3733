@@ -6,9 +6,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
+import java.time.LocalTime;
+//import java.time.Month;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,6 +23,7 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.google.gson.Gson;
 
+import edu.wpi.cs.algol.db.TimeSlotDAO;
 import edu.wpi.cs.algol.model.TimeSlot;
 
 public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
@@ -30,26 +35,39 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 		}
 
 		// variable setup
-		TimeslotDAO daoT = new TimeslotDAO(logger);
+		TimeSlotDAO daoT = new TimeSlotDAO();
 		ArrayList<TimeSlot> allts = new ArrayList<TimeSlot>();
 		ArrayList<TimeSlot> weekts = new ArrayList<TimeSlot>();
 		allts = daoT.getAllTimeSlots(id);
-		Timeslot timeslot = daot.getTimeslot(id, dateStart);
-		Timeslot beginWeekDay;
-		for (i = 0; i < 7; i++) {
-			if (timeslot.beginDateTime.minusDays(i).getDayofWeek() == DayOfWeek.SUNDAY) {
-				beginWeekDay = timeslot.minusDays(i);
+		String[] dateTime = dateStart.split("T");
+		String[] date = dateTime[0].split("-");
+		String[] time = dateTime[1].split(":");
+		
+		int year = Integer.parseInt(date[0]);	// parsing might not work correctly
+		int month = Integer.parseInt(date[1]);
+		int day = Integer.parseInt(date[2]);
+		
+		int hour = Integer.parseInt(time[0]);
+		int min = Integer.parseInt(time[1]);
+		
+		LocalDateTime ldt = LocalDateTime.of(LocalDate.of(year, month, day), 
+				LocalTime.of(hour, min));
+		TimeSlot timeslot = daoT.getTimeSlot(id, ldt);
+		TimeSlot beginWeekDay = daoT.getTimeSlot(id, timeslot.getBeginDateTime());;
+		for (int i = 0; i < 7; i++) {
+			if (timeslot.getBeginDateTime().minusDays(i).getDayOfWeek() == DayOfWeek.SUNDAY) {
+				beginWeekDay = daoT.getTimeSlot(id, timeslot.getBeginDateTime().minusDays(i));
 			}
 		}
 
-		Iterator<String> iterator = allts.iterator();
+		Iterator<TimeSlot> iterator = allts.iterator();
 		while (iterator.hasNext()) {
-			for (i = 0; i < 6; i++) {
-				if (iterator.next().beginDateTime == beginWeekDay.plusDays(i)) {
+			for (int i = 0; i < 6; i++) {
+				if (iterator.next().getBeginDateTime() == beginWeekDay.getBeginDateTime().plusDays(i)) {
 					weekts.add(iterator.next());
 				}
 			}
-		};
+		}
 
 		/* weekts.add(all timeslots within a week after beginWeek timeslot) */
 

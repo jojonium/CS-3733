@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { WeeklySchedule } from './weekly-schedule';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 import { ScheduleService } from '../schedule.service';
+import { ViewWeeklyScheduleResponse, ViewWeeklyScheduleResponseBody } from './view-weekly-schedule-response';
 
 @Component({
   selector: 'app-view-weekly-schedule',
@@ -12,7 +12,7 @@ import { ScheduleService } from '../schedule.service';
   styleUrls: ['./view-weekly-schedule.component.css']
 })
 export class ViewWeeklyScheduleComponent implements OnInit {
-  week$ : Observable<WeeklySchedule>;
+  week : ViewWeeklyScheduleResponseBody;
   
   constructor(
     private route: ActivatedRoute,
@@ -21,10 +21,13 @@ export class ViewWeeklyScheduleComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.week$ = this.route.paramMap.pipe(
-      switchMap((params: ParamMap) =>
-        this.scheduleService.getSchedule(params.get('id')))
-    );
+    console.log('ngOnInit: about to call scheduleService.getSchedule');
+    this.route.paramMap.pipe(
+      switchMap((params: ParamMap) => {
+        console.log('ID: ' + params.get('id'));
+        return this.scheduleService.getSchedule(params.get('id'))
+      })
+    ).subscribe(vwsResponse => { this.week = JSON.parse(vwsResponse.body) });
   }
 
 }

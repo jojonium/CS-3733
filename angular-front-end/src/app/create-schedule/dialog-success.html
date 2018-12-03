@@ -8,5 +8,5 @@
 </div>
 <div mat-dialog-actions style="display: flex; justify-content: flex-end">
   <button mat-raised-button (click)="closeSuccessDialog()">CLOSE</button>
-  <button mat-raised-button (click)="closeSuccessDialog()" color="primary" cdkFocusInitial>VIEW SCHEDULE</button>
+  <a [routerLink]="['/schedule', data.scheduleID]"><button mat-raised-button (click)="closeSuccessDialog()" color="primary" cdkFocusInitial>VIEW SCHEDULE</button></a>
 </div>

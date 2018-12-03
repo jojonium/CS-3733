@@ -3,13 +3,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { CreateScheduleRequest } from './create-schedule-request';
-import { CreateScheduleResponse } from './create-schedule-response';
+import { CreateScheduleRequest } from './create-schedule/create-schedule-request';
+import { CreateScheduleResponse } from './create-schedule/create-schedule-response';
+import { WeeklySchedule } from './view-weekly-schedule/weekly-schedule';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CreateScheduleService {
+export class ScheduleService {
 
   constructor(
     private http: HttpClient
@@ -35,6 +36,12 @@ export class CreateScheduleService {
       catchError(this.handleError<CreateScheduleResponse>('createSchedule')));
 
   }
+  
+  /* GETs a schedule from the server */
+  getSchedule(id: string): Observable<WeeklySchedule> {
+    // TODO implement
+    return new Observable<WeeklySchedule>();
+  }
 
 
 
@@ -48,7 +55,6 @@ export class CreateScheduleService {
   private handleError<T> (operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
       console.error(error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

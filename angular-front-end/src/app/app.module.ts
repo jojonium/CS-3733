@@ -10,13 +10,15 @@ import { ShowOnDirtyErrorStateMatcher } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { AmazingTimePickerModule } from 'amazing-time-picker';
 import { HttpClientModule } from '@angular/common/http';
 import { MatDialogModule } from '@angular/material/dialog';
-
+import { RouterModule, Routes } from '@angular/router'
 
 import { AppComponent } from './app.component';
 import { CreateScheduleComponent, DialogFailure, DialogSuccess } from './create-schedule/create-schedule.component';
+import { ViewWeeklyScheduleComponent } from './view-weekly-schedule/view-weekly-schedule.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { AppRoutingModule } from './app-routing.module';
 
 
 @NgModule({
@@ -24,7 +26,9 @@ import { CreateScheduleComponent, DialogFailure, DialogSuccess } from './create-
     AppComponent,
     CreateScheduleComponent,
     DialogFailure,
-    DialogSuccess
+    DialogSuccess,
+    ViewWeeklyScheduleComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -38,9 +42,9 @@ import { CreateScheduleComponent, DialogFailure, DialogSuccess } from './create-
     ReactiveFormsModule,
     MatSelectModule,
     MatProgressBarModule,
-    AmazingTimePickerModule,
     HttpClientModule,
-    MatDialogModule
+    MatDialogModule,
+    AppRoutingModule
   ],
   entryComponents: [
     DialogFailure,

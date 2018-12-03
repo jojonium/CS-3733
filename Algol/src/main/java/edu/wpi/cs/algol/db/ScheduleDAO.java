@@ -74,6 +74,7 @@ public class ScheduleDAO {
 //			logger.log("in addSchedule setEndTime: " + ps.toString() + "\n");
 			ps.execute();
 			
+			
 			TimeSlotDAO tDao = new TimeSlotDAO();
 			for (int i = 0; i < schedule.getTimeSlots().size(); i++) {
 				tDao.addTimeSlot(schedule.getTimeSlots().get(i));
@@ -135,8 +136,14 @@ public class ScheduleDAO {
 		String endTime = resultSet.getString("endTime");
 		int duration = Integer.parseInt(resultSet.getString("duration").substring(0, 2)); // regex minutes
 
-		return new Schedule(secretCode, id, name, startDate, endDate, startTime, endTime, duration);
-
+		Schedule s = new Schedule(secretCode, id, name, startDate, endDate, startTime, endTime, duration);
+		
+		TimeSlotDAO tDao = new TimeSlotDAO();
+		for (int i = 0; i < s.getTimeSlots().size(); i++) {
+			tDao.addTimeSlot(s.getTimeSlots().get(i));
+			
+		}
+		return s;
 	}
 	
 	private String rewriteS(String s) {

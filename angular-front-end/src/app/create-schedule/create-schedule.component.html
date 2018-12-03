@@ -1,0 +1,79 @@
+<div class="mat-elevation-z5 form-container" id="create-schedule-form">
+
+  <div class="form-container-internal">
+
+    <h2>{{heading}}</h2>
+
+
+    <form class="create-schedule-form" name="createScheduleForm" (ngSubmit)="onSubmit()" #createScheduleForm="ngForm">
+      <mat-form-field [hideRequiredMarker]="true">
+        <input matInput placeholder="Schedule name" name="name" [(ngModel)]="model.name" minlength="3" maxlength="32" required id="name-input" #nameInput="ngModel">
+        <mat-error *ngIf="nameInput.hasError('minlength') && !nameInput.hasError('required')">
+          Schedule name must be at least <strong>3</strong> characters long
+        </mat-error>
+        <mat-error *ngIf="nameInput.hasError('required')">
+          Schedule name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <br>
+
+      <mat-form-field [hideRequiredMarker]="true">
+        <mat-select placeholder="Meeting length" name="duration" [(ngModel)]="model.duration" required id="duration-input" #durationInput="ngModel">
+          <mat-option *ngFor="let duration of durations" [value]="duration">
+            {{duration}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="durationInput.hasError('required')">
+          Duration is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field [hideRequiredMarker]="true">
+        <input matInput name="startDate" [(ngModel)]="model.startDate" [matDatepicker]="startDatePicker" [matDatepickerFilter]="weekendFilter"  placeholder="Start date" required maxlength="10" id="start-date-input" #startDateInput="ngModel">
+        <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #startDatePicker></mat-datepicker>
+        <mat-error *ngIf="!startDateInput.valid">
+          A valid start date is <strong>required</strong>.
+        </mat-error>
+      </mat-form-field>
+
+      <br>
+
+      <mat-form-field [hideRequiredMarker]="true">
+        <input matInput name="endDate" [(ngModel)]="model.endDate" [matDatepicker]="endDatePicker" [matDatepickerFilter]="weekendFilter" placeholder="End date" required maxlength="10" id="end-date-input" #endDateInput="ngModel">
+        <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #endDatePicker></mat-datepicker>
+        <mat-error *ngIf="!endDateInput.valid">
+          A valid end date is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <br>
+
+      <mat-form-field [hideRequiredMarker]="true">
+        <input matInput  name="startTime" [(ngModel)]="model.startTime" placeholder="Start time" id="start-time-input" required #startTimeInput="ngModel" type="time">
+        <mat-error *ngIf="startTimeInput.hasError('required')">
+          Start time is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <br>
+
+      <mat-form-field [hideRequiredMarker]="true">
+        <input matInput  name="endTime" [(ngModel)]="model.endTime" placeholder="End time" id="end-time-input" required #endTimeInput="ngModel" type="time">
+        <mat-error *ngIf="endTimeInput.hasError('required')">
+          End time is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <div class="button-container">
+        <button mat-raised-button color="primary" type="submit" [disabled]="!createScheduleForm.form.valid || submitted">CREATE SCHEDULE</button>
+      </div>
+    </form>
+
+  </div> <!-- form-container-internal -->
+
+  <mat-progress-bar [value]="progressBarValue" [mode]="progressBarMode"></mat-progress-bar>
+
+</div> <!-- form-container -->

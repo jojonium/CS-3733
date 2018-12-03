@@ -113,6 +113,7 @@ public class TimeSlotDAO {
 		
 		try {
 			
+			// selects all timeslots with the given scheduleID
 			PreparedStatement ps = conn.prepareStatement("SELECT FROM TimeSlots WHERE scheduleID = ?");
 			ResultSet resultSet = ps.executeQuery();
 			

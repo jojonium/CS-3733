@@ -72,10 +72,11 @@ public class TimeSlotDAO {
 	public boolean addTimeSlot(TimeSlot timeSlot) throws Exception {
 
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO TimeSlots (scheduleID, beginDateTime) values(?,?);");
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO TimeSlots (scheduleID, beginDateTime, isOpen) values(?,?,?);");
 			
 			ps.setString(1, timeSlot.getScheduleId());
 			ps.setString(2,timeSlot.getBeginDateTime().toString());
+			ps.setString(3, (timeSlot.isOpen() ? "true" : "false"));
 			ps.execute();
 			
 			return true;

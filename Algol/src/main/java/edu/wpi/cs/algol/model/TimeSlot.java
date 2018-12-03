@@ -63,7 +63,12 @@ public class TimeSlot {
 		this.isOpen = false;
 		
 	}
-	
+	/* Construct during schedule generation */
+	public TimeSlot(LocalDateTime beginDateTime, String scheduleID) {
+		this.beginDateTime = beginDateTime;
+		this.scheduleID = scheduleID;
+		this.isOpen = false;
+	}
 	/* constructor for existing TimeSlots, prolly don't need though */
 	public TimeSlot(String secretCode, String beginDateTime, String isOpen, String requester, String scheduleID) {
 		

@@ -3,7 +3,7 @@ package edu.wpi.cs.algol.db;
 
 import java.sql.*;
 
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
+//import com.amazonaws.services.lambda.runtime.LambdaLogger;
 
 import edu.wpi.cs.algol.model.Schedule;
 
@@ -11,17 +11,17 @@ public class ScheduleDAO {
 	
 	java.sql.Connection conn;
 	
-	LambdaLogger logger = null;
+	//LambdaLogger logger = null;
 
-	public ScheduleDAO(LambdaLogger l) {
-		logger = l;
-		logger.log("ScheduleDAO constructor...\n");
+	public ScheduleDAO() {
+		//logger = l;
+		//logger.log("ScheduleDAO constructor...\n");
 		try {
 			conn = DatabaseUtil.connect(); // will need DatabaseUtil class
-			logger.log("Generating ScheduleDAO, checking conn: " + conn.toString() + "\n");
+			//logger.log("Generating ScheduleDAO, checking conn: " + conn.toString() + "\n");
 		} catch (Exception e) {
 			conn = null;
-			logger.log("Error in generating DAO, exception: " + e +"\n" +e.toString());
+			//logger.log("Error in generating DAO, exception: " + e +"\n" +e.toString());
 		}
 
 	}
@@ -56,23 +56,30 @@ public class ScheduleDAO {
 
 		try {
 			PreparedStatement ps;
-			logger.log("made PreparedStatement ps\n");
+//			logger.log("made PreparedStatement ps\n");
 			ps = conn.prepareStatement("INSERT INTO Schedules (secretCode, id, name, startDate, endDate, startTime, endTime, duration) values(?,?,?,?,?,?,?,?) ");
-			logger.log("in addSchedule innitial declaration of conn: " + ps.toString() + "\n");
+//			logger.log("in addSchedule innitial declaration of conn: " + ps.toString() + "\n");
 			ps.setString(1, schedule.getSecretCode());
 			ps.setString(2, schedule.getId());
 			ps.setString(3, schedule.name);
-			logger.log("in addSchedule set name: " + ps.toString() + "\n");
+//			logger.log("in addSchedule set name: " + ps.toString() + "\n");
 			ps.setString(4, rewriteS(schedule.getStartDate().toString()));
-			logger.log("addSchedule set startDate: " + ps.toString() + "\n");
+//			logger.log("addSchedule set startDate: " + ps.toString() + "\n");
 			ps.setString(5, rewriteS(schedule.getEndDate().toString()));
-			logger.log("in addSchedule set: endDate" + ps.toString() + "\n");
+//			logger.log("in addSchedule set: endDate" + ps.toString() + "\n");
 			ps.setString(6, schedule.getStartTime().toString());
-			logger.log("in addSchedule setStartTime: " + ps.toString() + "\n");
+//			logger.log("in addSchedule setStartTime: " + ps.toString() + "\n");
 			ps.setString(7, schedule.getEndTime().toString());
 			ps.setInt(8, schedule.duration); 
-			logger.log("in addSchedule setEndTime: " + ps.toString() + "\n");
+//			logger.log("in addSchedule setEndTime: " + ps.toString() + "\n");
 			ps.execute();
+			
+			TimeSlotDAO tDao = new TimeSlotDAO();
+			for (int i = 0; i < schedule.getTimeSlots().size(); i++) {
+				tDao.addTimeSlot(schedule.getTimeSlots().get(i));
+				
+			}
+			
 			return true;
 
 		} catch (Exception e) {

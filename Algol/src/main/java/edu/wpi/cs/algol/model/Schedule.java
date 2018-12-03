@@ -257,7 +257,7 @@ public class Schedule {
 		// timeslot generation
 				for (LocalDate date = this.startDate; date.isBefore(this.endDate.plusDays(1)); date = date.plusDays(1)) {
 
-					for(LocalTime time = this.startTime; time.isBefore(this.endTime); time = (time.getMinute()%duration == 0) ? time.plusMinutes(duration) : time.plusMinutes(duration - time.getMinute()%duration)) {
+					for(LocalTime time = (this.startTime.getMinute()%duration == 0) ? this.startTime : this.startTime.plusMinutes(duration - this.startTime.getMinute()%duration); time.isBefore(this.endTime); time = time.plusMinutes(duration)) {
 						 
 						timeSlots.add(new TimeSlot(LocalDateTime.of(date,time),this.id));
 						

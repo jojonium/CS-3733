@@ -102,23 +102,22 @@ window.updateProgressBar = () => {
 	} else {
 		progressBar.foundation_.close();
 	}
-}
+};
 
 window.handleCreateSchedule = (e) => {
 	const createScheduleUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/createschedule";
-	var incFlag = false;
 	
 	document.querySelector('.create-schedule').disabled = "disabled";
 	document.querySelector('.mdc-linear-progress').className += ' mdc-linear-progress--indeterminate';
 	
 	// grab data from form fields
-	var form        = document.createScheduleForm;
-	var sdateArg    = form.sdate.value;
-	var edateArg    = form.edate.value;
-	var stimeArg    = form.stime.value;
-	var etimeArg    = form.etime.value;
-	var nameArg     = form.name.value;
-	var durationArg = form.duration.value;
+	const form        = document.createScheduleForm;
+	const sdateArg    = form.sdate.value;
+	const edateArg    = form.edate.value;
+	const stimeArg    = form.stime.value;
+	const etimeArg    = form.etime.value;
+	const nameArg     = form.name.value;
+	const durationArg = form.duration.value;
 
 	// populate a JSON with form data
 	var data = {};
@@ -132,12 +131,11 @@ window.handleCreateSchedule = (e) => {
 	console.log(json);
 
 	var xhr = new XMLHttpRequest();
-	setTimeout(() => {
-		xhr.open("POST", createScheduleUrl, true);
-	
-		// send the collected data as JSON
-		xhr.send(json);
-	}, 5000);
+	xhr.open("POST", createScheduleUrl, true);
+
+	// send the collected data as JSON
+	xhr.send(json);
+
 
 	// handle the server's response
 	xhr.onloadend = function() {
@@ -158,8 +156,17 @@ window.handleCreateSchedule = (e) => {
 			}
 			document.querySelector('.create-schedule').disabled = "";
 			document.querySelector('.mdc-linear-progress').classList.remove('mdc-linear-progress--indeterminate');
-			progressBar.foundation_.close();
+			progressBar.foundation_.open();
 		}
 	}
+};
+
+window.handleViewSchedule = (e) => {
+	// grab data from form fields
+	const form = document.viewScheduleForm;
+	const scheduleIDArg = form.scheduleID.value;
+	const secretCodeArg = form.secretCode.value;
+	
+	console.log("scheduleID: " + scheduleIDArg + ", secretCode: " + secretCodeArg);
 };
 

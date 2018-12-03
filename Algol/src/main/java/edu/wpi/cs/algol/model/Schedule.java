@@ -3,7 +3,7 @@ package edu.wpi.cs.algol.model;
 //import java.awt.List;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 //import java.util.Iterator;
 //import java.util.NoSuchElementException;
 import java.util.Random;
@@ -20,7 +20,7 @@ public class Schedule {
 	private LocalTime startTime;
 	private LocalTime endTime;
 	public final int duration;
-	private ArrayList<TimeSlot> timeSlots;
+	//private ArrayList<TimeSlot> timeSlots;
 
 	public LambdaLogger logger = null;
 	// month/day/year 
@@ -101,6 +101,40 @@ public class Schedule {
 		this.secretCode = generateCode();
 		this.id = generateCode();
 
+	}
+	
+	public Schedule(String secretCode, String id, String name, String startDate, String endDate,
+	String startTime, String endTime, int duration) {
+		int startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute;
+		String[] dateStartArray = startDate.split("/");
+		startMonth = Integer.parseInt(dateStartArray[0]);
+		startDay = Integer.parseInt(dateStartArray[1]);
+		startYear = Integer.parseInt(dateStartArray[2]);
+
+		String[] dateEndArray = endDate.split("/");
+		endMonth = Integer.parseInt(dateEndArray[0]);
+		endDay = Integer.parseInt(dateEndArray[1]);
+		endYear = Integer.parseInt(dateEndArray[2]);
+	
+
+
+		String[] timeStartArray = startTime.split(":");
+		startHour = Integer.parseInt(timeStartArray[0]);
+		startMinute = Integer.parseInt(timeStartArray[1]);
+
+		String[] timeEndArray = endTime.split(":");
+		endHour = Integer.parseInt(timeEndArray[0]);
+		endMinute = Integer.parseInt(timeEndArray[1]);
+
+		this.name = name;
+		this.startDate = LocalDate.of(startYear, startMonth, startDay);
+		this.endDate = LocalDate.of(endYear, endMonth, endDay);
+		this.startTime = LocalTime.of(startHour, startMinute);
+		this.endTime = LocalTime.of(endHour, endMinute);
+		this.duration = duration;
+		
+		this.secretCode = secretCode;
+		this.id = id;
 	}
 
 	private static String generateCode(){
@@ -218,7 +252,7 @@ public class Schedule {
 	public String toString() {
 		return "Schedule [secretCode=" + secretCode + ", id=" + id + ", name=" + name + ", startDate=" + startDate
 				+ ", endDate=" + endDate + ", startTime=" + startTime + ", endTime=" + endTime + ", duration="
-				+ duration + ", timeSlots=" + timeSlots + "]";
+				+ duration + "]";
 	}
 
 

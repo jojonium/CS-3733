@@ -2,6 +2,7 @@ package edu.wpi.cs.algol.db;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 //import edu.wpi.cs.algol.model.Schedule;
 import edu.wpi.cs.algol.model.TimeSlot;
@@ -106,7 +107,32 @@ public class TimeSlotDAO {
 	}
 
 	// something for getting multiple timeslots for various reasons
-
+	public ArrayList<TimeSlot> getAllTimeSlots(String id) throws Exception{
+		
+		ArrayList<TimeSlot> allTimeSlots = new ArrayList<TimeSlot>();
+		
+		try {
+			
+			PreparedStatement ps = conn.prepareStatement("SELECT FROM TimeSlots WHERE scheduleID = ?");
+			ResultSet resultSet = ps.executeQuery();
+			
+			while(resultSet.next()) {
+				TimeSlot ts = createTimeSlot(resultSet);
+				allTimeSlots.add(ts);
+			}
+			
+			resultSet.close();
+			ps.close();
+			
+			return allTimeSlots;
+			
+			
+		} catch (Exception e) {
+			throw new Exception("Failed in getting all constants: " + e.getMessage());
+		}
+		
+		
+	}
 
 	public TimeSlot createTimeSlot(ResultSet resultSet) throws Exception {
 		

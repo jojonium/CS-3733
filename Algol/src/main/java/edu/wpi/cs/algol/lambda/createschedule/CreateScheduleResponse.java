@@ -1,4 +1,4 @@
-package edu.wpi.cs.algol.lambda;
+package edu.wpi.cs.algol.lambda.createschedule;
 public class CreateScheduleResponse {
 	String response;
 	String secretCode;

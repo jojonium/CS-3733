@@ -1,4 +1,4 @@
-package edu.wpi.cs.algol.lambda;
+package edu.wpi.cs.algol.lambda.hello;
 
 public class HelloResponse {
 	String message;

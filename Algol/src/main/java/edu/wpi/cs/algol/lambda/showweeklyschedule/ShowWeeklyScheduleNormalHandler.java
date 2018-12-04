@@ -1,4 +1,4 @@
-package edu.wpi.cs.algol.lambda;
+package edu.wpi.cs.algol.lambda.showweeklyschedule;
 
 import java.io.BufferedReader;
 import java.io.IOException;

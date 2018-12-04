@@ -1,5 +1,6 @@
 package edu.wpi.cs.algol.model;
 
+import java.time.DayOfWeek;
 //import java.awt.List;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -256,10 +257,11 @@ public class Schedule {
 	public void timeSlotGeneration() {
 		// timeslot generation
 				for (LocalDate date = this.startDate; date.isBefore(this.endDate.plusDays(1)); date = date.plusDays(1)) {
-
+					if ((date.getDayOfWeek() != DayOfWeek.SATURDAY) || (date.getDayOfWeek() != DayOfWeek.SUNDAY))
 					for(LocalTime time = (this.startTime.getMinute()%duration == 0) ? this.startTime : this.startTime.plusMinutes(duration - this.startTime.getMinute()%duration); time.isBefore(this.endTime); time = time.plusMinutes(duration)) {
 						 
-						timeSlots.add(new TimeSlot(LocalDateTime.of(date,time),this.id));
+						
+								timeSlots.add(new TimeSlot(LocalDateTime.of(date,time),this.id));
 						
 
 					}

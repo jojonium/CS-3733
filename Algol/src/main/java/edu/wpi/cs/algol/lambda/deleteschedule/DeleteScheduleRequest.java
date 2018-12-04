@@ -14,4 +14,10 @@ public class DeleteScheduleRequest {
 	public String toString() {
 		return "DeleteScheduleRequest [Schedule ID=" + scheduleID + ", Secret Code =" + secretCode + "]";
 	}
+	public String getSecretCode() {
+		return this.secretCode;
+	}
+	public String getScheduleID() {
+		return this.scheduleID;
+	}
 }

@@ -25,6 +25,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
   numDays: number;
   numTimes: number;
   id: string;
+  reqDate: string;
   errorMessage: string;
   createMeetingData: CreateMeetingData;
   weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -155,7 +156,8 @@ export class ViewWeeklyScheduleComponent implements OnInit {
       switchMap((params: ParamMap) => {
         console.log('ID: ' + params.get('id'));
         this.id = params.get('id');
-        return this.scheduleService.getSchedule(params.get('id'))
+        this.reqDate = (params.has('date')) ? params.get('date') : null;
+        return this.scheduleService.getSchedule(this.id, this.reqDate);
       })
     ).subscribe(vwsResponse => {
       this.week = JSON.parse(vwsResponse.body);

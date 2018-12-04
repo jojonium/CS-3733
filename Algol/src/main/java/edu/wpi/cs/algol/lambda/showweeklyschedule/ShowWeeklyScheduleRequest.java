@@ -2,14 +2,14 @@ package edu.wpi.cs.algol.lambda.showweeklyschedule;
 
 public class ShowWeeklyScheduleRequest {
 	String scheduleID;
-	String secretCode;
+	//String secretCode;
 	String dateTime;
 	
 	/* normal mode constructor */
-	/*public ShowWeeklyScheduleRequest(String sid, String dt) {
-		this.scheduleID = sid;
-		this.dateTime = dt;
-	}*
+	public ShowWeeklyScheduleRequest(String scheduleID, String dateTime) {
+		this.scheduleID = scheduleID;
+		this.dateTime = dateTime;
+	}
 	
 	/* organizer mode constructor */
 	/*public ShowWeeklyScheduleRequest(String sid, String sc, String dt) {
@@ -18,12 +18,18 @@ public class ShowWeeklyScheduleRequest {
 		this.dateTime = dt;
 	}*/
 	
-	public ShowWeeklyScheduleRequest(String sid) {
-		this.scheduleID = sid;
+	public ShowWeeklyScheduleRequest(String scheduleID) {
+		this.scheduleID = scheduleID;
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
-		return "ShowWeeklyScheduleRequest [scheduleId=" + scheduleID + "]";
+		return "ShowWeeklyScheduleRequest [scheduleID=" + scheduleID + ", dateTime="
+				+ dateTime + "]";
 	}
+	
+
 }

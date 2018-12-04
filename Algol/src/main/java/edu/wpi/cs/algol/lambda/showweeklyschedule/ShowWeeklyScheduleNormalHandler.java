@@ -6,10 +6,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-//import java.time.DayOfWeek;
-//import java.time.LocalDate;
-//import java.time.LocalDateTime;
-//import java.time.LocalTime;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 //import java.time.Month;
 import java.util.ArrayList;
 //import java.util.Iterator;
@@ -31,28 +31,90 @@ import edu.wpi.cs.algol.model.TimeSlot;
 public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 	private LambdaLogger logger = null;
 
-	ArrayList<TimeSlot> getWeeklyScheduleSlots(String id) throws Exception {
+	ArrayList<TimeSlot> getWeeklyScheduleSlots(String id, String dateStart) throws Exception {
 		if (logger != null) {
 			logger.log("getWeeklyScheduleSlots");
 		}
 
 		// variable setup
+		ScheduleDAO daoS = new ScheduleDAO();
 		TimeSlotDAO daoT = new TimeSlotDAO();
-		/*ArrayList<TimeSlot> allts = new ArrayList<TimeSlot>();
+		ArrayList<TimeSlot> allts = new ArrayList<TimeSlot>();
 		ArrayList<TimeSlot> weekts = new ArrayList<TimeSlot>();
-		allts = daoT.getAllTimeSlots(id);
-		String[] dateTime = dateStart.split("T");
-		String[] date = dateTime[0].split("-");
-		String[] time = dateTime[1].split(":");
-		
-		int year = Integer.parseInt(date[0]);	// parsing might not work correctly
-		int month = Integer.parseInt(date[1]);
-		int day = Integer.parseInt(date[2]);
-		
-		int hour = Integer.parseInt(time[0]);
-		int min = Integer.parseInt(time[1]);
-		
-		LocalDateTime ldt = LocalDateTime.of(LocalDate.of(year, month, day), 
+		//allts = daoT.getAllTimeSlots(id);
+		Schedule s = daoS.getSchedule(id);
+		TimeSlot startts;
+		if (dateStart != null) {
+			String[] date = dateStart.split("-");
+			//String[] time = dateTime.split(":");
+
+			int month = Integer.parseInt(date[0]);	// parsing might not work correctly
+			int day = Integer.parseInt(date[1]);
+			int year = Integer.parseInt(date[2]);
+			LocalDateTime ldt;
+
+			ldt = LocalDateTime.of(LocalDate.of(year, month, day), s.getStartTime());
+			// check which date begins on 
+			startts = daoT.getTimeSlot(id, ldt);
+
+			if(startts.getBeginDateTime().getDayOfWeek() == DayOfWeek.MONDAY) {
+
+				for (int i = 0; i < 5; i ++) {
+					for(LocalTime time = (s.getStartTime().getMinute()% s.getDuration() == 0) ? s.getStartTime() : s.getStartTime().plusMinutes(s.getDuration() - s.getStartTime().getMinute()%s.getDuration()); time.isBefore(s.getEndTime()); time = time.plusMinutes(s.getDuration())) {
+						weekts.add(daoT.getTimeSlot(id, LocalDateTime.of(LocalDate.of(year, month, day).plusDays(i), time)));
+					}
+				}
+
+			}
+
+			else {
+				int newDay = day;
+				while (startts.getBeginDateTime().getDayOfWeek() != DayOfWeek.MONDAY) {
+					startts = daoT.getTimeSlot(id, LocalDateTime.of(LocalDate.of(year, month, newDay--), s.getStartTime()));
+					if (startts == null) {
+						startts = daoT.getTimeSlot(id, LocalDateTime.of(LocalDate.of(year, month, newDay++), s.getStartTime()));
+						break;
+					}
+				}
+				for (int i = 0; i < 5; i ++) {
+					for(LocalTime time = (s.getStartTime().getMinute()% s.getDuration() == 0) ? s.getStartTime() : s.getStartTime().plusMinutes(s.getDuration() - s.getStartTime().getMinute()%s.getDuration()); time.isBefore(s.getEndTime()); time = time.plusMinutes(s.getDuration())) {
+						weekts.add(daoT.getTimeSlot(id, LocalDateTime.of(LocalDate.of(year, month, day).plusDays(i), time)));
+					}
+				}
+			}
+
+
+			return weekts;
+
+
+		}
+
+		else {
+			
+			startts = daoT.getTimeSlot(id, LocalDateTime.of(s.getStartDate(),s.getStartTime()));
+			
+			int day = startts.getBeginDateTime().getDayOfMonth();
+			int month = startts.getBeginDateTime().getMonthValue();
+			int year = startts.getBeginDateTime().getYear();
+
+			for (int i = 0; startts.getBeginDateTime().getDayOfWeek() != DayOfWeek.SATURDAY; i ++) {
+				for(LocalTime time = (s.getStartTime().getMinute()% s.getDuration() == 0) ? s.getStartTime() : s.getStartTime().plusMinutes(s.getDuration() - s.getStartTime().getMinute()%s.getDuration()); time.isBefore(s.getEndTime()); time = time.plusMinutes(s.getDuration())) {
+					startts = daoT.getTimeSlot(id, LocalDateTime.of(LocalDate.of(year, month, day).plusDays(i), time));
+					
+					weekts.add(startts);
+
+				}
+			}
+
+
+			return weekts;
+
+		}
+
+		//		int hour = Integer.parseInt(time[0]);
+		//		int min = Integer.parseInt(time[1]);
+
+		/*LocalDateTime ldt = LocalDateTime.of(LocalDate.of(year, month, day), 
 				LocalTime.of(hour, min));
 		TimeSlot timeslot = daoT.getTimeSlot(id, ldt);
 		TimeSlot beginWeekDay = daoT.getTimeSlot(id, timeslot.getBeginDateTime());;
@@ -71,6 +133,7 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 			}
 		}*/
 
+
 		/* weekts.add(all timeslots within a week after beginWeek timeslot) */
 
 		/*
@@ -79,8 +142,8 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 		 * the schedule s = new Schedule(name, dateStart, dateEnd, timeStart, timeEnd,
 		 * durationInt);
 		 */
-		
-		return daoT.getAllTimeSlots(id);
+
+
 	}
 
 	@SuppressWarnings("unchecked")
@@ -144,7 +207,7 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 				 * TODO Actually grab a schedule from the database BEGIN PLACEHOLDER
 				 */
 
-				ArrayList<TimeSlot> ts = getWeeklyScheduleSlots(req.scheduleID);
+				ArrayList<TimeSlot> ts = getWeeklyScheduleSlots(req.scheduleID, req.dateTime);
 				/*
 				 * ts.add(new TimeSlot(null, LocalDateTime.of(2018, Month.NOVEMBER, 26, 9, 0,
 				 * 0), true, null, req.scheduleID)); ts.add(new TimeSlot(null,
@@ -171,7 +234,7 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 				// successful processing
 				ScheduleDAO sDao = new ScheduleDAO();
 				Schedule s = sDao.getSchedule(req.scheduleID);
-				
+
 				resp = new ShowWeeklyScheduleResponse(s.getName(),s.getStartDate(),s.getEndDate(),s.getStartTime(),s.getEndTime(),s.getDuration(), ts);
 				logger.log("ShowWeeklySchedule response: " + resp.toString() + "\n");
 				/*

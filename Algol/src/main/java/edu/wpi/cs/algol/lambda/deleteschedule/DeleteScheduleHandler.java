@@ -91,8 +91,14 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 
 				DeleteScheduleResponse resp;
 				try {
+					if(deleteSchedule(s.getId(), s.getSecretCode())){
+						logger.log("deleteSchedule worked");
 						resp = new DeleteScheduleResponse("Successful deletion of schedule ", s.getId(), s.getSecretCode(), s.getName(), 202);
-				
+						logger.log("schedule successfully deleted");
+					} else {
+						resp = new DeleteScheduleResponse("Unable to delete schedule: ", s.getId(), s.getSecretCode(), s.getName(), 404);
+						logger.log("schedule deletion failed");
+					}
 				} catch (Exception e) {
 					resp = new DeleteScheduleResponse("Unable to delete schedule: " + s.getName() + " because of (" + e.getMessage() + ")", s.getId(), s.getSecretCode(), s.getName(), 404);
 				}
@@ -101,7 +107,7 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 		        responseJson.put("body", new Gson().toJson(resp));  
 			}
 			
-			logger.log("end result:" + responseJson.toJSONString());
+			logger.log("end result:" + responseJson.toJSONString() + "\n");
 	        logger.log(responseJson.toJSONString());
 	        OutputStreamWriter writer = new OutputStreamWriter(output, "UTF-8");
 	        writer.write(responseJson.toJSONString());  

@@ -97,7 +97,7 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 			int month = startts.getBeginDateTime().getMonthValue();
 			int year = startts.getBeginDateTime().getYear();
 
-			for (int i = 0; startts.getBeginDateTime().getDayOfWeek() != DayOfWeek.SATURDAY; i ++) {
+			for (int i = 0; startts.getBeginDateTime().getDayOfWeek() != DayOfWeek.FRIDAY; i ++) {
 				for(LocalTime time = (s.getStartTime().getMinute()% s.getDuration() == 0) ? s.getStartTime() : s.getStartTime().plusMinutes(s.getDuration() - s.getStartTime().getMinute()%s.getDuration()); time.isBefore(s.getEndTime()); time = time.plusMinutes(s.getDuration())) {
 					startts = daoT.getTimeSlot(id, LocalDateTime.of(LocalDate.of(year, month, day).plusDays(i), time));
 					

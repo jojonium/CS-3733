@@ -1,6 +1,39 @@
 div#schedule-view-container {
-  width: 400px;
+  width: 800px;
   margin: 20px;
   border-radius: 5px;
   padding: 40px;
+}
+
+mat-grid-tile.date-header, mat-grid-tile.time-header {
+  background-color: #4c4c4c;
+}
+
+mat-grid-tile.date-header.first-dh {
+  border-top-left-radius: 10px;
+}
+
+mat-grid-tile.date-header.last-dh {
+  border-top-right-radius: 10px;
+}
+
+mat-grid-tile.time-header.first-th {
+  border-top-left-radius: 10px;
+}
+
+mat-grid-tile.time-header.last-th {
+  border-bottom-left-radius: 10px;
+}
+
+mat-grid-tile.open {
+  background-color: #007605;
+  cursor: pointer;
+}
+
+mat-grid-tile.open:hover {
+  background-color: #108615;
+}
+
+mat-grid-tile.closed {
+  background-color: #454545;
 }

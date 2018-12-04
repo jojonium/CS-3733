@@ -232,21 +232,21 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 				Schedule s = sDao.getSchedule(req.scheduleID);
 
 				resp = new ShowWeeklyScheduleResponse(s.getName(),s.getStartDate(),s.getEndDate(),s.getStartTime(),s.getEndTime(),s.getDuration(), ts);
-				logger.log("ShowWeeklySchedule response: " + resp.toString() + "\n");
+				//logger.log("ShowWeeklySchedule response: " + resp.toString() + "\n");
 			} catch (Exception e) {
 				resp = new ShowWeeklyScheduleResponse(
-						"Unable to show schedule " + req.scheduleID + " (" + e.getMessage() + ")", 400);
+						"Unable to show schedule " + req.scheduleID + " (" + e + ")", 400);
 				logger.log("Unable to show schedule:  " + req.scheduleID + " 400. Error Message: " + e + "\n");
 			}
 
 			// compute proper response
 			responseJson.put("body", new Gson().toJson(resp));
 
-			logger.log("\n" + responseJson.toJSONString() + "\n");
+			//logger.log("\n" + responseJson.toJSONString() + "\n");
 		}
 
 		logger.log("end result:" + responseJson.toJSONString() + "\n");
-		logger.log(responseJson.toJSONString() + "\n");
+		//logger.log(responseJson.toJSONString() + "\n");
 		OutputStreamWriter writer = new OutputStreamWriter(output, "UTF-8");
 		writer.write(responseJson.toJSONString());
 		writer.close();

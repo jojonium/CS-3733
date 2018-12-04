@@ -42,6 +42,7 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 		  @SuppressWarnings("unchecked")
 			@Override
 	    public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
+				
 	    	logger = context.getLogger();
 			logger.log("Loading Java Lambda handler to create constant");
 
@@ -67,7 +68,7 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 				String method = (String) event.get("httpMethod");
 				if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 					logger.log("Options request");
-					response = new DeleteScheduleResponse("name",s.getId(), s.getSecretCode(), s.getName(), 200);  // OPTIONS needs a 200 response
+					response = new DeleteScheduleResponse("name", 200);  // OPTIONS needs a 200 response
 			        responseJson.put("body", new Gson().toJson(response));
 			        processed = true;
 			        body = null;
@@ -79,7 +80,7 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 				}
 			} catch (ParseException pe) {
 				logger.log(pe.toString());
-				response = new DeleteScheduleResponse("Bad Request:" + pe.getMessage(),s.getId(), s.getSecretCode(), s.getName(), 422);  // unable to process input
+				response = new DeleteScheduleResponse("Bad Request:" + pe.getMessage(), 422);  // unable to process input
 		        responseJson.put("body", new Gson().toJson(response));
 		        processed = true;
 		        body = null;
@@ -87,20 +88,22 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 
 			if (!processed) {
 				DeleteScheduleRequest req = new Gson().fromJson(body, DeleteScheduleRequest.class);
+				
 				logger.log(req.toString());
 
 				DeleteScheduleResponse resp;
+				if (logger != null) { logger.log(s.getId() + " " +  ", " + s.getSecretCode() + " "); }
 				try {
 					if(deleteSchedule(s.getId(), s.getSecretCode())){
 						logger.log("deleteSchedule worked");
-						resp = new DeleteScheduleResponse("Successful deletion of schedule ", s.getId(), s.getSecretCode(), s.getName(), 202);
+						resp = new DeleteScheduleResponse(s.getId());
 						logger.log("schedule successfully deleted");
 					} else {
-						resp = new DeleteScheduleResponse("Unable to delete schedule: ", s.getId(), s.getSecretCode(), s.getName(), 404);
+						resp = new DeleteScheduleResponse("Unable to delete schedule: ", 404);
 						logger.log("schedule deletion failed");
 					}
 				} catch (Exception e) {
-					resp = new DeleteScheduleResponse("Unable to delete schedule: " + s.getName() + " because of (" + e.getMessage() + ")", s.getId(), s.getSecretCode(), s.getName(), 404);
+					resp = new DeleteScheduleResponse("Unable to delete schedule: " + s.getName() + " because of (" + e.getMessage() + ")", 404);
 				}
 
 				// compute proper response

@@ -4,24 +4,17 @@ public class DeleteScheduleResponse {
 	public String response;
 	public String secretCode;
 	public String scheduleID;
-	public String name;
 	public int httpCode;
 	
 	/* used for errors or other responses that require a message */
-	public DeleteScheduleResponse(String response, String sid, String scd, String name,  int code) {
+	public DeleteScheduleResponse(String response, int code) {
 		this.response = response;
-		this.scheduleID = sid;
-		this.secretCode = scd;
-		this.name = name;
 		this.httpCode = code;
 	}
 
 	/* used for successful responses */
-	public DeleteScheduleResponse(String response, String sid, String scd, String name) {
-		this.response = response;
+	public DeleteScheduleResponse(String sid) {
 		this.scheduleID = sid;
-		this.secretCode = scd;
-		this.name = name;
 		this.httpCode = 202;
 	}
 

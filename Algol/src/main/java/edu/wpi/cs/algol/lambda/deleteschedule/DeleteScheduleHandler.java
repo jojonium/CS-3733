@@ -32,7 +32,7 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 			
 			Schedule s = daoS.getSchedule(sid);
 			if(s.getSecretCode() == scd) { 
-	
+				if (logger != null) { logger.log(s.getId() + " " + sid + ", " + s.getSecretCode() + " " + scd); }
 			return daoS.deleteSchedule(s);
 			}
 			else {

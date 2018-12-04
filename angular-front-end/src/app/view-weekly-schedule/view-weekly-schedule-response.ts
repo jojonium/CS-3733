@@ -13,7 +13,7 @@ export class ViewWeeklyScheduleResponseBody {
     public endTime: MyTime,
     public startDate: MyDate,
     public startTime: MyTime,
-    public timeSlot: TimeSlot[]
+    public timeSlots: TimeSlot[]
   ) { }
 }
 

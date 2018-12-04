@@ -6,7 +6,9 @@
     
     <mat-grid-list [cols]="numDays + 1" rowHeight="100px">
       <mat-grid-tile
-          *ngFor="let tile of tiles"
+          *ngFor="let tile of tiles; let i = index"
+          [attr.data-index]="i"
+          (click)="timeSlotClick(tile.text, i)"
           [ngClass]="tile.class">
         {{tile.text}}
       </mat-grid-tile>
@@ -17,4 +19,16 @@
     <h2>{{errorMessage}}</h2>
   </div>
   
+</div>
+
+<div class="button-container">
+  <button mat-raised-button type="button" (click)="goToPreviousWeek()">
+    <i class="material-icons">navigate_before</i>
+    PREVIOUS WEEK
+  </button>
+  
+  <button mat-raised-button type="button" (click)="goToNextWeek()">
+    NEXT WEEK
+    <i class="material-icons">navigate_next</i>
+  </button>
 </div>

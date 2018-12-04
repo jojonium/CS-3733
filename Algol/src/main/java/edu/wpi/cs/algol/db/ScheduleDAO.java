@@ -70,8 +70,9 @@ public class ScheduleDAO {
 			ps.setString(6, schedule.getStartTime().toString());
 //			logger.log("in addSchedule setStartTime: " + ps.toString() + "\n");
 			ps.setString(7, schedule.getEndTime().toString());
-			ps.setInt(8, schedule.duration); 
 //			logger.log("in addSchedule setEndTime: " + ps.toString() + "\n");
+			ps.setInt(8, schedule.getDuration());
+			
 			ps.execute();
 			
 			

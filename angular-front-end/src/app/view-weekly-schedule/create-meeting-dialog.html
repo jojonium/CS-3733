@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>Schedule meeting</h1>
+
+<style>
+.full-width {
+  width: 100%;
+}
+</style>
+
+<form>
+  <div mat-dialog-content>
+    <p>To request a meeting on {{data.dateString}} at {{data.timeString}}, please enter your name below:</p>
+    <mat-form-field class="full-width">
+      <input matInput [(ngModel)]="data.requester" name="requester">
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions style="display: flex; justify-content: flex-end">
+    <button mat-raised-button type="button" (click)="closeCreateMeetingDialog()" style="margin-right: 5px;">CANCEL</button>
+    <button mat-raised-button type="submit" (click)="closeCreateMeetingDialog()" color="primary" style="margin-left: 5px;" cdkFocusInitial>SUBMIT</button>
+  </div>
+</form>

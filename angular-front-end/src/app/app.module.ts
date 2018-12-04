@@ -19,7 +19,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 
 import { AppComponent } from './app.component';
 import { CreateScheduleComponent, DialogFailure, DialogSuccess } from './create-schedule/create-schedule.component';
-import { ViewWeeklyScheduleComponent } from './view-weekly-schedule/view-weekly-schedule.component';
+import { ViewWeeklyScheduleComponent, CreateMeetingDialog } from './view-weekly-schedule/view-weekly-schedule.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AppRoutingModule } from './app-routing.module';
 
@@ -30,6 +30,7 @@ import { AppRoutingModule } from './app-routing.module';
     CreateScheduleComponent,
     DialogFailure,
     DialogSuccess,
+    CreateMeetingDialog,
     ViewWeeklyScheduleComponent,
     PageNotFoundComponent
   ],
@@ -53,7 +54,8 @@ import { AppRoutingModule } from './app-routing.module';
   ],
   entryComponents: [
     DialogFailure,
-    DialogSuccess
+    DialogSuccess,
+    CreateMeetingDialog
   ],
   providers: [
   ],

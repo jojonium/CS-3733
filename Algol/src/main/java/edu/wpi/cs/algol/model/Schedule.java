@@ -21,7 +21,7 @@ public class Schedule {
 	private LocalDate endDate;
 	private LocalTime startTime;
 	private LocalTime endTime;
-	public final int duration;
+	private int duration;
 	private ArrayList<TimeSlot> timeSlots = new ArrayList<TimeSlot>();
 
 	public LambdaLogger logger = null;

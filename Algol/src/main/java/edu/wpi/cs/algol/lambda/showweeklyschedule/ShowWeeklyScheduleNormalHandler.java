@@ -6,10 +6,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.time.DayOfWeek;
+//import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+//import java.time.LocalDateTime;
+//import java.time.LocalTime;
 //import java.time.Month;
 import java.util.ArrayList;
 //import java.util.Iterator;
@@ -32,15 +32,21 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 	private LambdaLogger logger = null;
 
 	ArrayList<TimeSlot> getWeeklyScheduleSlots(String id, String dateStart) throws Exception {
-		if (logger != null) {
-			logger.log("getWeeklyScheduleSlots");
-		}
+		if (logger != null) { logger.log("in getWeeklyScheduleSlots"); }
+		
 
 		// variable setup
-		ScheduleDAO daoS = new ScheduleDAO();
+//		ScheduleDAO daoS = new ScheduleDAO();
 		TimeSlotDAO daoT = new TimeSlotDAO();
+		
+		if(dateStart.isEmpty()) {
+			//Schedule s = daoS.getSchedule(id);
+			return daoT.getAllTimeSlots(id);
+		}
+		else
+			return daoT.getAllTimeSlots(id);
 		//ArrayList<TimeSlot> allts = new ArrayList<TimeSlot>();
-		ArrayList<TimeSlot> weekts = new ArrayList<TimeSlot>();
+		/*ArrayList<TimeSlot> weekts = new ArrayList<TimeSlot>();
 		//allts = daoT.getAllTimeSlots(id);
 		Schedule s = daoS.getSchedule(id);
 		TimeSlot startts;
@@ -97,7 +103,7 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 			int month = startts.getBeginDateTime().getMonthValue();
 			int year = startts.getBeginDateTime().getYear();
 
-			for (int i = 0; startts.getBeginDateTime().getDayOfWeek() != DayOfWeek.FRIDAY; i ++) {
+			for (int i = 0; startts.getBeginDateTime().getDayOfWeek() != DayOfWeek.SATURDAY; i ++) {
 				for(LocalTime time = (s.getStartTime().getMinute()% s.getDuration() == 0) ? s.getStartTime() : s.getStartTime().plusMinutes(s.getDuration() - s.getStartTime().getMinute()%s.getDuration()); time.isBefore(s.getEndTime()); time = time.plusMinutes(s.getDuration())) {
 					startts = daoT.getTimeSlot(id, LocalDateTime.of(LocalDate.of(year, month, day).plusDays(i), time));
 					
@@ -109,7 +115,7 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 
 			return weekts;
 
-		}
+		}*/
 
 		//		int hour = Integer.parseInt(time[0]);
 		//		int min = Integer.parseInt(time[1]);
@@ -204,6 +210,8 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 			ShowWeeklyScheduleResponse resp;
 			try {
 				ArrayList<TimeSlot> ts = getWeeklyScheduleSlots(req.scheduleID, req.date);
+				logger.log("Assign var ts: " + ts.toString() + "\n");
+				
 				/*
 				 * ts.add(new TimeSlot(null, LocalDateTime.of(2018, Month.NOVEMBER, 26, 9, 0,
 				 * 0), true, null, req.scheduleID)); ts.add(new TimeSlot(null,
@@ -229,11 +237,16 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 				 */
 				// successful processing
 				ScheduleDAO sDao = new ScheduleDAO();
+				
+				
 				Schedule s = sDao.getSchedule(req.scheduleID);
+				logger.log("Retriving schedule with input ID: " + s.toString() + "\n");
 				TimeSlot lastts = ts.get(ts.size()-1);
+				logger.log("Retrieving last timeslot of weekly schedule: " + lastts.toString() + "\n");
 				LocalDate endOfWeek = LocalDate.of(lastts.getBeginDateTime().getDayOfYear(), lastts.getBeginDateTime().getMonth(), lastts.getBeginDateTime().getDayOfMonth());
+				logger.log("Retrieving endOfWeek date: " + endOfWeek.toString() + "\n");
 				resp = new ShowWeeklyScheduleResponse(s.getName(),s.getStartDate(),endOfWeek,s.getStartTime(),s.getEndTime(),s.getDuration(), ts);
-				//logger.log("ShowWeeklySchedule response: " + resp.toString() + "\n");
+				logger.log("ShowWeeklySchedule response: " + resp.toString() + "\n");
 			} catch (Exception e) {
 				resp = new ShowWeeklyScheduleResponse(
 						"Unable to show schedule " + req.scheduleID + " (" + e + ")", 400);

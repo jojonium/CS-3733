@@ -6,13 +6,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+//import java.time.DayOfWeek;
+//import java.time.LocalDate;
+//import java.time.LocalDateTime;
+//import java.time.LocalTime;
 //import java.time.Month;
 import java.util.ArrayList;
-import java.util.Iterator;
+//import java.util.Iterator;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -23,20 +23,22 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.google.gson.Gson;
 
+import edu.wpi.cs.algol.db.ScheduleDAO;
 import edu.wpi.cs.algol.db.TimeSlotDAO;
+import edu.wpi.cs.algol.model.Schedule;
 import edu.wpi.cs.algol.model.TimeSlot;
 
 public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 	private LambdaLogger logger = null;
 
-	ArrayList<TimeSlot> getWeeklyScheduleSlots(String id, String dateStart) throws Exception {
+	ArrayList<TimeSlot> getWeeklyScheduleSlots(String id) throws Exception {
 		if (logger != null) {
-			logger.log("in createSchedule");
+			logger.log("getWeeklyScheduleSlots");
 		}
 
 		// variable setup
 		TimeSlotDAO daoT = new TimeSlotDAO();
-		ArrayList<TimeSlot> allts = new ArrayList<TimeSlot>();
+		/*ArrayList<TimeSlot> allts = new ArrayList<TimeSlot>();
 		ArrayList<TimeSlot> weekts = new ArrayList<TimeSlot>();
 		allts = daoT.getAllTimeSlots(id);
 		String[] dateTime = dateStart.split("T");
@@ -67,7 +69,7 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 					weekts.add(iterator.next());
 				}
 			}
-		}
+		}*/
 
 		/* weekts.add(all timeslots within a week after beginWeek timeslot) */
 
@@ -77,8 +79,8 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 		 * the schedule s = new Schedule(name, dateStart, dateEnd, timeStart, timeEnd,
 		 * durationInt);
 		 */
-
-		return weekts;
+		
+		return daoT.getAllTimeSlots(id);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -142,7 +144,7 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 				 * TODO Actually grab a schedule from the database BEGIN PLACEHOLDER
 				 */
 
-				ArrayList<TimeSlot> ts = getWeeklyScheduleSlots(req.scheduleID, req.dateTime);
+				ArrayList<TimeSlot> ts = getWeeklyScheduleSlots(req.scheduleID);
 				/*
 				 * ts.add(new TimeSlot(null, LocalDateTime.of(2018, Month.NOVEMBER, 26, 9, 0,
 				 * 0), true, null, req.scheduleID)); ts.add(new TimeSlot(null,
@@ -166,8 +168,12 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 				 * TimeSlot(null, LocalDateTime.of(2018, Month.NOVEMBER, 27, 11, 30, 0), false,
 				 * null, req.scheduleID));
 				 */
-				resp = new ShowWeeklyScheduleResponse("Successfully retrieved timeslots for weekly schedule: ", ts);
-				logger.log("Created response: " + resp.toString() + "\n");
+				// successful processing
+				ScheduleDAO sDao = new ScheduleDAO();
+				Schedule s = sDao.getSchedule(req.scheduleID);
+				
+				resp = new ShowWeeklyScheduleResponse(s.getName(),s.getStartDate(),s.getEndDate(),s.getStartTime(),s.getEndTime(),s.getDuration(), ts);
+				logger.log("ShowWeeklySchedule response: " + resp.toString() + "\n");
 				/*
 				 * END PLACEHOLDER
 				 */

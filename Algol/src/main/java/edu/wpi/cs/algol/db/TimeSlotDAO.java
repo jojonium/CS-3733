@@ -114,7 +114,8 @@ public class TimeSlotDAO {
 		try {
 			
 			// selects all timeslots with the given scheduleID
-			PreparedStatement ps = conn.prepareStatement("SELECT FROM TimeSlots WHERE scheduleID = ?");
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM TimeSlots WHERE scheduleID = ?");
+			ps.setString(1, id);
 			ResultSet resultSet = ps.executeQuery();
 			
 			while(resultSet.next()) {
@@ -129,7 +130,7 @@ public class TimeSlotDAO {
 			
 			
 		} catch (Exception e) {
-			throw new Exception("Failed in getting all constants: " + e.getMessage());
+			throw new Exception("Failed in getting all timeslots: " + e.getMessage());
 		}
 		
 		

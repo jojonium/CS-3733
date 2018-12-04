@@ -7,6 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -38,6 +39,7 @@ import { AppRoutingModule } from './app-routing.module';
     MatCardModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatToolbarModule,
     FormsModule,
     ReactiveFormsModule,
     MatSelectModule,

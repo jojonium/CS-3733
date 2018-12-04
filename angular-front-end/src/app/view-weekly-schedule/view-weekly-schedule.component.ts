@@ -26,7 +26,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
   numTimes: number;
   id: string;
   reqDate: string;
-  errorMessage: string;
+  errorMessage = '';
   createMeetingData: CreateMeetingData;
   weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   dateArray: Date[];
@@ -85,6 +85,8 @@ export class ViewWeeklyScheduleComponent implements OnInit {
   makeTiles = (input : TimeSlot[]) => {
     this.numDays = (Math.abs(this.getDate(this.week.startDate).valueOf() - this.getDate(this.week.endDate).valueOf()) / 8.64e+7) + 1;
     this.numTimes = input.length / this.numDays;
+    
+    console.log(`numDays: ${this.numDays}, numTimes: ${this.numTimes}`);
     
     this.dateArray = new Array<Date>(this.numDays);
     this.timeArray = new Array<MyTime>(this.numTimes);
@@ -149,10 +151,9 @@ export class ViewWeeklyScheduleComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     console.log('ngOnInit: about to call scheduleService.getSchedule');
     this.tiles = [];
-    /*this.route.paramMap.pipe(
+    this.route.paramMap.pipe(
       switchMap((params: ParamMap) => {
         console.log('ID: ' + params.get('id'));
         this.id = params.get('id');
@@ -167,10 +168,10 @@ export class ViewWeeklyScheduleComponent implements OnInit {
       } else if (this.week.httpCode == '400') {
         this.errorMessage = "400 Error: Unable to show schedule with ID " + this.id;
       }
-    });*/
-    this.week = JSON.parse("{\"name\":\"Multi-week schedule\",\"startDate\":{\"year\":2018,\"month\":12,\"day\":3},\"endDate\":{\"year\":2018,\"month\":12,\"day\":8},\"startTime\":{\"hour\":9,\"minute\":0,\"second\":0,\"nano\":0},\"endTime\":{\"hour\":11,\"minute\":0,\"second\":0,\"nano\":0},\"duration\":60,\"timeSlots\":[{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":3},\"time\":{\"hour\":9,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":true,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":3},\"time\":{\"hour\":10,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":false,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":4},\"time\":{\"hour\":9,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":true,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":4},\"time\":{\"hour\":10,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":false,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":5},\"time\":{\"hour\":9,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":true,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":5},\"time\":{\"hour\":10,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":true,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":6},\"time\":{\"hour\":9,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":false,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":6},\"time\":{\"hour\":10,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":false,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":7},\"time\":{\"hour\":9,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":false,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":7},\"time\":{\"hour\":10,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":false,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":8},\"time\":{\"hour\":9,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":true,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":8},\"time\":{\"hour\":10,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":false,\"scheduleID\":\"nm111n\"}],\"httpCode\":200}");
+    });
+    /*this.week = JSON.parse("{\"name\":\"Multi-week schedule\",\"startDate\":{\"year\":2018,\"month\":12,\"day\":3},\"endDate\":{\"year\":2018,\"month\":12,\"day\":8},\"startTime\":{\"hour\":9,\"minute\":0,\"second\":0,\"nano\":0},\"endTime\":{\"hour\":11,\"minute\":0,\"second\":0,\"nano\":0},\"duration\":60,\"timeSlots\":[{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":3},\"time\":{\"hour\":9,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":true,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":3},\"time\":{\"hour\":10,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":false,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":4},\"time\":{\"hour\":9,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":true,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":4},\"time\":{\"hour\":10,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":false,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":5},\"time\":{\"hour\":9,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":true,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":5},\"time\":{\"hour\":10,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":true,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":6},\"time\":{\"hour\":9,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":false,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":6},\"time\":{\"hour\":10,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":false,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":7},\"time\":{\"hour\":9,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":false,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":7},\"time\":{\"hour\":10,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":false,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":8},\"time\":{\"hour\":9,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":true,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":8},\"time\":{\"hour\":10,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":false,\"scheduleID\":\"nm111n\"}],\"httpCode\":200}");
     console.log(this.week);
-    this.makeTiles(this.week.timeSlots);
+    this.makeTiles(this.week.timeSlots);*/
   }
 
 }

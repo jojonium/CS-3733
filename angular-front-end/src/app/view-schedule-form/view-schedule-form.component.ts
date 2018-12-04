@@ -31,7 +31,7 @@ export class ViewScheduleFormComponent implements OnInit {
 
 export class ViewScheduleModel {
   constructor(
-    id: string,
-    date: string
+    public id: string,
+    public date: string
   ) { }
 }

@@ -5,6 +5,13 @@ div#schedule-view-container {
   padding: 40px;
 }
 
+div.spinner-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-content: center;
+}
+
 mat-grid-tile {
   text-align: center;
   line-height: 150%;

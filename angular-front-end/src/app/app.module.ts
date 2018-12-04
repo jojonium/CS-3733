@@ -15,6 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatDialogModule } from '@angular/material/dialog';
 import { RouterModule, Routes } from '@angular/router'
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 import { AppComponent } from './app.component';
@@ -46,6 +47,7 @@ import { ViewScheduleFormComponent } from './view-schedule-form/view-schedule-fo
     MatNativeDateModule,
     MatToolbarModule,
     MatGridListModule,
+    MatProgressSpinnerModule,
     FormsModule,
     ReactiveFormsModule,
     MatSelectModule,

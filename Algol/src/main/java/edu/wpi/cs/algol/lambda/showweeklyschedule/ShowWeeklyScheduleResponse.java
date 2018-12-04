@@ -11,7 +11,7 @@ public class ShowWeeklyScheduleResponse {
 
 	public String name;
 	public LocalDate startDate; 
-	public LocalDate endDate;
+	public LocalDate endDate;	// last available date in showweeklyschedule
 	public LocalTime startTime; 
 	public LocalTime endTime;
 	public int duration;

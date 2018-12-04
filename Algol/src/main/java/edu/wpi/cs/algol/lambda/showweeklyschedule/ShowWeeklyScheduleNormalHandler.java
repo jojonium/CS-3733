@@ -44,7 +44,7 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 		//allts = daoT.getAllTimeSlots(id);
 		Schedule s = daoS.getSchedule(id);
 		TimeSlot startts;
-		if (dateStart != null) {
+		if (!dateStart.isEmpty()) {			// a valid date has been included
 			String[] date = dateStart.split("-");
 			//String[] time = dateTime.split(":");
 
@@ -59,7 +59,7 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 
 			if(startts.getBeginDateTime().getDayOfWeek() == DayOfWeek.MONDAY) {
 
-				for (int i = 0; i < 5; i ++) {
+				for (int i = 0; i < 4; i ++) {
 					for(LocalTime time = (s.getStartTime().getMinute()% s.getDuration() == 0) ? s.getStartTime() : s.getStartTime().plusMinutes(s.getDuration() - s.getStartTime().getMinute()%s.getDuration()); time.isBefore(s.getEndTime()); time = time.plusMinutes(s.getDuration())) {
 						weekts.add(daoT.getTimeSlot(id, LocalDateTime.of(LocalDate.of(year, month, day).plusDays(i), time)));
 					}
@@ -76,7 +76,7 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 						break;
 					}
 				}
-				for (int i = 0; i < 5; i ++) {
+				for (int i = 0; i < 4; i ++) {
 					for(LocalTime time = (s.getStartTime().getMinute()% s.getDuration() == 0) ? s.getStartTime() : s.getStartTime().plusMinutes(s.getDuration() - s.getStartTime().getMinute()%s.getDuration()); time.isBefore(s.getEndTime()); time = time.plusMinutes(s.getDuration())) {
 						weekts.add(daoT.getTimeSlot(id, LocalDateTime.of(LocalDate.of(year, month, day).plusDays(i), time)));
 					}
@@ -230,8 +230,9 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 				// successful processing
 				ScheduleDAO sDao = new ScheduleDAO();
 				Schedule s = sDao.getSchedule(req.scheduleID);
-
-				resp = new ShowWeeklyScheduleResponse(s.getName(),s.getStartDate(),s.getEndDate(),s.getStartTime(),s.getEndTime(),s.getDuration(), ts);
+				TimeSlot lastts = ts.get(ts.size()-1);
+				LocalDate endOfWeek = LocalDate.of(lastts.getBeginDateTime().getDayOfYear(), lastts.getBeginDateTime().getMonth(), lastts.getBeginDateTime().getDayOfMonth());
+				resp = new ShowWeeklyScheduleResponse(s.getName(),s.getStartDate(),endOfWeek,s.getStartTime(),s.getEndTime(),s.getDuration(), ts);
 				//logger.log("ShowWeeklySchedule response: " + resp.toString() + "\n");
 			} catch (Exception e) {
 				resp = new ShowWeeklyScheduleResponse(

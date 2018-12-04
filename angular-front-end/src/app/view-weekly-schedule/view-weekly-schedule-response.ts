@@ -35,10 +35,10 @@ export class MyTime {
 }
 
 export interface TimeSlot {
-  public beginDateTime: {
-    public date: MyDate,
-    public time: MyTime,
+  beginDateTime: {
+    date: MyDate,
+    time: MyTime,
   },
-  public isOpen: boolean,
-  public scheduleID: string
+  isOpen: boolean,
+  scheduleID: string
 }

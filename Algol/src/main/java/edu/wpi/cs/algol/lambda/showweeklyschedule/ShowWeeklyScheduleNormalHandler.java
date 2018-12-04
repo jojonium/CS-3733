@@ -23,7 +23,9 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.google.gson.Gson;
 
+import edu.wpi.cs.algol.db.ScheduleDAO;
 import edu.wpi.cs.algol.db.TimeSlotDAO;
+import edu.wpi.cs.algol.model.Schedule;
 import edu.wpi.cs.algol.model.TimeSlot;
 
 public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
@@ -166,7 +168,11 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 				 * TimeSlot(null, LocalDateTime.of(2018, Month.NOVEMBER, 27, 11, 30, 0), false,
 				 * null, req.scheduleID));
 				 */
-				resp = new ShowWeeklyScheduleResponse("Successfully retrieved timeslots for weekly schedule: ", ts);
+				// successful processing
+				ScheduleDAO sDao = new ScheduleDAO();
+				Schedule s = sDao.getSchedule(req.scheduleID);
+				
+				resp = new ShowWeeklyScheduleResponse(s.getName(),s.getStartDate(),s.getEndDate(),s.getStartTime(),s.getEndTime(),s.getDuration(), ts);
 				logger.log("ShowWeeklySchedule response: " + resp.toString() + "\n");
 				/*
 				 * END PLACEHOLDER

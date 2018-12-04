@@ -19,7 +19,7 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 	import edu.wpi.cs.algol.model.Schedule;
 
 	public class DeleteScheduleHandler implements RequestStreamHandler {
-		
+		//test
 		public LambdaLogger logger = null;
 		public Schedule s;
 	  

@@ -1,7 +1,7 @@
 <div class="mat-elevation-z5 form-container raised" id="view-schedule-form">
   <h2>View schedule</h2>
   
-  <form name="viewScheduleForm" (ngSubmit)="onSubmit()" #viewScheduleForm="ngForm" (ngSubmit)="onSubmit()">
+  <form name="viewScheduleForm" #viewScheduleForm="ngForm" (ngSubmit)="onSubmit()">
     <mat-form-field [hideRequiredMarker]="true">
       <input matInput placeholder="Schedule ID" name="id" [(ngModel)]="model.id" minlength="6" maxlength="6" required id="id-input" #idInput="ngModel">
       <mat-error *ngIf="idInput.hasError('minlength') && !idInput.hasError('required')">
@@ -10,6 +10,14 @@
       <mat-error *ngIf="idInput.hasError('required')">
         Schedule ID is <strong>required</strong>
       </mat-error>
+    </mat-form-field>
+    
+    <br>
+    
+    <mat-form-field [hideRequiredMarker]="true">
+      <input matInput name="date" [(ngModel)]="model.date" [matDatepicker]="datePicker" placeholder="Date (optional)" maxlength="10" id="date-input" #dateInput="ngModel">
+      <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+      <mat-datepicker #datePicker></mat-datepicker>
     </mat-form-field>
     
     <div class="button-container">

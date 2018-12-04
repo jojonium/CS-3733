@@ -7,12 +7,18 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./view-schedule-form.component.css']
 })
 export class ViewScheduleFormComponent implements OnInit {
-  model = ViewScheduleModel;
+  model = new ViewScheduleModel('', '');
   submitted = false;
   
   onSubmit(): void {
     this.submitted = true;
-    this.router.navigate(['/schedule/' + this.model.id]);
+    if (this.model.date != '') {
+      var tempDate = new Date(this.model.date);
+      var parsedTempDate = ((tempDate.getMonth() + 1) + '-' + tempDate.getDate() + '-' + tempDate.getFullYear());
+      this.router.navigate(['/schedule/' + this.model.id + '/' + parsedTempDate]);
+    } else {
+      this.router.navigate(['/schedule/' + this.model.id]);
+    }
   }
   
   constructor(private router: Router) { }
@@ -25,6 +31,7 @@ export class ViewScheduleFormComponent implements OnInit {
 
 export class ViewScheduleModel {
   constructor(
-    id: string
+    id: string,
+    date: string
   ) { }
 }

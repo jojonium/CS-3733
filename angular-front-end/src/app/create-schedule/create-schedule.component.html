@@ -28,6 +28,8 @@
           Duration is <strong>required</strong>
         </mat-error>
       </mat-form-field>
+      
+      <br>
 
       <mat-form-field [hideRequiredMarker]="true">
         <input matInput name="startDate" [(ngModel)]="model.startDate" [matDatepicker]="startDatePicker" [matDatepickerFilter]="weekendFilter"  placeholder="Start date" required maxlength="10" id="start-date-input" #startDateInput="ngModel">

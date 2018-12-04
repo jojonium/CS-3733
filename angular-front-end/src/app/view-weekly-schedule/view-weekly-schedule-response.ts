@@ -8,30 +8,37 @@ export class ViewWeeklyScheduleResponse {
 export class ViewWeeklyScheduleResponseBody {
   constructor(
     public name: string,
-    public startDate: string,
-    public endDate: string,
-    public startTime: string,
-    public endTime: string,
-    public duration: string,
-    public scheduleID: string,
-    public timeSlots: TimeSlot[],
-    public httpCode: string
+    public duration: number,
+    public endDate: MyDate,
+    public endTime: MyTime,
+    public startDate: MyDate,
+    public startTime: MyTime,
+    public timeSlot: TimeSlot[]
+  ) { }
+}
+
+export class MyDate {
+  constructor(
+    public year: number,
+    public month: number,
+    public day: number
+  ) { }
+}
+
+export class MyTime {
+  constructor(
+    public hour: number,
+    public minute: number,
+    public second: number,
+    public nano: number
   ) { }
 }
 
 export interface TimeSlot {
-  beginDateTime: {
-    date: {
-      year: number,
-      month: number,
-      day: number
-    },
-    time: {
-      hour: number,
-      minute: number,
-      second: number,
-      nano: number,
-    }
+  public beginDateTime: {
+    public date: MyDate,
+    public time: MyTime,
   },
-  isOpen: boolean
+  public isOpen: boolean,
+  public scheduleID: string
 }

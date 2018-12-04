@@ -1,7 +1,20 @@
 <div class="mat-elevation-z5 raised" id="schedule-view-container">
-  <h2 *ngIf="week">{{week.name}}</h2>
+  <div *ngIf="!errorMessage">
+    <h2 *ngIf="week">{{week.name}}</h2>
 
-  <p>The actual schedule week goes here</p>
+    <p>Click on an open time slot to schedule a meeting</p>
+    
+    <mat-grid-list [cols]="numDays + 1" rowHeight="100px">
+      <mat-grid-tile
+          *ngFor="let tile of tiles"
+          [ngClass]="tile.class">
+        {{tile.text}}
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
   
-  <!-- <p>{{week.schdeuleID}}</p> -->
+  <div *ngIf="errorMessage">
+    <h2>{{errorMessage}}</h2>
+  </div>
+  
 </div>

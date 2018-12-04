@@ -5,42 +5,28 @@ import java.util.ArrayList;
 import edu.wpi.cs.algol.model.TimeSlot;
 
 public class ShowWeeklyScheduleResponse {
-	String response;
-	String id;
-	String name;
-	String startDate;
-	String endDate;
-	String startTime;
-	String endTime;
-	String duration;
-	ArrayList<TimeSlot> timeSlots;
-	int httpCode;
+	public String response;
+	public ArrayList<TimeSlot> ts;
+	public int httpCode;
 	
 	/* used for errors or other responses that require a message */
-	public ShowWeeklyScheduleResponse(String s, int code) {
-		this.response = s;
+	public ShowWeeklyScheduleResponse(String response, int code) {
+		this.response = response;
+		this.ts = new ArrayList<TimeSlot>();
 		this.httpCode = code;
 	}
 
 	/* used for successful responses */
-	public ShowWeeklyScheduleResponse(String id, String name, String startDate, String endDate, String startTime,
-			String endTime, String duration, ArrayList<TimeSlot> timeSlots) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.duration = duration;
-		this.timeSlots = timeSlots;
+	public ShowWeeklyScheduleResponse(String response, ArrayList<TimeSlot> ts) {
+		this.response = response;
+		this.ts = ts;
 		this.httpCode = 200;
 	}
 
 	public String toString(){
-		if (response != null)
-			return ("Showing schedule, response: " + response);
+		if (ts != null)
+			return ("Showing schedule was successful, response: " + ts.size() + "\n");
 		else
-			return ("Showing schedule " + name);
+			return ("Showing schedule timeslot null error \n");
 	}
 }

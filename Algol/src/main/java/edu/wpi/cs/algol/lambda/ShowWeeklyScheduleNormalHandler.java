@@ -166,8 +166,7 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 				 * TimeSlot(null, LocalDateTime.of(2018, Month.NOVEMBER, 27, 11, 30, 0), false,
 				 * null, req.scheduleID));
 				 */
-				resp = new ShowWeeklyScheduleResponse(req.scheduleID, "An Example Schedule", "11/26/2018", "11/27/2018",
-						"9:00", "12:00", "30 minutes", ts);
+				resp = new ShowWeeklyScheduleResponse("Successfully retrieved timeslots for weekly schedule: ", ts);
 				logger.log("Created response: " + resp.toString() + "\n");
 				/*
 				 * END PLACEHOLDER

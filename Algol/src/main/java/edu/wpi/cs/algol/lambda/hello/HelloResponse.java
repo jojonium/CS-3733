@@ -1,6 +1,6 @@
 package edu.wpi.cs.algol.lambda.hello;
 
-public class HelloResponse {
+public class HelloResponse{
 	String message;
 	int httpCode;
 	

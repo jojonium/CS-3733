@@ -46,6 +46,7 @@ public class ShowWeeklyScheduleResponse {
 					+ duration + ", timeSlot=" + timeSlots + ", httpCode=" + httpCode + "]";
 		else
 			return "response=\" " + response + ", httpCode=" + httpCode + "]";
+	
 	}
 
 	/*public String toString(){

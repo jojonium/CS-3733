@@ -8,6 +8,7 @@ import { ViewWeeklyScheduleComponent } from './view-weekly-schedule/view-weekly-
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const appRoutes: Routes = [
+  { path: 'schedule/:id/:date', component: ViewWeeklyScheduleComponent },
   { path: 'schedule/:id', component: ViewWeeklyScheduleComponent },
   { path: '', pathMatch: 'full', component: CreateScheduleComponent },
   { path: '**', component: PageNotFoundComponent },

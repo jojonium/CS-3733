@@ -5,6 +5,11 @@ div#schedule-view-container {
   padding: 40px;
 }
 
+mat-grid-tile {
+  text-align: center;
+  line-height: 150%;
+}
+
 mat-grid-tile.date-header, mat-grid-tile.time-header {
   background-color: #4c4c4c;
 }
@@ -37,3 +42,10 @@ mat-grid-tile.open:hover {
 mat-grid-tile.closed {
   background-color: #454545;
 }
+
+div.button-container {
+  margin: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+

@@ -94,9 +94,9 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 				logger.log(req.toString());
 
 				DeleteScheduleResponse resp;
-				if (logger != null) { logger.log(s.getId() + " " +  ", " + s.getSecretCode() + " "); }
+				if (logger != null) { logger.log(req.scheduleID + " " +  ", " + req.secretCode + " "); }
 				try {
-					if(deleteSchedule(s.getId(), s.getSecretCode())){
+					if(deleteSchedule(req.scheduleID, req.secretCode)){
 						logger.log("deleteSchedule worked");
 						resp = new DeleteScheduleResponse(s.getId());
 						logger.log("schedule successfully deleted");
@@ -105,7 +105,7 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 						logger.log("schedule deletion failed");
 					}
 				} catch (Exception e) {
-					resp = new DeleteScheduleResponse("Unable to delete schedule: " + s.getName() + " because of (" + e.getMessage() + ")", 404);
+					resp = new DeleteScheduleResponse("Unable to delete schedule: " + req.scheduleID + " because of (" + e.getMessage() + ")", 404);
 				}
 
 				// compute proper response

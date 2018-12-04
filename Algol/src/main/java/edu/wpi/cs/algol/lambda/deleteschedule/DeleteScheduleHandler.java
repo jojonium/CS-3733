@@ -24,16 +24,20 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 		public Schedule s;
 	  
 		
-		boolean deleteSchedule(String sid) throws Exception {
+		boolean deleteSchedule(String sid, String scd) throws Exception {
 			if (logger != null) { logger.log("in deleteSchedule"); }
 
 			//variable setup
 			ScheduleDAO daoS = new ScheduleDAO();
 			
 			Schedule s = daoS.getSchedule(sid);
-			//creating the schedule
+			if(s.getSecretCode() == scd) { 
 	
 			return daoS.deleteSchedule(s);
+			}
+			else {
+				return false;
+			}
 		}
 		  @SuppressWarnings("unchecked")
 			@Override
@@ -63,7 +67,7 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 				String method = (String) event.get("httpMethod");
 				if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 					logger.log("Options request");
-					response = new DeleteScheduleResponse("name",s.getSecretCode(), s.getName(), 200);  // OPTIONS needs a 200 response
+					response = new DeleteScheduleResponse("name",s.getId(), s.getSecretCode(), s.getName(), 200);  // OPTIONS needs a 200 response
 			        responseJson.put("body", new Gson().toJson(response));
 			        processed = true;
 			        body = null;
@@ -75,7 +79,7 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 				}
 			} catch (ParseException pe) {
 				logger.log(pe.toString());
-				response = new DeleteScheduleResponse("Bad Request:" + pe.getMessage(),s.getSecretCode(), s.getName(), 422);  // unable to process input
+				response = new DeleteScheduleResponse("Bad Request:" + pe.getMessage(),s.getId(), s.getSecretCode(), s.getName(), 422);  // unable to process input
 		        responseJson.put("body", new Gson().toJson(response));
 		        processed = true;
 		        body = null;
@@ -87,10 +91,10 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 
 				DeleteScheduleResponse resp;
 				try {
-						resp = new DeleteScheduleResponse("Successful deletion of schedule ", s.getSecretCode(), s.getName(), 202);
+						resp = new DeleteScheduleResponse("Successful deletion of schedule ", s.getId(), s.getSecretCode(), s.getName(), 202);
 				
 				} catch (Exception e) {
-					resp = new DeleteScheduleResponse("Unable to delete schedule: " + s.getName() + " because of (" + e.getMessage() + ")", s.getSecretCode(), s.getName(), 404);
+					resp = new DeleteScheduleResponse("Unable to delete schedule: " + s.getName() + " because of (" + e.getMessage() + ")", s.getId(), s.getSecretCode(), s.getName(), 404);
 				}
 
 				// compute proper response

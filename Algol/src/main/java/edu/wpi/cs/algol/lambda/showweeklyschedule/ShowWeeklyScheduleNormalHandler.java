@@ -6,10 +6,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.time.DayOfWeek;
+//import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+//import java.time.LocalDateTime;
+//import java.time.LocalTime;
 //import java.time.Month;
 import java.util.ArrayList;
 //import java.util.Iterator;
@@ -36,10 +36,17 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 		
 
 		// variable setup
-		ScheduleDAO daoS = new ScheduleDAO();
+//		ScheduleDAO daoS = new ScheduleDAO();
 		TimeSlotDAO daoT = new TimeSlotDAO();
+		
+		if(dateStart.isEmpty()) {
+			//Schedule s = daoS.getSchedule(id);
+			return daoT.getAllTimeSlots(id);
+		}
+		else
+			return daoT.getAllTimeSlots(id);
 		//ArrayList<TimeSlot> allts = new ArrayList<TimeSlot>();
-		ArrayList<TimeSlot> weekts = new ArrayList<TimeSlot>();
+		/*ArrayList<TimeSlot> weekts = new ArrayList<TimeSlot>();
 		//allts = daoT.getAllTimeSlots(id);
 		Schedule s = daoS.getSchedule(id);
 		TimeSlot startts;
@@ -108,7 +115,7 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 
 			return weekts;
 
-		}
+		}*/
 
 		//		int hour = Integer.parseInt(time[0]);
 		//		int min = Integer.parseInt(time[1]);

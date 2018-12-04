@@ -12,7 +12,7 @@ public class ShowWeeklyScheduleResponse {
 	/* used for errors or other responses that require a message */
 	public ShowWeeklyScheduleResponse(String response, int code) {
 		this.response = response;
-		this.ts = new ArrayList<TimeSlot>();
+		//this.ts = new ArrayList<TimeSlot>();
 		this.httpCode = code;
 	}
 
@@ -24,9 +24,10 @@ public class ShowWeeklyScheduleResponse {
 	}
 
 	public String toString(){
-		if (ts != null)
-			return ("Showing schedule was successful, response: " + ts.size() + "\n");
-		else
-			return ("Showing schedule timeslot null error \n");
+		
+			return ("Showing schedule was successful, response:" + ts.toString()+ " \n");
+		
 	}
+	
+	
 }

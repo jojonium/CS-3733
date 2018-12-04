@@ -39,7 +39,7 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 		// variable setup
 		ScheduleDAO daoS = new ScheduleDAO();
 		TimeSlotDAO daoT = new TimeSlotDAO();
-		ArrayList<TimeSlot> allts = new ArrayList<TimeSlot>();
+		//ArrayList<TimeSlot> allts = new ArrayList<TimeSlot>();
 		ArrayList<TimeSlot> weekts = new ArrayList<TimeSlot>();
 		//allts = daoT.getAllTimeSlots(id);
 		Schedule s = daoS.getSchedule(id);
@@ -203,11 +203,7 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 
 			ShowWeeklyScheduleResponse resp;
 			try {
-				/*
-				 * TODO Actually grab a schedule from the database BEGIN PLACEHOLDER
-				 */
-
-				ArrayList<TimeSlot> ts = getWeeklyScheduleSlots(req.scheduleID, req.dateTime);
+				ArrayList<TimeSlot> ts = getWeeklyScheduleSlots(req.scheduleID, req.date);
 				/*
 				 * ts.add(new TimeSlot(null, LocalDateTime.of(2018, Month.NOVEMBER, 26, 9, 0,
 				 * 0), true, null, req.scheduleID)); ts.add(new TimeSlot(null,
@@ -237,9 +233,6 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 
 				resp = new ShowWeeklyScheduleResponse(s.getName(),s.getStartDate(),s.getEndDate(),s.getStartTime(),s.getEndTime(),s.getDuration(), ts);
 				logger.log("ShowWeeklySchedule response: " + resp.toString() + "\n");
-				/*
-				 * END PLACEHOLDER
-				 */
 			} catch (Exception e) {
 				resp = new ShowWeeklyScheduleResponse(
 						"Unable to show schedule " + req.scheduleID + " (" + e.getMessage() + ")", 400);

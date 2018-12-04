@@ -1,9 +1,5 @@
 package edu.wpi.cs.algol.lambda.deleteschedule;
 
-import java.util.ArrayList;
-
-import edu.wpi.cs.algol.model.TimeSlot;
-
 public class DeleteScheduleResponse {
 	public String response;
 	public String secretCode;

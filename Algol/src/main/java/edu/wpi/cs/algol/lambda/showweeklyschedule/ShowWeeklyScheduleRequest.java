@@ -3,12 +3,12 @@ package edu.wpi.cs.algol.lambda.showweeklyschedule;
 public class ShowWeeklyScheduleRequest {
 	String scheduleID;
 	//String secretCode;
-	String dateTime;
+	String date;
 	
 	/* normal mode constructor */
-	public ShowWeeklyScheduleRequest(String scheduleID, String dateTime) {
+	public ShowWeeklyScheduleRequest(String scheduleID, String date) {
 		this.scheduleID = scheduleID;
-		this.dateTime = dateTime;
+		this.date= date;
 	}
 	
 	/* organizer mode constructor */
@@ -27,8 +27,8 @@ public class ShowWeeklyScheduleRequest {
 	 */
 	@Override
 	public String toString() {
-		return "ShowWeeklyScheduleRequest [scheduleID=" + scheduleID + ", dateTime="
-				+ dateTime + "]";
+		return "ShowWeeklyScheduleRequest [scheduleID=" + scheduleID + ", date="
+				+ date+ "]";
 	}
 	
 

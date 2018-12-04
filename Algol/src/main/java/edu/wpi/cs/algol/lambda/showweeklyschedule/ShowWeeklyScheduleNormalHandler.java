@@ -204,6 +204,8 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 			ShowWeeklyScheduleResponse resp;
 			try {
 				ArrayList<TimeSlot> ts = getWeeklyScheduleSlots(req.scheduleID, req.date);
+				logger.log("Assign var ts: " + ts.toString() + "\n");
+				
 				/*
 				 * ts.add(new TimeSlot(null, LocalDateTime.of(2018, Month.NOVEMBER, 26, 9, 0,
 				 * 0), true, null, req.scheduleID)); ts.add(new TimeSlot(null,
@@ -229,11 +231,16 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 				 */
 				// successful processing
 				ScheduleDAO sDao = new ScheduleDAO();
+				
+				
 				Schedule s = sDao.getSchedule(req.scheduleID);
+				logger.log("Retriving schedule with input ID: " + s.toString() + "\n");
 				TimeSlot lastts = ts.get(ts.size()-1);
+				logger.log("Retrieving last timeslot of weekly schedule: " + lastts.toString() + "\n");
 				LocalDate endOfWeek = LocalDate.of(lastts.getBeginDateTime().getDayOfYear(), lastts.getBeginDateTime().getMonth(), lastts.getBeginDateTime().getDayOfMonth());
+				logger.log("Retrieving endOfWeek date: " + endOfWeek.toString() + "\n");
 				resp = new ShowWeeklyScheduleResponse(s.getName(),s.getStartDate(),endOfWeek,s.getStartTime(),s.getEndTime(),s.getDuration(), ts);
-				//logger.log("ShowWeeklySchedule response: " + resp.toString() + "\n");
+				logger.log("ShowWeeklySchedule response: " + resp.toString() + "\n");
 			} catch (Exception e) {
 				resp = new ShowWeeklyScheduleResponse(
 						"Unable to show schedule " + req.scheduleID + " (" + e + ")", 400);

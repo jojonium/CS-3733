@@ -95,7 +95,7 @@ public class ScheduleDAO {
 		try {
 			PreparedStatement ps = conn.prepareStatement("DELETE FROM Schedules WHERE id =? AND secretCode = ?");
 
-
+			
 			ps.setString(1, id);
 			ps.setString(2, secretCode);
 

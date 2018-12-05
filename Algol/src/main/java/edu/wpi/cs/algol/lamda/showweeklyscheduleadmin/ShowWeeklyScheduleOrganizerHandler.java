@@ -32,118 +32,28 @@ import edu.wpi.cs.algol.model.TimeSlot;
 public class ShowWeeklyScheduleOrganizerHandler implements RequestStreamHandler {
 	private LambdaLogger logger = null;
 
-	ArrayList<TimeSlot> getWeeklyScheduleSlots(String id, String dateStart) throws Exception {
+	ArrayList<TimeSlot> getWeeklyScheduleSlots(String id, String secretCode, String dateStart) throws Exception {
 		if (logger != null) { logger.log("in getWeeklyScheduleSlots"); }
-		
 
-		// variable setup
-//		ScheduleDAO daoS = new ScheduleDAO();
+
+
+		//		ScheduleDAO daoS = new ScheduleDAO();
 		TimeSlotDAO daoT = new TimeSlotDAO();
-		
-		return daoT.getWeeklyTimeSlots(id, dateStart);
-		//ArrayList<TimeSlot> allts = new ArrayList<TimeSlot>();
-		/*ArrayList<TimeSlot> weekts = new ArrayList<TimeSlot>();
-		//allts = daoT.getAllTimeSlots(id);
-		Schedule s = daoS.getSchedule(id);
-		TimeSlot startts;
-		if (!dateStart.isEmpty()) {			// a valid date has been included
-			String[] date = dateStart.split("-");
-			//String[] time = dateTime.split(":");
 
-			int month = Integer.parseInt(date[0]);	// parsing might not work correctly
-			int day = Integer.parseInt(date[1]);
-			int year = Integer.parseInt(date[2]);
-			LocalDateTime ldt;
-
-			ldt = LocalDateTime.of(LocalDate.of(year, month, day), s.getStartTime());
-			// check which date begins on 
-			startts = daoT.getTimeSlot(id, ldt);
-
-			if(startts.getBeginDateTime().getDayOfWeek() == DayOfWeek.MONDAY) {
-
-				for (int i = 0; i < 4; i ++) {
-					for(LocalTime time = (s.getStartTime().getMinute()% s.getDuration() == 0) ? s.getStartTime() : s.getStartTime().plusMinutes(s.getDuration() - s.getStartTime().getMinute()%s.getDuration()); time.isBefore(s.getEndTime()); time = time.plusMinutes(s.getDuration())) {
-						weekts.add(daoT.getTimeSlot(id, LocalDateTime.of(LocalDate.of(year, month, day).plusDays(i), time)));
-					}
-				}
-
+		try {
+			ScheduleDAO daoS = new ScheduleDAO();
+			Schedule s = daoS.getSchedule(id);
+			if (s.getSecretCode().equals(secretCode)) {
+				return daoT.getWeeklyTimeSlots(id, dateStart);
 			}
-
-			else {
-				int newDay = day;
-				while (startts.getBeginDateTime().getDayOfWeek() != DayOfWeek.MONDAY) {
-					startts = daoT.getTimeSlot(id, LocalDateTime.of(LocalDate.of(year, month, newDay--), s.getStartTime()));
-					if (startts == null) {
-						startts = daoT.getTimeSlot(id, LocalDateTime.of(LocalDate.of(year, month, newDay++), s.getStartTime()));
-						break;
-					}
-				}
-				for (int i = 0; i < 4; i ++) {
-					for(LocalTime time = (s.getStartTime().getMinute()% s.getDuration() == 0) ? s.getStartTime() : s.getStartTime().plusMinutes(s.getDuration() - s.getStartTime().getMinute()%s.getDuration()); time.isBefore(s.getEndTime()); time = time.plusMinutes(s.getDuration())) {
-						weekts.add(daoT.getTimeSlot(id, LocalDateTime.of(LocalDate.of(year, month, day).plusDays(i), time)));
-					}
-				}
-			}
-
-
-			return weekts;
-
-
+			else
+				throw new Exception("Failue due to incorrect secretCode");
+		} catch (Exception e){
+			throw new Exception ("Failed to get organizer's weekly schedule: " + e.getMessage());
 		}
 
-		else {
-			
-			startts = daoT.getTimeSlot(id, LocalDateTime.of(s.getStartDate(),s.getStartTime()));
-			
-			int day = startts.getBeginDateTime().getDayOfMonth();
-			int month = startts.getBeginDateTime().getMonthValue();
-			int year = startts.getBeginDateTime().getYear();
-
-			for (int i = 0; startts.getBeginDateTime().getDayOfWeek() != DayOfWeek.SATURDAY; i ++) {
-				for(LocalTime time = (s.getStartTime().getMinute()% s.getDuration() == 0) ? s.getStartTime() : s.getStartTime().plusMinutes(s.getDuration() - s.getStartTime().getMinute()%s.getDuration()); time.isBefore(s.getEndTime()); time = time.plusMinutes(s.getDuration())) {
-					startts = daoT.getTimeSlot(id, LocalDateTime.of(LocalDate.of(year, month, day).plusDays(i), time));
-					
-					weekts.add(startts);
-
-				}
-			}
 
 
-			return weekts;
-
-		}*/
-
-		//		int hour = Integer.parseInt(time[0]);
-		//		int min = Integer.parseInt(time[1]);
-
-		/*LocalDateTime ldt = LocalDateTime.of(LocalDate.of(year, month, day), 
-				LocalTime.of(hour, min));
-		TimeSlot timeslot = daoT.getTimeSlot(id, ldt);
-		TimeSlot beginWeekDay = daoT.getTimeSlot(id, timeslot.getBeginDateTime());;
-		for (int i = 0; i < 7; i++) {
-			if (timeslot.getBeginDateTime().minusDays(i).getDayOfWeek() == DayOfWeek.SUNDAY) {
-				beginWeekDay = daoT.getTimeSlot(id, timeslot.getBeginDateTime().minusDays(i));
-			}
-		}
-
-		Iterator<TimeSlot> iterator = allts.iterator();
-		while (iterator.hasNext()) {
-			for (int i = 0; i < 6; i++) {
-				if (iterator.next().getBeginDateTime() == beginWeekDay.getBeginDateTime().plusDays(i)) {
-					weekts.add(iterator.next());
-				}
-			}
-		}*/
-
-
-		/* weekts.add(all timeslots within a week after beginWeek timeslot) */
-
-		/*
-		 * int durationInt = Integer.parseInt(duration.substring(0, 2));
-		 * logger.log("Parsed duration to get integer: "+ durationInt+"\n"); //creating
-		 * the schedule s = new Schedule(name, dateStart, dateEnd, timeStart, timeEnd,
-		 * durationInt);
-		 */
 
 
 	}
@@ -205,38 +115,16 @@ public class ShowWeeklyScheduleOrganizerHandler implements RequestStreamHandler 
 
 			ShowWeeklyScheduleOrganizerResponse resp;
 			try {
-				ArrayList<TimeSlot> ts = getWeeklyScheduleSlots(req.scheduleID, req.date);
+				ArrayList<TimeSlot> ts = getWeeklyScheduleSlots(req.scheduleID, req.secretCode, req.date);
 				logger.log("Assign var ts: " + ts.toString() + "\n");
-				
-				/*
-				 * ts.add(new TimeSlot(null, LocalDateTime.of(2018, Month.NOVEMBER, 26, 9, 0,
-				 * 0), true, null, req.scheduleID)); ts.add(new TimeSlot(null,
-				 * LocalDateTime.of(2018, Month.NOVEMBER, 26, 9, 30, 0), true, null,
-				 * req.scheduleID)); ts.add(new TimeSlot(null, LocalDateTime.of(2018,
-				 * Month.NOVEMBER, 26, 10, 0, 0), false, null, req.scheduleID)); ts.add(new
-				 * TimeSlot(null, LocalDateTime.of(2018, Month.NOVEMBER, 26, 10, 30, 0), true,
-				 * null, req.scheduleID)); ts.add(new TimeSlot(null, LocalDateTime.of(2018,
-				 * Month.NOVEMBER, 26, 11, 0, 0), true, null, req.scheduleID)); ts.add(new
-				 * TimeSlot(null, LocalDateTime.of(2018, Month.NOVEMBER, 26, 11, 30, 0), false,
-				 * null, req.scheduleID));
-				 * 
-				 * ts.add(new TimeSlot(null, LocalDateTime.of(2018, Month.NOVEMBER, 27, 9, 0,
-				 * 0), false, null, req.scheduleID)); ts.add(new TimeSlot(null,
-				 * LocalDateTime.of(2018, Month.NOVEMBER, 27, 9, 30, 0), false, null,
-				 * req.scheduleID)); ts.add(new TimeSlot(null, LocalDateTime.of(2018,
-				 * Month.NOVEMBER, 27, 10, 0, 0), false, null, req.scheduleID)); ts.add(new
-				 * TimeSlot(null, LocalDateTime.of(2018, Month.NOVEMBER, 27, 10, 30, 0), true,
-				 * null, req.scheduleID)); ts.add(new TimeSlot(null, LocalDateTime.of(2018,
-				 * Month.NOVEMBER, 27, 11, 0, 0), true, null, req.scheduleID)); ts.add(new
-				 * TimeSlot(null, LocalDateTime.of(2018, Month.NOVEMBER, 27, 11, 30, 0), false,
-				 * null, req.scheduleID));
-				 */
+
+
 				// successful processing
 				ScheduleDAO sDao = new ScheduleDAO();
-				
-				
+
+
 				Schedule s = sDao.getSchedule(req.scheduleID);
-				logger.log("Retrieving schedule with input ID: " + s.toString() + "\n");
+				logger.log("Retrieving schedule with input secretCode: " + s.toString() + "\n");
 				TimeSlot firstts = ts.get(0);
 				TimeSlot lastts = ts.get(ts.size()-1);
 				logger.log("Retrieving last timeslot of weekly schedule: " + lastts.toString() + "\n");

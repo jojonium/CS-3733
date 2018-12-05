@@ -333,6 +333,23 @@ public class TimeSlotDAO {
 
 
 	}
+	
+	public ArrayList<TimeSlot> getOrganizerWeekly(String scheduleID, String secretCode, String dateStart) throws Exception {
+		
+		try {
+			ScheduleDAO sDao = new ScheduleDAO();
+			Schedule s = sDao.getSchedule(scheduleID);
+			if (s.getSecretCode().equals(secretCode)) {
+				return this.getWeeklyTimeSlots(scheduleID, dateStart);
+			}
+			else
+				throw new Exception("Failed to get schedule due to invalid code: ");
+			
+		} catch (Exception e) {
+			throw new Exception ("Failed to get organizer's weekly schedule: " + e.getMessage());
+		}
+		
+	}
 
 	public TimeSlot createTimeSlot(ResultSet resultSet) throws Exception {
 

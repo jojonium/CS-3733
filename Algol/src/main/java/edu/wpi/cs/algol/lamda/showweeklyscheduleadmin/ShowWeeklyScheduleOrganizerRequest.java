@@ -6,9 +6,9 @@ public class ShowWeeklyScheduleOrganizerRequest {
 	String date;
 	
 	/* normal mode constructor */
-	public ShowWeeklyScheduleOrganizerRequest(String scheduleID, String code, String date) {
+	public ShowWeeklyScheduleOrganizerRequest(String scheduleID, String secretCode, String date) {
 		this.scheduleID = scheduleID;
-		this.secretCode = code;
+		this.secretCode = secretCode;
 		this.date= date;
 	}
 	
@@ -18,10 +18,10 @@ public class ShowWeeklyScheduleOrganizerRequest {
 		this.secretCode = sc;
 		this.dateTime = dt;
 	}*/
-	
-	public ShowWeeklyScheduleOrganizerRequest(String scheduleID, String code) {
+	// not necessary
+	public ShowWeeklyScheduleOrganizerRequest(String scheduleID, String secretCode) {
 		this.scheduleID = scheduleID;
-		this.secretCode = code;
+		this.secretCode = secretCode;
 	}
 
 	/* (non-Javadoc)

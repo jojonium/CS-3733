@@ -33,7 +33,7 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 			Schedule s = daoS.getSchedule(sid);
 			if (logger != null) { logger.log("Matt HAGAN"); }
 			if (logger != null) { logger.log(s.getId() + " " + sid + ", " + s.getSecretCode() + " " + scd); }
-			if(s.getSecretCode() == scd) { 
+			if(s.getSecretCode().equals(scd)) { 
 			
 			return daoS.deleteSchedule(s);
 			}

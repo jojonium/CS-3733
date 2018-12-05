@@ -21,7 +21,7 @@ import edu.wpi.cs.algol.lambda.closetimeslot.CloseTimeSlotRequest;
 import edu.wpi.cs.algol.lambda.closetimeslot.CloseTimeSlotResponse;
 
 public class CloseTimeSlotHandler implements RequestStreamHandler {
-	//test
+	//logger
 	public LambdaLogger logger = null;
 	
 	boolean CloseTimeSlot(String sid, String scd, String d, String t) throws Exception {

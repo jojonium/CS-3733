@@ -111,8 +111,6 @@ export class ViewWeeklyScheduleComponent implements OnInit {
       }
     }
     
-    console.log(this.timeArray);
-    
     // blank tile for the top left
     this.tiles[tileIndex++] = {class: "blank", text: "", text2: "", click: null};
     
@@ -132,24 +130,28 @@ export class ViewWeeklyScheduleComponent implements OnInit {
     }
     
     // add in the times and timeslots
-    for (let i = 0, j = 0, k = 0; i < input.length + this.numTimes; ++i) {
+    for (let i = 0, j = 0, r = -1, c; i < input.length + this.numTimes; ++i) {
       if (i % (this.numDays + 1) == 0) { // beginning of a row
+        c = 0; r++;
         // add a time to the start of the row
         let extraClass = '';
         if (i == 0) extraClass += ' first-th';
         if (i == input.length + this.numTimes - this.numDays - 1) extraClass += ' last-th';
         this.tiles[tileIndex++] = {class: "time-header" + extraClass,
-          text: this.prettyPrintTime(this.timeArray[k++]),
+          text: this.prettyPrintTime(this.timeArray[j++]),
           text2: "",
-          click: ''
+          click: ""
         };
       } else {
         // add an open/closed timeslot
-        this.tiles[tileIndex++] = {class: input[j].isOpen ? 'open' : 'closed',
-          text: input[j].isOpen ? 'Open' : '—',
+        // r tracks row (time), and c tracks column (date) of the table.
+        // the corresponding index in the TimeSlot array is (c * numDays) + r
+        this.tiles[tileIndex++] = {class: input[c * this.numDays + r].isOpen ? 'open' : 'closed',
+          text: input[c * this.numDays + r].isOpen ? 'Open' : '—',
           text2: "",
-          click: input[j++].isOpen ? 'openTimeSlotClick()' : ''
+          click: input[c * this.numDays + r].isOpen ? 'openTimeSlotClick()' : ''
         };
+        c++;
       }
     }
   };

@@ -90,6 +90,11 @@ public class ScheduleDAO {
 
 	}
 	
+	/**
+	 * TODO this should be changed to take in a string (the schedule ID), and
+	 * another string (the secret code) and delete from Schedules where both are
+	 * valid.
+	 */
 	public boolean deleteSchedule(Schedule schedule) throws Exception {
 		
 		try {

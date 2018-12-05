@@ -34,17 +34,19 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 	ArrayList<TimeSlot> getWeeklyScheduleSlots(String id, String dateStart) throws Exception {
 		if (logger != null) { logger.log("in getWeeklyScheduleSlots"); }
 		
+		TimeSlotDAO daoT = new TimeSlotDAO();
+		return daoT.getWeeklySchedule(id,dateStart);
 
 		// variable setup
 //		ScheduleDAO daoS = new ScheduleDAO();
-		TimeSlotDAO daoT = new TimeSlotDAO();
+		//TimeSlotDAO daoT = new TimeSlotDAO();
 		
-		if(dateStart.isEmpty()) {
-			//Schedule s = daoS.getSchedule(id);
-			return daoT.getAllTimeSlots(id);
-		}
-		else
-			return daoT.getAllTimeSlots(id);
+//		if(dateStart.isEmpty()) {
+//			//Schedule s = daoS.getSchedule(id);
+//			return daoT.getAllTimeSlots(id);
+//		}
+//		else
+//			return daoT.getAllTimeSlots(id);
 		//ArrayList<TimeSlot> allts = new ArrayList<TimeSlot>();
 		/*ArrayList<TimeSlot> weekts = new ArrayList<TimeSlot>();
 		//allts = daoT.getAllTimeSlots(id);

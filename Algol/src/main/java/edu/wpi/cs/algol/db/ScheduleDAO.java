@@ -8,9 +8,9 @@ import java.sql.*;
 import edu.wpi.cs.algol.model.Schedule;
 
 public class ScheduleDAO {
-	
+
 	java.sql.Connection conn;
-	
+
 	//LambdaLogger logger = null;
 
 	public ScheduleDAO() {
@@ -56,59 +56,63 @@ public class ScheduleDAO {
 
 		try {
 			PreparedStatement ps;
-//			logger.log("made PreparedStatement ps\n");
+			//			logger.log("made PreparedStatement ps\n");
 			ps = conn.prepareStatement("INSERT INTO Schedules (secretCode, id, name, startDate, endDate, startTime, endTime, duration) values(?,?,?,?,?,?,?,?) ");
-//			logger.log("in addSchedule innitial declaration of conn: " + ps.toString() + "\n");
+			//			logger.log("in addSchedule innitial declaration of conn: " + ps.toString() + "\n");
 			ps.setString(1, schedule.getSecretCode());
 			ps.setString(2, schedule.getId());
 			ps.setString(3, schedule.name);
-//			logger.log("in addSchedule set name: " + ps.toString() + "\n");
+			//			logger.log("in addSchedule set name: " + ps.toString() + "\n");
 			ps.setString(4, rewriteS(schedule.getStartDate().toString()));
-//			logger.log("addSchedule set startDate: " + ps.toString() + "\n");
+			//			logger.log("addSchedule set startDate: " + ps.toString() + "\n");
 			ps.setString(5, rewriteS(schedule.getEndDate().toString()));
-//			logger.log("in addSchedule set: endDate" + ps.toString() + "\n");
+			//			logger.log("in addSchedule set: endDate" + ps.toString() + "\n");
 			ps.setString(6, schedule.getStartTime().toString());
-//			logger.log("in addSchedule setStartTime: " + ps.toString() + "\n");
+			//			logger.log("in addSchedule setStartTime: " + ps.toString() + "\n");
 			ps.setString(7, schedule.getEndTime().toString());
-//			logger.log("in addSchedule setEndTime: " + ps.toString() + "\n");
+			//			logger.log("in addSchedule setEndTime: " + ps.toString() + "\n");
 			ps.setInt(8, schedule.getDuration());
-			
+
 			ps.execute();
-			
-			
+
+
 			TimeSlotDAO tDao = new TimeSlotDAO();
 			for (int i = 0; i < schedule.getTimeSlots().size(); i++) {
 				tDao.addTimeSlot(schedule.getTimeSlots().get(i));
-				
+
 			}
-			
+
 			return true;
 
 		} catch (Exception e) {
-            throw new Exception("Failed to insert schedule: " + e + "\n" + e.getMessage());
-        }
+			throw new Exception("Failed to insert schedule: " + e + "\n" + e.getMessage());
+		}
 
 	}
-	
-	public boolean deleteSchedule(Schedule schedule) throws Exception {
-		
+
+	public boolean deleteSchedule(String id, String secretCode) throws Exception {
+
 		try {
-			PreparedStatement ps = conn.prepareStatement("DELETE FROM Schedules WHERE id =?");
-			ps.setString(1, schedule.getId());
+			PreparedStatement ps = conn.prepareStatement("DELETE FROM Schedules WHERE id =? AND secretCode = ?");
+
+
+			ps.setString(1, id);
+			ps.setString(2, secretCode);
+
 			int numAffected = ps.executeUpdate();
 			ps.close();
-			
+
 			return (numAffected == 1);
-			
+
 		} catch (Exception e) {
 			throw new Exception("Failed to delete Schedule: " + e.getMessage());
 		}
-		
-		
+
+
 	}
 	// might just get schedule id and then update. 
 	public boolean updateSchedule(Schedule schedule) throws Exception {
-		
+
 		try {
 			PreparedStatement ps = conn.prepareStatement("UPDATE Schedules SET startDate=?, endDate=?, startTime=?, endTime=? WHERE id=?;");
 			ps.setString(1, rewriteS(schedule.getStartDate().toString()));
@@ -119,15 +123,15 @@ public class ScheduleDAO {
 
 			int numAffected = ps.executeUpdate();
 			ps.close();
-			
+
 			return (numAffected == 1);
-			
+
 		} catch (Exception e) {
 			throw new Exception("Failed to update Schedule: " + e.getMessage());
 		}
 	}
 	private Schedule createSchedule(ResultSet resultSet) throws Exception {
-		
+
 		String secretCode = resultSet.getString("secretCode");
 		String id = resultSet.getString("id");
 		String name = resultSet.getString("name");
@@ -138,15 +142,15 @@ public class ScheduleDAO {
 		int duration = Integer.parseInt(resultSet.getString("duration").substring(0, 2)); // regex minutes
 
 		Schedule s = new Schedule(secretCode, id, name, startDate, endDate, startTime, endTime, duration);
-		
+
 		TimeSlotDAO tDao = new TimeSlotDAO();
 		for (int i = 0; i < s.getTimeSlots().size(); i++) {
 			tDao.addTimeSlot(s.getTimeSlots().get(i));
-			
+
 		}
 		return s;
 	}
-	
+
 	private String rewriteS(String s) {
 
 		String[] dateArray = s.split("-");
@@ -155,12 +159,12 @@ public class ScheduleDAO {
 		int day = Integer.parseInt(dateArray[2]);
 
 
-		
+
 		return (month +"/"+ day+"/" + year );
-		
-		
+
+
 	}
-	
+
 
 
 }

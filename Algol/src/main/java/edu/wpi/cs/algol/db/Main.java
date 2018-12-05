@@ -26,12 +26,13 @@ public class Main {
 			//System.out.println(tDao.getTimeSlot("746zpl", LocalDateTime.of(LocalDate.of(2018, 12, 11), LocalTime.of(2, 0))).toString());
 			//Schedule s =new Schedule("letzt","11/11/2018","11/12/2018","9:00","10:00",20);
 			//sDao.addSchedule(s);
-			Schedule s = sDao.getSchedule("xZz12l");
-			ArrayList<TimeSlot> ts = tDao.getAllTimeSlots(s.getId());
-			for (int i = 0; i < ts.size() ; i ++) {
-				System.out.println(ts.toString());
+			Schedule s = new Schedule("what2","12/10/2018","12/17/2018","9:00","10:00",30);;
+			//sDao.addSchedule(s);
+			//ArrayList<TimeSlot> ts = tDao.getAllTimeSlots(s.getId());
+			for (int i = 0; i < s.getTimeSlots().size() ; i ++) {
+				System.out.println(s.getTimeSlots().get(i));
 			}
-			System.out.println(s.getDuration());
+			System.out.println(s.getStartDate());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

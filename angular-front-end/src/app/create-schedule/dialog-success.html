@@ -7,6 +7,6 @@
   <p>Write this down, you'll need it if you want to edit your schedule in the future.</p>
 </div>
 <div mat-dialog-actions style="display: flex; justify-content: flex-end">
-  <button mat-raised-button (click)="closeSuccessDialog()">CLOSE</button>
-  <button mat-raised-button (click)="closeSuccessDialog()" color="primary" cdkFocusInitial>VIEW SCHEDULE</button>
+  <button mat-raised-button (click)="closeSuccessDialog()" style="margin-right: 5px;">CLOSE</button>
+  <a [routerLink]="['/schedule', data.scheduleID]"><button mat-raised-button (click)="closeSuccessDialog()" color="primary" style="margin-left: 5px;" cdkFocusInitial>VIEW SCHEDULE</button></a>
 </div>

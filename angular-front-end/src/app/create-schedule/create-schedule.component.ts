@@ -2,9 +2,10 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
-import { CreateScheduleRequest } from '../create-schedule-request';
-import { CreateScheduleService } from '../create-schedule.service';
-import { CreateScheduleResponse } from '../create-schedule-response';
+import { CreateScheduleRequest } from './create-schedule-request';
+import { ScheduleService } from '../schedule.service';
+import { CreateScheduleResponse } from './create-schedule-response';
+import { ViewWeeklyScheduleComponent } from '../view-weekly-schedule/view-weekly-schedule.component';
 
 @Component({
   selector: 'app-create-schedule',
@@ -58,13 +59,14 @@ export class CreateScheduleComponent implements OnInit {
     var parsedEndDate = ((tempDate.getMonth() + 1) + '/' + tempDate.getDate() + '/' + tempDate.getFullYear());
     var modelToSend = new CreateScheduleRequest(this.model.name, this.model.duration, parsedStartDate, parsedEndDate, this.model.startTime, this.model.endTime);
 
-    this.createScheduleService.createSchedule(modelToSend)
+    this.scheduleService.createSchedule(modelToSend)
       .subscribe(csResponse => {
         console.log(`CreateScheduleComponent received response: ${csResponse}`);
         this.progressBarMode = '';
         var responseBody = JSON.parse(csResponse.body);
         if (responseBody.httpCode == 201) {
-          this.openSuccessDialog(responseBody.secretCode, responseBody.scheduleID);
+          console.log("RESPONSE BODY: sc: " + responseBody.secretCode + " sid: " + responseBody.id);
+          this.openSuccessDialog(responseBody.secretCode, responseBody.id);
           // success
         } else if (responseBody.httpCode == 400) {
           this.openFailDialog();
@@ -80,7 +82,7 @@ export class CreateScheduleComponent implements OnInit {
   }
 
   constructor(
-    private createScheduleService: CreateScheduleService,
+    private scheduleService: ScheduleService,
     public failDialog: MatDialog,
     public successDialog: MatDialog
   ) { }

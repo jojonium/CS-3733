@@ -7,16 +7,23 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { AmazingTimePickerModule } from 'amazing-time-picker';
 import { HttpClientModule } from '@angular/common/http';
 import { MatDialogModule } from '@angular/material/dialog';
+import { RouterModule, Routes } from '@angular/router'
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 import { AppComponent } from './app.component';
 import { CreateScheduleComponent, DialogFailure, DialogSuccess } from './create-schedule/create-schedule.component';
+import { ViewWeeklyScheduleComponent, CreateMeetingDialog } from './view-weekly-schedule/view-weekly-schedule.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { AppRoutingModule } from './app-routing.module';
+import { ViewScheduleFormComponent } from './view-schedule-form/view-schedule-form.component';
 
 
 @NgModule({
@@ -24,7 +31,11 @@ import { CreateScheduleComponent, DialogFailure, DialogSuccess } from './create-
     AppComponent,
     CreateScheduleComponent,
     DialogFailure,
-    DialogSuccess
+    DialogSuccess,
+    CreateMeetingDialog,
+    ViewWeeklyScheduleComponent,
+    PageNotFoundComponent,
+    ViewScheduleFormComponent
   ],
   imports: [
     BrowserModule,
@@ -34,17 +45,21 @@ import { CreateScheduleComponent, DialogFailure, DialogSuccess } from './create-
     MatCardModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatToolbarModule,
+    MatGridListModule,
+    MatProgressSpinnerModule,
     FormsModule,
     ReactiveFormsModule,
     MatSelectModule,
     MatProgressBarModule,
-    AmazingTimePickerModule,
     HttpClientModule,
-    MatDialogModule
+    MatDialogModule,
+    AppRoutingModule
   ],
   entryComponents: [
     DialogFailure,
-    DialogSuccess
+    DialogSuccess,
+    CreateMeetingDialog
   ],
   providers: [
   ],

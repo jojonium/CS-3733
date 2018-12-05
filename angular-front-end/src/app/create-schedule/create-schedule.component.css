@@ -8,7 +8,7 @@ div.form-container-internal {
   padding: 40px;
 }
 
-.create-schedule-form mat-form-field {
+#create-schedule-form mat-form-field {
   width: 100%;
 }
 

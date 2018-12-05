@@ -3,19 +3,21 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { CreateScheduleRequest } from './create-schedule-request';
-import { CreateScheduleResponse } from './create-schedule-response';
+import { CreateScheduleRequest } from './create-schedule/create-schedule-request';
+import { CreateScheduleResponse } from './create-schedule/create-schedule-response';
+import { ViewWeeklyScheduleResponse } from './view-weekly-schedule/view-weekly-schedule-response';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CreateScheduleService {
+export class ScheduleService {
 
   constructor(
     private http: HttpClient
   ) { }
 
   private createScheduleUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/createschedule";
+  private viewWeeklyScheduleUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/viewweeklyschedule";
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -23,7 +25,7 @@ export class CreateScheduleService {
 
   /* POSTs a new schedule to the server */
   createSchedule(csRequest: CreateScheduleRequest): Observable<CreateScheduleResponse> {
-    console.log('CreateScheduleService.createSchedule(): Attempting to send...');
+    console.log('ScheduleService.createSchedule(): Attempting to send...');
     console.log(csRequest);
     console.log(JSON.stringify(csRequest));
 
@@ -33,8 +35,29 @@ export class CreateScheduleService {
         console.log(csResponse);
       }),
       catchError(this.handleError<CreateScheduleResponse>('createSchedule')));
-
   }
+
+  
+  /* GETs a schedule from the server */
+  getSchedule(scheduleID: string, date: string | null): Observable<ViewWeeklyScheduleResponse> {
+    console.log('ScheduleService.getSchdeule(): Attempting to send with scheduleID=' + scheduleID + ' and date=' + date);
+
+    var parameters = {"scheduleID":scheduleID};
+    if (date != null) parameters['date'] = date;
+
+    console.log(parameters);
+    
+    return this.http.get<ViewWeeklyScheduleResponse>(this.viewWeeklyScheduleUrl, {
+      params: parameters,
+    }).pipe(
+      tap((vwsResponse: ViewWeeklyScheduleResponse) => {
+        console.log('received vwsResponse:');
+        console.log(vwsResponse);
+      }),
+      catchError(this.handleError<ViewWeeklyScheduleResponse>('getSchedule')));
+    
+  }
+  
 
 
 
@@ -48,7 +71,6 @@ export class CreateScheduleService {
   private handleError<T> (operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
       console.error(error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

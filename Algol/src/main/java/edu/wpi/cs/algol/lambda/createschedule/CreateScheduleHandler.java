@@ -1,4 +1,4 @@
-package edu.wpi.cs.algol.lambda;
+package edu.wpi.cs.algol.lambda.createschedule;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,7 +43,7 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 		if (logger != null) { logger.log("in createSchedule"); }
 
 		//variable setup
-		ScheduleDAO daoS = new ScheduleDAO(logger);
+		ScheduleDAO daoS = new ScheduleDAO();
 		
 		int durationInt = Integer.parseInt(duration.substring(0, 2));
 		logger.log("Parsed duration to get integer: "+ durationInt+"\n");

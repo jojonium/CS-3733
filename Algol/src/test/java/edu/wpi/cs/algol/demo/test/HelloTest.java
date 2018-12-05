@@ -9,7 +9,7 @@ import java.io.OutputStream;
 import org.junit.Assert;
 import org.junit.Test;
 
-import edu.wpi.cs.algol.lambda.Hello;
+import edu.wpi.cs.algol.lambda.hello.Hello;
 
 /**
  * A simple test harness for locally invoking your Lambda function handler.

@@ -1,11 +1,11 @@
-<div class="mat-elevation-z5 form-container" id="create-schedule-form">
+<div class="mat-elevation-z5 form-container raised" id="create-schedule-form">
 
   <div class="form-container-internal">
 
     <h2>{{heading}}</h2>
 
 
-    <form class="create-schedule-form" name="createScheduleForm" (ngSubmit)="onSubmit()" #createScheduleForm="ngForm">
+    <form class="view-schedule-form" name="createScheduleForm" (ngSubmit)="onSubmit()" #createScheduleForm="ngForm">
       <mat-form-field [hideRequiredMarker]="true">
         <input matInput placeholder="Schedule name" name="name" [(ngModel)]="model.name" minlength="3" maxlength="32" required id="name-input" #nameInput="ngModel">
         <mat-error *ngIf="nameInput.hasError('minlength') && !nameInput.hasError('required')">
@@ -28,6 +28,8 @@
           Duration is <strong>required</strong>
         </mat-error>
       </mat-form-field>
+      
+      <br>
 
       <mat-form-field [hideRequiredMarker]="true">
         <input matInput name="startDate" [(ngModel)]="model.startDate" [matDatepicker]="startDatePicker" [matDatepickerFilter]="weekendFilter"  placeholder="Start date" required maxlength="10" id="start-date-input" #startDateInput="ngModel">

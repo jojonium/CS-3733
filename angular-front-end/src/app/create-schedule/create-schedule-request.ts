@@ -1,4 +1,3 @@
-
 export class CreateScheduleRequest {
   constructor(
     public name: string,

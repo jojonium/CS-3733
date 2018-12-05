@@ -1,9 +1,9 @@
-header {
-  text-align: center;
+header h1 {
+  margin-left: 20px;
 }
 
-svg {
-  margin-top: 30px;
+header a {
+  margin-top: 10px;
 }
 
 div.app-container {

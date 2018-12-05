@@ -1,9 +1,11 @@
 package edu.wpi.cs.algol.model;
 
+import java.time.DayOfWeek;
 //import java.awt.List;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-//import java.util.ArrayList;
+import java.util.ArrayList;
 //import java.util.Iterator;
 //import java.util.NoSuchElementException;
 import java.util.Random;
@@ -19,13 +21,13 @@ public class Schedule {
 	private LocalDate endDate;
 	private LocalTime startTime;
 	private LocalTime endTime;
-	public final int duration;
-	//private ArrayList<TimeSlot> timeSlots;
+	private int duration;
+	private ArrayList<TimeSlot> timeSlots = new ArrayList<TimeSlot>();
 
 	public LambdaLogger logger = null;
 	// month/day/year 
 	public Schedule (String name, String startDate, String endDate,
-			String startTime, String endTime, int duration ) { 
+			String startTime, String endTime, int duration) { 
 		// date formatted "(\\d){1,2}([/]){1} (\\d){1,2} ([/]){1}(\\d){4}"
 		// time formatted "(\\d){1,2}([:]){1}(\\d){2}"
 		/*StringTokenizer stSDate = new StringTokenizer(startDate,"/");
@@ -85,21 +87,14 @@ public class Schedule {
 		this.startTime = LocalTime.of(startHour, startMinute);
 		this.endTime = LocalTime.of(endHour, endMinute);
 		this.duration = duration;
-
-		// timeslot generation
-		/*for (LocalDate date = this.startDate; date.isBefore(this.endDate); date = date.plusDays(1)) {
-
-			for(LocalTime time = this.startTime; time.isBefore(this.endTime); time = time.plusMinutes(duration)) {
-
-				// loop and add timeslots
-
-			}
-
-		}*/
-
+		
 		// unique value generations
 		this.secretCode = generateCode();
 		this.id = generateCode();
+
+		timeSlotGeneration();
+
+
 
 	}
 	
@@ -215,6 +210,10 @@ public class Schedule {
 	public int getDuration() {
 		return duration;
 	}
+	
+	public ArrayList<TimeSlot> getTimeSlots() {
+		return this.timeSlots;
+	}
 
 	/*private class TimeSlotIterator implements Iterator<TimeSlot> {
 		private int pointer;
@@ -255,5 +254,18 @@ public class Schedule {
 				+ duration + "]";
 	}
 
+	public void timeSlotGeneration() {
+		// timeslot generation
+				for (LocalDate date = this.startDate; date.isBefore(this.endDate.plusDays(1)); date = date.plusDays(1)) {
+					if ((date.getDayOfWeek() != DayOfWeek.SATURDAY) || (date.getDayOfWeek() != DayOfWeek.SUNDAY))
+					for(LocalTime time = (this.startTime.getMinute()%duration == 0) ? this.startTime : this.startTime.plusMinutes(duration - this.startTime.getMinute()%duration); time.isBefore(this.endTime); time = time.plusMinutes(duration)) {
+						 
+						
+								timeSlots.add(new TimeSlot(LocalDateTime.of(date,time),this.id));
+						
 
+					}
+
+				}
+	}
 }

@@ -1,0 +1,15 @@
+#view-schedule-form mat-form-field {
+  width: 100%;
+}
+
+div.button-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+div.form-container {
+  width: 400px;
+  margin: 20px;
+  padding: 40px;
+  border-radius: 5px;
+}

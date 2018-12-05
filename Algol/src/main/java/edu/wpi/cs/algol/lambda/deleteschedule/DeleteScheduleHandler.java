@@ -22,6 +22,7 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 		public LambdaLogger logger = null;
 		
 		boolean deleteSchedule(String sid, String scd) throws Exception {
+			//logger test
 			if (logger != null) { logger.log("in deleteSchedule"); }
 
 			//variable setup

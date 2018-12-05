@@ -16,29 +16,22 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 	import com.google.gson.Gson;
 	
 	import edu.wpi.cs.algol.db.ScheduleDAO;
-	import edu.wpi.cs.algol.model.Schedule;
 
 	public class DeleteScheduleHandler implements RequestStreamHandler {
 		//test
 		public LambdaLogger logger = null;
-		public Schedule s;
-	  
 		
 		boolean deleteSchedule(String sid, String scd) throws Exception {
+			//logger test
 			if (logger != null) { logger.log("in deleteSchedule"); }
 
 			//variable setup
 			ScheduleDAO daoS = new ScheduleDAO();
-			
-			Schedule s = daoS.getSchedule(sid);
-			if (logger != null) { logger.log("Matt HAGAN"); }
-			if (logger != null) { logger.log(s.getId() + " " + sid + ", " + s.getSecretCode() + " " + scd); }
-			if(s.getSecretCode() == scd) { 
-			
-			return daoS.deleteSchedule(s);
-			}
-			else {
-				return false;
+			try {
+				return daoS.deleteSchedule(sid, scd);
+				
+			} catch (Exception e) {
+				throw e;
 			}
 		}
 		  @SuppressWarnings("unchecked")
@@ -96,14 +89,11 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 				DeleteScheduleResponse resp;
 				if (logger != null) { logger.log(req.scheduleID + " " +  ", " + req.secretCode + " "); }
 				try {
-					if(deleteSchedule(req.scheduleID, req.secretCode)){
+					deleteSchedule(req.scheduleID, req.secretCode);
 						logger.log("deleteSchedule worked");
-						resp = new DeleteScheduleResponse(s.getId());
+						resp = new DeleteScheduleResponse(req.scheduleID);
 						logger.log("schedule successfully deleted");
-					} else {
-						resp = new DeleteScheduleResponse("Unable to delete schedule: ", 404);
-						logger.log("schedule deletion failed");
-					}
+					
 				} catch (Exception e) {
 					resp = new DeleteScheduleResponse("Unable to delete schedule: " + req.scheduleID + " because of (" + e.getMessage() + ")", 404);
 				}

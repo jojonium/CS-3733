@@ -40,12 +40,7 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 //		ScheduleDAO daoS = new ScheduleDAO();
 		TimeSlotDAO daoT = new TimeSlotDAO();
 		
-		if(dateStart.isEmpty()) {
-			//Schedule s = daoS.getSchedule(id);
-			return daoT.getAllTimeSlots(id);
-		}
-		else
-			return daoT.getAllTimeSlots(id);
+		return daoT.getWeeklyTimeSlots(id, dateStart);
 		//ArrayList<TimeSlot> allts = new ArrayList<TimeSlot>();
 		/*ArrayList<TimeSlot> weekts = new ArrayList<TimeSlot>();
 		//allts = daoT.getAllTimeSlots(id);

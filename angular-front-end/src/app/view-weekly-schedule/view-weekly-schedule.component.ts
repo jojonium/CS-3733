@@ -210,6 +210,27 @@ export class CreateMeetingDialog {
   }
   
   requestMeeting(data: CreateMeetingData): void {
+    message = '';
     
+    var modelToSend = {"requester": data.requester,
+      "scheduleID": data.scheduleID,
+      "date": data.dateString,
+      "time": data.time.hour + ":" + data.time.minute
+    };
+    console.log(modelToSend);
+    this.scheduleService.createMeeting(modelToSend)
+      .subscribe(cmResponse => {
+        console.log(`CreateMeetingComponent received response: ${csResponse}`);
+        var responseBody = JSON.parse(csResponse.body);
+        if (responseBody.httpCode == 201) {
+          console.log("RESPONSE BODY:");
+          console.log(responseBody);
+          this.message = "Meeting scheduled!";
+          // success
+        } else if (responseBody.httpCode == 400) {
+          this.message = responseBody.message;
+        }
+        this.submitted = false;
+      });
   }
 }

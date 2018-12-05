@@ -11,9 +11,9 @@ import edu.wpi.cs.algol.model.TimeSlot;
 //beginDateTime, isOpen, requester, secretCode, 
 
 public class TimeSlotDAO {
-	
+
 	java.sql.Connection conn;
-	
+
 	public TimeSlotDAO() {
 		try {
 			conn = DatabaseUtil.connect();
@@ -74,21 +74,21 @@ public class TimeSlotDAO {
 
 		try {
 			PreparedStatement ps = conn.prepareStatement("INSERT INTO TimeSlots (scheduleID, beginDateTime, isOpen) values(?,?,?);");
-			
+
 			ps.setString(1, timeSlot.getScheduleId());
 			ps.setString(2,timeSlot.getBeginDateTime().toString());
 			ps.setString(3, (timeSlot.isOpen() ? "true" : "false"));
 			ps.execute();
-			
+
 			return true;
 		} catch (Exception e) {
 			throw new Exception("Fail to add new timeslot: " + e.getMessage());
 		}
 
 	}
-	
+
 	public boolean addMeeting(TimeSlot timeSlot) throws Exception {
-		
+
 		try {
 			PreparedStatement ps = conn.prepareStatement("UPDATE TimeSlots SET requester=?, isOpen=?, secretCode =? WHERE beginDateTime=? AND scheduleID =?;");
 			ps.setString(1, timeSlot.getRequester());
@@ -97,47 +97,81 @@ public class TimeSlotDAO {
 			ps.setString(4,timeSlot.getBeginDateTime().toString());
 			ps.setString(5,timeSlot.getScheduleId());
 			int numAffected = ps.executeUpdate();
-			
+
 			return (numAffected == 1);
-			
+
 		} catch (Exception e) {
 			throw new Exception("Fail to add new meeting in timeslot: " + e.getMessage());
 		}
-		
+
+	}
+
+	public boolean deleteAllTimeSlots(String scheduleID) throws Exception {
+		try {
+			PreparedStatement ps = conn.prepareStatement("DELETE from TimeSlots WHERE scheduleID =?;");
+
+			ps.setString(1, scheduleID);
+			int numAffected = ps.executeUpdate();
+
+			return (numAffected == 1);
+		} catch (Exception e) {
+			throw new Exception ("Fail to delete all time slots: " + e.getMessage());
+		}
+	}
+
+	public boolean cancelMeeting(String scheduleID, LocalDateTime beginDateTime ) throws Exception {
+
+		try {
+			PreparedStatement ps = conn.prepareStatement("UPDATE TimeSlots SET requester=?, isOpen=?, secretCode =? WHERE beginDateTime=? AND scheduleID =?;");
+
+			ps.setString(1, null);
+			ps.setString(2, "true");
+			ps.setString(3, null);
+			ps.setString(4, beginDateTime.toString());
+			ps.setString(5, scheduleID);
+			int numAffected = ps.executeUpdate();
+			
+			return (numAffected == 1);
+		} catch (Exception e) {
+			throw new Exception ("Fail to cancel meeting: "+ e.getMessage());
+		}
+
+
+
 	}
 
 	// something for getting multiple timeslots for various reasons
 	public ArrayList<TimeSlot> getAllTimeSlots(String id) throws Exception{
-		
+
 		ArrayList<TimeSlot> allTimeSlots = new ArrayList<TimeSlot>();
-		
+
 		try {
-			
+
 			// selects all timeslots with the given scheduleID
 			PreparedStatement ps = conn.prepareStatement("SELECT * FROM TimeSlots WHERE scheduleID = ?");
 			ps.setString(1, id);
 			ResultSet resultSet = ps.executeQuery();
-			
+
 			while(resultSet.next()) {
 				TimeSlot ts = createTimeSlot(resultSet);
 				allTimeSlots.add(ts);
 			}
-			
+
 			resultSet.close();
 			ps.close();
-			
+
 			return allTimeSlots;
-			
-			
+
+
 		} catch (Exception e) {
 			throw new Exception("Failed in getting all timeslots: " + e.getMessage());
 		}
-		
-		
+
+
 	}
 
 	public TimeSlot createTimeSlot(ResultSet resultSet) throws Exception {
-		
+
 		String beginDateTime = resultSet.getString("beginDateTime");
 		String scheduleID = resultSet.getString("scheduleID");
 		String secretCode = resultSet.getString("secretCode");

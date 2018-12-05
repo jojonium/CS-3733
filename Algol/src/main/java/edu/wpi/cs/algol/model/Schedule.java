@@ -34,8 +34,8 @@ public class Schedule {
 		StringTokenizer stEDate = new StringTokenizer(endDate,"/");
 		StringTokenizer stSTime = new StringTokenizer(startTime,":");
 		StringTokenizer stETime = new StringTokenizer(endTime,":");
-		
-		
+
+
 		int sMonth = Integer.parseInt(stSDate.nextToken("/"));
 		logger.log("Parse sMonth: " + sMonth + "\n");
 		int sDay = Integer.parseInt(stSDate.nextToken("/"));
@@ -49,7 +49,7 @@ public class Schedule {
 		logger.log("Parse eDay: " + eDay + "\n");
 		int eYear = Integer.parseInt(stEDate.nextToken());
 		logger.log("Parse eYear: " + eYear + "\n");
-		
+
 		int sHour = Integer.parseInt(stSTime.nextToken(":"));
 		logger.log("Parse sHour: " + sHour + "\n");
 		int sMin = Integer.parseInt(stSTime.nextToken());
@@ -70,7 +70,7 @@ public class Schedule {
 		endMonth = Integer.parseInt(dateEndArray[0]);
 		endDay = Integer.parseInt(dateEndArray[1]);
 		endYear = Integer.parseInt(dateEndArray[2]);
-	
+
 
 
 		String[] timeStartArray = startTime.split(":");
@@ -82,14 +82,14 @@ public class Schedule {
 		endMinute = Integer.parseInt(timeEndArray[1]);
 
 		// check for valid minutes 
-		
+
 		this.name = name;
 		this.startDate = LocalDate.of(startYear, startMonth, startDay);
 		this.endDate = LocalDate.of(endYear, endMonth, endDay);
 		this.startTime = LocalTime.of(startHour, startMinute);
 		this.endTime = LocalTime.of(endHour, endMinute);
 		this.duration = duration;
-		
+
 		// unique value generations
 		this.secretCode = generateCode();
 		this.id = generateCode();
@@ -99,9 +99,9 @@ public class Schedule {
 
 
 	}
-	
+
 	public Schedule(String secretCode, String id, String name, String startDate, String endDate,
-	String startTime, String endTime, int duration) {
+			String startTime, String endTime, int duration) {
 		int startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute;
 		String[] dateStartArray = startDate.split("/");
 		startMonth = Integer.parseInt(dateStartArray[0]);
@@ -112,7 +112,7 @@ public class Schedule {
 		endMonth = Integer.parseInt(dateEndArray[0]);
 		endDay = Integer.parseInt(dateEndArray[1]);
 		endYear = Integer.parseInt(dateEndArray[2]);
-	
+
 
 
 		String[] timeStartArray = startTime.split(":");
@@ -129,7 +129,7 @@ public class Schedule {
 		this.startTime = LocalTime.of(startHour, startMinute);
 		this.endTime = LocalTime.of(endHour, endMinute);
 		this.duration = duration;
-		
+
 		this.secretCode = secretCode;
 		this.id = id;
 	}
@@ -140,7 +140,7 @@ public class Schedule {
 		Random r = new Random();
 		//48-57, 65-90, 97-122
 		for (int i = 0; i < 6; i++) {
-			
+
 			if ((r.nextInt(3)+1) == 1) {
 				code += Character.toString((char) (r.nextInt(58-48) + 48));
 			}
@@ -212,7 +212,7 @@ public class Schedule {
 	public int getDuration() {
 		return duration;
 	}
-	
+
 	public ArrayList<TimeSlot> getTimeSlots() {
 		return this.timeSlots;
 	}
@@ -220,8 +220,8 @@ public class Schedule {
 	/*private class TimeSlotIterator implements Iterator<TimeSlot> {
 		private int pointer;
 		private int lastSlot;
-		
-		
+
+
 		public TimeSlotIterator(int start, int lastSlot) {
 			this.pointer = start;
 			this.lastSlot = lastSlot;
@@ -242,7 +242,7 @@ public class Schedule {
 				return timeSlots.get(current);
 			}
 			throw new NoSuchElementException();
-			
+
 		}
 	}
 	public Iterator<TimeSlot> iterator() {
@@ -258,16 +258,18 @@ public class Schedule {
 
 	public void timeSlotGeneration() {
 		// timeslot generation
-				for (LocalDate date = this.startDate; date.isBefore(this.endDate.plusDays(1)); date = date.plusDays(1)) {
-					if ((date.getDayOfWeek() != DayOfWeek.SATURDAY) && (date.getDayOfWeek() != DayOfWeek.SUNDAY))
+		for (LocalDate date = this.startDate; date.isBefore(this.endDate); date = date.plusDays(1)) {
+			if ((date.getDayOfWeek() != DayOfWeek.SUNDAY)) {
+				if((date.getDayOfWeek() != DayOfWeek.SATURDAY)) {
 					for(LocalTime time = (this.startTime.getMinute()%duration == 0) ? this.startTime : this.startTime.plusMinutes(duration - this.startTime.getMinute()%duration); time.isBefore(this.endTime); time = time.plusMinutes(duration)) {
-						 
-						
-								timeSlots.add(new TimeSlot(LocalDateTime.of(date,time),this.id));
-						
+
+
+						timeSlots.add(new TimeSlot(LocalDateTime.of(date.plusDays(0),time),this.id));
 
 					}
-
 				}
+			}
+
+		}
 	}
 }

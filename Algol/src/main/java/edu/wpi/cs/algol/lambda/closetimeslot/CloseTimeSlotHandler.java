@@ -25,7 +25,6 @@ public class CloseTimeSlotHandler implements RequestStreamHandler {
 	public LambdaLogger logger = null;
 	
 	boolean CloseTimeSlot(String sid, String scd, String d, String t) throws Exception {
-		//logger test
 		if (logger != null) { logger.log("in CloseTimeSlot"); }
 
 		//variable setup

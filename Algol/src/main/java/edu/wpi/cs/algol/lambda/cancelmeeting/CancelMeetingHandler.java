@@ -84,9 +84,10 @@ public class CancelMeetingHandler implements RequestStreamHandler {
 		logger.log("\n Timeslot Code:" + t.getSecretCode());
 		logger.log("\n Schedule Code:" + s.getSecretCode());
 
-		if (t.getSecretCode() == passcode) {
+		if (t.getSecretCode().equals(passcode)) {
 			same = true;
-		} else if (s.getSecretCode() == passcode) {
+		}
+		if (s.getSecretCode().equals(passcode)) {
 			same = true;
 		}
 

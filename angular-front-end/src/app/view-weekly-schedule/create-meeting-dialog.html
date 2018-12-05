@@ -1,20 +1,27 @@
-<h1 mat-dialog-title>Schedule meeting</h1>
+<h1 mat-dialog-title>{{header}}</h1>
+
+<form>
+  <div mat-dialog-content>
+    <p *ngIf="!finished">To request a meeting on {{data.dateString}} at {{data.timeString}}, please enter your name below:</p>
+    <mat-form-field class="full-width" *ngIf="!finished">
+      <input matInput [(ngModel)]="data.requester" name="requester" cdkFocusInitial>
+    </mat-form-field>
+    
+    <p *ngIf="finished">{{message}}</p>
+    
+    <h2 *ngIf="finished">{{secretCode}}</h2>
+    
+    <p *ngIf="finished">{{message2}}</p>
+    
+  </div>
+  <div mat-dialog-actions style="display: flex; justify-content: flex-end">
+    <button mat-raised-button type="button" (click)="closeCreateMeetingDialog()" style="margin-right: 5px;">{{closeButton}}</button>
+    <button mat-raised-button *ngIf="!finished" type="submit" (click)="requestMeeting(data)" color="primary" style="margin-left: 5px;">SUBMIT</button>
+  </div>
+</form>
 
 <style>
 .full-width {
   width: 100%;
 }
 </style>
-
-<form>
-  <div mat-dialog-content>
-    <p>To request a meeting on {{data.dateString}} at {{data.timeString}}, please enter your name below:</p>
-    <mat-form-field class="full-width">
-      <input matInput [(ngModel)]="data.requester" name="requester">
-    </mat-form-field>
-  </div>
-  <div mat-dialog-actions style="display: flex; justify-content: flex-end">
-    <button mat-raised-button type="button" (click)="closeCreateMeetingDialog()" style="margin-right: 5px;">CANCEL</button>
-    <button mat-raised-button type="submit" (click)="requestMeeting(data)" color="primary" style="margin-left: 5px;" cdkFocusInitial>SUBMIT</button>
-  </div>
-</form>

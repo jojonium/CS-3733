@@ -53,6 +53,7 @@ public class CreateMeetingHandler implements RequestStreamHandler {
 			created = true;
 			t.setRequester(name);
 			t.setSecretCode(secretC);
+			daoT.updateTimeSlot(t);
 		}
 		return created;
 	}

@@ -27,7 +27,7 @@ public class CloseTimeSlotHandler implements RequestStreamHandler {
 	boolean CloseTimeSlot(String sid, String scd, String d, String t) throws Exception {
 		if (logger != null) { logger.log("in CloseTimeSlot"); }
 
-		//variable setup
+
 		TimeSlotDAO daoTS = new TimeSlotDAO();
 		try {
 			return daoTS.closeTimeSlot(sid, scd, d, t);

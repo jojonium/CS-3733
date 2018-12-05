@@ -34,7 +34,7 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 			if (logger != null) { logger.log("Matt HAGAN"); }
 			if (logger != null) { logger.log(s.getId() + " " + sid + ", " + s.getSecretCode() + " " + scd); }
 			if(s.getSecretCode().equals(scd)) { 
-			
+				if (logger != null) { logger.log("\n about to hit Justin's Code \n"); }
 			return daoS.deleteSchedule(s);
 			}
 			else {

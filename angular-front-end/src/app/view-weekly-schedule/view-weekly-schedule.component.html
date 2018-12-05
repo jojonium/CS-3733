@@ -4,7 +4,7 @@
   </div>
 
   <div *ngIf="!errorMessage">
-    <h2 *ngIf="week">{{week.name}}</h2>
+    <h1 *ngIf="week">{{week.name}}</h1>
 
     <p *ngIf="week">Click on an open time slot to schedule a meeting</p>
     
@@ -13,10 +13,7 @@
           *ngFor="let tile of tiles; let i = index"
           [attr.data-index]="i"
           (click)="timeSlotClick(tile.text, i)"
-          [ngClass]="tile.class">
-        {{tile.text}}
-        <br>
-        {{tile.text2}}
+          [ngClass]="tile.class">{{tile.text}}<br>{{tile.text2}}
       </mat-grid-tile>
     </mat-grid-list>
   </div>

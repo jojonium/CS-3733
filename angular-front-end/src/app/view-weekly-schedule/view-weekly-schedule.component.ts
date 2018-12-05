@@ -129,10 +129,22 @@ export class ViewWeeklyScheduleComponent implements OnInit {
       runningDate = new Date(runningDate.valueOf() + 8.64e+7); // add a day
     }
     
+    var s = new Array<TimeSlot[]>(this.numDays);
+    var z = 0;
+    for (let i = 0; i < this.numDays; ++i) {
+      s[i] = new Array<TimeSlot>(this.numTimes);
+      for (let j = 0; j < this.numTimes; ++j) {
+        s[i][j] = input[z];
+        ++z;
+      }
+    }
+    
+    console.log(s);
+    
     // add in the times and timeslots
-    for (let i = 0, j = 0, r = -1, c; i < input.length + this.numTimes; ++i) {
+    var j = 0; var c = 0; var r = 0;
+    for (let i = 0; i < input.length + this.numTimes; ++i) {
       if (i % (this.numDays + 1) == 0) { // beginning of a row
-        c = 0; r++;
         // add a time to the start of the row
         let extraClass = '';
         if (i == 0) extraClass += ' first-th';
@@ -143,15 +155,20 @@ export class ViewWeeklyScheduleComponent implements OnInit {
           click: ""
         };
       } else {
+        console.log("c=" + c + ",r=" + r);
         // add an open/closed timeslot
-        // r tracks row (time), and c tracks column (date) of the table.
-        // the corresponding index in the TimeSlot array is (c * numDays) + r
-        this.tiles[tileIndex++] = {class: input[c * this.numDays + r].isOpen ? 'open' : 'closed',
-          text: input[c * this.numDays + r].isOpen ? 'Open' : '—',
-          text2: "",
-          click: input[c * this.numDays + r].isOpen ? 'openTimeSlotClick()' : ''
+        //let l = ((k % this.numDays) * this.numDays) + Math.floor(k / this.numDays); //+ (Math.abs(this.numTimes - this.numDays) * (k % this.numDays));
+        //console.log("l= " + l);
+        this.tiles[tileIndex++] = {class: s[c][r].isOpen ? 'open' : 'closed',
+          text: s[c][r].isOpen ? 'Open' : '—',
+          text2: '',
+          click: s[c][r].isOpen ? 'openTimeSlotClick()' : ''
         };
         c++;
+        if (c == this.numDays) {
+          c = 0;
+          r++;
+        }
       }
     }
   };

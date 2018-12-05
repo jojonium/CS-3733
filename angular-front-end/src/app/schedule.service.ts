@@ -6,7 +6,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { CreateScheduleRequest } from './create-schedule/create-schedule-request';
 import { CreateScheduleResponse } from './create-schedule/create-schedule-response';
 import { ViewWeeklyScheduleResponse } from './view-weekly-schedule/view-weekly-schedule-response';
-import { CreateMeetingRequest, CreateMeetingResponse } from './view-weekly-schedule/view-weekly-schedule.component';
+import { CreateMeetingRequest, Response } from './view-weekly-schedule/view-weekly-schedule.component';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +20,7 @@ export class ScheduleService {
   private createScheduleUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/createschedule";
   private viewWeeklyScheduleUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/viewweeklyschedule";
   private createMeetingUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/createmeeting";
+  private retrieveDetailsUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/retrievedetails";
 
 
   httpOptions = {
@@ -44,13 +45,29 @@ export class ScheduleService {
     console.log('ScheduleService.createMeeting(): Attempting to send...');
     console.log(cmRequest);
     
-    return this.http.post<CreateMeetingResponse>(this.createMeetingUrl, cmRequest, this.httpOptions).pipe(
-      tap((cmResponse: CreateMeetingResponse) => {
+    return this.http.post<Response>(this.createMeetingUrl, cmRequest, this.httpOptions).pipe(
+      tap((cmResponse: Response) => {
         console.log('received cmResponse:');
         console.log(cmResponse);
       }),
-      catchError(this.handleError<CreateMeetingResponse>('createMeeting')));
+      catchError(this.handleError<Response>('createMeeting')));
   }
+  
+  /* GETs a meeting from the server */
+  retrieveDetails(secretCode: string, scheduleID: string): Observable<Response> {
+    console.log('ScheduleService.getSchdeule(): Attempting to send with scheduleID=' + scheduleID + ' and secretCode=' + secretCode);
+    
+    var parameters = {"scheduleID":scheduleID,"secretCode":secretCode};
+    
+    return this.http.get<Response>(this.retrieveDetailsUrl, {
+      params: parameters,
+    }).pipe(
+      tap((resp: Response) => {
+        console.log(resp);
+      }),
+      catchError(this.handleError<Response>('retrieveDetails')));
+  }
+
 
   
   /* GETs a schedule from the server */

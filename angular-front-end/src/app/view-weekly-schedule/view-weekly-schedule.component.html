@@ -29,9 +29,38 @@
     <i class="material-icons">navigate_before</i>
     PREVIOUS WEEK
   </button>
-  
+    
   <button mat-raised-button type="button" (click)="goToNextWeek()">
     NEXT WEEK
     <i class="material-icons">navigate_next</i>
   </button>
+</div>
+
+<div class="options">
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Show my meeting
+      </mat-panel-title>
+      <mat-panel-description>
+        View or cancel a meeting based on its secret code
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    
+    <p>
+    Enter the secret code you received when you created your meeting in the box below.
+    </p>
+    
+    <mat-form-field>
+      <input matInput maxlength="6" #scInput placeholder="Your secret code">
+    </mat-form-field>
+    
+    <p color="warn">{{this.vsMessage}}</p>
+       
+    <mat-action-row>
+      <button mat-button type="button" (click)="getMeeting(scInput.value)">VIEW MEETING</button>
+      <button mat-button type="button" (click)="cancelMeeting(scInput.value)" color="warn">CANCEL MEETING</button>
+    </mat-action-row>
+
+  </mat-expansion-panel>
 </div>

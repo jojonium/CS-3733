@@ -16,6 +16,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { RouterModule, Routes } from '@angular/router'
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 
 import { AppComponent } from './app.component';
@@ -48,6 +49,7 @@ import { ViewScheduleFormComponent } from './view-schedule-form/view-schedule-fo
     MatToolbarModule,
     MatGridListModule,
     MatProgressSpinnerModule,
+    MatExpansionModule,
     FormsModule,
     ReactiveFormsModule,
     MatSelectModule,

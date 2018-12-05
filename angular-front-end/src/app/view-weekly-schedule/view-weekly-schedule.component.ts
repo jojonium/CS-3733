@@ -32,6 +32,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
   weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   dateArray: Date[];
   timeArray: MyTime[];
+  vsMessage: string;
   
   getDate = (d : MyDate) => {
     return new Date(d.year, d.month - 1, d.day);
@@ -155,7 +156,6 @@ export class ViewWeeklyScheduleComponent implements OnInit {
           click: ""
         };
       } else {
-        console.log("c=" + c + ",r=" + r);
         // add an open/closed timeslot
         //let l = ((k % this.numDays) * this.numDays) + Math.floor(k / this.numDays); //+ (Math.abs(this.numTimes - this.numDays) * (k % this.numDays));
         //console.log("l= " + l);
@@ -192,6 +192,25 @@ export class ViewWeeklyScheduleComponent implements OnInit {
     });
   }
   
+  
+  getMeeting(sc: string): void {
+    console.log(`getMeeting: secretCode: ${sc}, scheduleID: ${this.id}`);
+    this.scheduleService.retrieveDetails(sc, this.id)
+      .subscribe(cancelResponse => {
+        console.log(`ViewWeeklyScheduleComponent received response: ${cancelResponse}`);
+        var responseBody = JSON.parse(cancelResponse.body);
+        if (responseBody.httpCode == 200 ) {          // success
+          console.log("RESPONSE BODY:");
+          console.log(responseBody);
+          this.vsMessage = `Meeting details: requester: ${responseBody.timeslot.requester}, time: ${this.prettyPrintTime(responseBody.timeslot.beginDateTime.time)}, date: ${this.prettyPrintDate(this.getDate(responseBody.timeslot.beginDateTime.date))}`;
+        } else if (responseBody.httpCode == 400) {    // failure
+          this.vsMessage = "400 error: invalid secret code";
+        }
+      });
+  }
+  
+
+  
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -205,6 +224,9 @@ export class ViewWeeklyScheduleComponent implements OnInit {
   }
 
 }
+
+
+
 
 
 
@@ -229,7 +251,7 @@ export class CreateMeetingRequest{
   ) { }
 }
 
-export class CreateMeetingResponse {
+export class Response {
   constructor(
     public body: string,
     public headers?: any

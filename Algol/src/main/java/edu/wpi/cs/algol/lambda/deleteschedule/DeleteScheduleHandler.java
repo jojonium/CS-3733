@@ -35,20 +35,6 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 			} catch (Exception e) {
 				throw new Exception(e.getMessage());
 			}
-			
-<<<<<<< HEAD
-=======
-			Schedule s = daoS.getSchedule(sid);
-			if (logger != null) { logger.log("Matt HAGAN"); }
-			if (logger != null) { logger.log(s.getId() + " " + sid + ", " + s.getSecretCode() + " " + scd); }
-			if(s.getSecretCode() == scd) { 
-			
-			return daoS.deleteSchedule(s);
-			}
-			else {
-				return false;
-			}
->>>>>>> branch 'development' of https://github.com/jojonium/CS-3733.git
 		}
 		  @SuppressWarnings("unchecked")
 			@Override

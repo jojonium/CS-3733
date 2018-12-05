@@ -11,6 +11,7 @@ import { ViewWeeklyScheduleResponse, ViewWeeklyScheduleResponseBody, TimeSlot, M
 export interface Tile {
   class: string;
   text: string;
+  text2: string;
   click: string;
 }
 
@@ -50,7 +51,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
   }
   
   prettyPrintDate(d : Date): string {
-    return this.weekdays[d.getDay()] + ', ' + (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
+    return (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
   }
   
   addDays(d : MyDate, i : number): MyDate {
@@ -72,6 +73,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
       let t = this.timeArray[Math.floor(index / (this.numDays + 1)) - 1]
       this.createMeetingData = {date: d,
         dateString: this.prettyPrintDate(d),
+        dayOfWeek: this.weekdays[d.getDay()],
         time: t,
         timeString: this.prettyPrintTime(t),
         scheduleID: this.id,
@@ -106,7 +108,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
     console.log(this.timeArray);
     
     // blank tile for the top left
-    this.tiles.push({class: "blank", text: "", click: null});
+    this.tiles.push({class: "blank", text: "", text2: "", click: null});
     
     // add in the date headers at the top of each column
     var runningDate = this.getDate(this.week.startDate);
@@ -116,7 +118,8 @@ export class ViewWeeklyScheduleComponent implements OnInit {
       if (i == this.numDays - 1) extraClass += ' last-dh';
       this.dateArray[i]  = runningDate;
       this.tiles.push({class: "date-header" + extraClass,
-        text: this.prettyPrintDate(runningDate),
+        text: this.weekdays[runningDate.getDay()] + ",",
+        text2: this.prettyPrintDate(runningDate),
         click: ''
       });
       runningDate = new Date(runningDate.valueOf() + 8.64e+7); // add a day
@@ -131,12 +134,14 @@ export class ViewWeeklyScheduleComponent implements OnInit {
         if (i == input.length + this.numTimes - this.numDays - 1) extraClass += ' last-th';
         this.tiles.push({class: "time-header" + extraClass,
           text: this.prettyPrintTime(this.timeArray[k++]),
+          text2: "",
           click: ''
         });
       } else {
         // add an open/closed timeslot
         this.tiles.push({class: input[j].isOpen ? 'open' : 'closed',
           text: input[j].isOpen ? 'Open' : '—',
+          text2: "",
           click: input[j++].isOpen ? 'openTimeSlotClick()' : ''
         });
       }
@@ -163,7 +168,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
     ).subscribe(vwsResponse => {
       this.week = JSON.parse(vwsResponse.body);
       if (this.week.httpCode == '200') {
-        console.log(this.week.timeSlots);
+        console.log(this.week);
         this.makeTiles(this.week.timeSlots);
       } else if (this.week.httpCode == '400') {
         this.errorMessage = "400 Error: Unable to show schedule with ID " + this.id;
@@ -181,6 +186,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
 export interface CreateMeetingData {
   date: Date,
   dateString: string,
+  dayOfWeek: string,
   time: MyTime,
   timeString: string,
   scheduleID: string,
@@ -195,10 +201,15 @@ export interface CreateMeetingData {
 export class CreateMeetingDialog {
   constructor(
     public dialogRef: MatDialogRef<CreateMeetingDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: CreateMeetingData
+    @Inject(MAT_DIALOG_DATA) public data: CreateMeetingData,
+    private scheduleService: ScheduleService
   ) { }
 
   closeCreateMeetingDialog(): void {
     this.dialogRef.close();
+  }
+  
+  requestMeeting(data: CreateMeetingData): void {
+    
   }
 }

@@ -91,7 +91,6 @@ public class ScheduleDAO {
 	}
 
 	public boolean deleteSchedule(String id, String secretCode) throws Exception {
-
 		try {
 			PreparedStatement ps = conn.prepareStatement("DELETE FROM Schedules WHERE id =? AND secretCode = ?");
 

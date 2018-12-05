@@ -146,17 +146,17 @@ public class CancelMeetingHandler implements RequestStreamHandler {
 			try {
 				if (checkCode(req.secretCode, req.date, req.time, req.scheduleID) == true) {
 					if (cancelMeeting(req.date, req.time, req.scheduleID) == true) {
-						resp = new CancelMeetingResponse("You have succesfully cancelled a meeting, " + req.requester);
+						resp = new CancelMeetingResponse("You have succesfully cancelled a meeting.");
 					} else {
 						resp = new CancelMeetingResponse("Meeting cancel failure. No meeting scheduled.", 409);
 					}
 				} else {
-					resp = new CancelMeetingResponse("Meeting schedule failure. Incorrect passcode.", 400);
+					resp = new CancelMeetingResponse("Meeting cancel failure. Incorrect passcode.", 400);
 				}
 				
 			} catch (Exception e) {
 				resp = new CancelMeetingResponse(
-						"Unable to schedule meeting: " + req.requester + " because of (" + e.getMessage() + ")", 400);
+						"Unable to cancel meeting" + " because of (" + e.getMessage() + ")", 400);
 			}
 
 			// compute proper response

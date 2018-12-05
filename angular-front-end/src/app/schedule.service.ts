@@ -6,6 +6,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { CreateScheduleRequest } from './create-schedule/create-schedule-request';
 import { CreateScheduleResponse } from './create-schedule/create-schedule-response';
 import { ViewWeeklyScheduleResponse } from './view-weekly-schedule/view-weekly-schedule-response';
+import { CreateMeetingRequest, CreateMeetingResponse } from './view-weekly-schedule/view-weekly-schedule.component';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,8 @@ export class ScheduleService {
 
   private createScheduleUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/createschedule";
   private viewWeeklyScheduleUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/viewweeklyschedule";
+  private createMeetingUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/createmeeting";
+
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -27,7 +30,6 @@ export class ScheduleService {
   createSchedule(csRequest: CreateScheduleRequest): Observable<CreateScheduleResponse> {
     console.log('ScheduleService.createSchedule(): Attempting to send...');
     console.log(csRequest);
-    console.log(JSON.stringify(csRequest));
 
     return this.http.post<CreateScheduleResponse>(this.createScheduleUrl, csRequest, this.httpOptions).pipe(
       tap((csResponse: CreateScheduleResponse) => {
@@ -35,6 +37,19 @@ export class ScheduleService {
         console.log(csResponse);
       }),
       catchError(this.handleError<CreateScheduleResponse>('createSchedule')));
+  }
+  
+  /* POSTS a new meeting to the server */
+  createMeeting(cmRequest: CreateMeetingRequest): Observable<CreateScheduleResponse> {
+    console.log('ScheduleService.createMeeting(): Attempting to send...');
+    console.log(cmRequest);
+    
+    return this.http.post<CreateMeetingResponse>(this.createMeetingUrl, cmRequest, this.httpOptions).pipe(
+      tap((cmResponse: CreateMeetingResponse) => {
+        console.log('received cmResponse:');
+        console.log(cmResponse);
+      }),
+      catchError(this.handleError<CreateMeetingResponse>('createMeeting')));
   }
 
   
@@ -55,12 +70,10 @@ export class ScheduleService {
         console.log(vwsResponse);
       }),
       catchError(this.handleError<ViewWeeklyScheduleResponse>('getSchedule')));
-    
   }
   
 
-
-
+    
 
   /**
    * Handle Http operation that failed.

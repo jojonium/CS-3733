@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 //import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 //import java.time.LocalDateTime;
 //import java.time.LocalTime;
 //import java.time.Month;
@@ -241,11 +242,13 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 				
 				Schedule s = sDao.getSchedule(req.scheduleID);
 				logger.log("Retrieving schedule with input ID: " + s.toString() + "\n");
+				TimeSlot firstts = ts.get(0);
 				TimeSlot lastts = ts.get(ts.size()-1);
 				logger.log("Retrieving last timeslot of weekly schedule: " + lastts.toString() + "\n");
 				LocalDate endOfWeek = LocalDate.of(lastts.getBeginDateTime().getYear(), lastts.getBeginDateTime().getMonth(), lastts.getBeginDateTime().getDayOfMonth());
+				LocalDate startOfWeek = LocalDate.of(firstts.getBeginDateTime().getYear(),firstts.getBeginDateTime().getMonth() , firstts.getBeginDateTime().getDayOfMonth());
 				logger.log("Retrieving endOfWeek date: " + endOfWeek.toString() + "\n");
-				resp = new ShowWeeklyScheduleResponse(s.getName(),s.getStartDate(),endOfWeek,s.getStartTime(),s.getEndTime(),s.getDuration(), ts);
+				resp = new ShowWeeklyScheduleResponse(s.getName(),startOfWeek,endOfWeek,LocalTime.of(firstts.getBeginDateTime().getHour(), firstts.getBeginDateTime().getMinute()),LocalTime.of(lastts.getBeginDateTime().getHour(), lastts.getBeginDateTime().getMinute()),s.getDuration(), ts);
 				logger.log("ShowWeeklySchedule response: " + resp.toString() + "\n");
 			} catch (Exception e) {
 				resp = new ShowWeeklyScheduleResponse(

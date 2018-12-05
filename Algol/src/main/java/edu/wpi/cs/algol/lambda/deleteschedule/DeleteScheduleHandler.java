@@ -16,7 +16,6 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 	import com.google.gson.Gson;
 	
 	import edu.wpi.cs.algol.db.ScheduleDAO;
-	import edu.wpi.cs.algol.model.Schedule;
 
 	public class DeleteScheduleHandler implements RequestStreamHandler {
 		//test

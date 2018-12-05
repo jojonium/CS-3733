@@ -130,7 +130,7 @@ public class Schedule {
 		endMinute = Integer.parseInt(timeEndArray[1]);
 		this.duration = duration;
 		
-		// check for valid minutes
+		// check for valid minutes for string constructor
 		if (startMinute % duration != 0) {
 			startMinute += duration - (startMinute %duration);
 		}

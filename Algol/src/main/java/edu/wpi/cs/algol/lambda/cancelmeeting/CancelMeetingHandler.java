@@ -58,13 +58,13 @@ public class CancelMeetingHandler implements RequestStreamHandler {
 		}
 		return cancelled;
 	}
-	
+
 	boolean checkCode(String passcode, String date, String time, String sid) throws Exception {
-		
+
 		ScheduleDAO daoS = new ScheduleDAO();
 		TimeSlotDAO daoT = new TimeSlotDAO();
 		boolean same = false;
-		
+
 		// parse into date and time
 		String[] tsDate = date.split("/");
 		int month = Integer.parseInt(tsDate[0]);
@@ -83,14 +83,13 @@ public class CancelMeetingHandler implements RequestStreamHandler {
 		logger.log("Entered code:" + passcode);
 		logger.log("\n Timeslot Code:" + t.getSecretCode());
 		logger.log("\n Schedule Code:" + s.getSecretCode());
-		
+
 		if (t.getSecretCode() == passcode) {
 			same = true;
-		}
-		else if (s.getSecretCode() == passcode) {
+		} else if (s.getSecretCode() == passcode) {
 			same = true;
 		}
-		
+
 		return same;
 	}
 
@@ -147,20 +146,22 @@ public class CancelMeetingHandler implements RequestStreamHandler {
 
 			CancelMeetingResponse resp;
 			try {
-				if (cancelMeeting(req.date, req.time, req.scheduleID) == true) {
-					if (checkCode(req.secretCode, req.date, req.time, req.scheduleID) == true) {
+
+				if (checkCode(req.secretCode, req.date, req.time, req.scheduleID) == true) {
+					if (cancelMeeting(req.date, req.time, req.scheduleID) == true) {
 						resp = new CancelMeetingResponse("You have succesfully cancelled a meeting.");
 					} else {
-						resp = new CancelMeetingResponse("Meeting cancel failure. Incorrect passcode.", 400);
+						resp = new CancelMeetingResponse("Meeting cancel failure. No meeting scheduled.", 409);
 					}
 				} else {
-					resp = new CancelMeetingResponse("Meeting cancel failure. No meeting scheduled.", 409);
+					resp = new CancelMeetingResponse("Meeting cancel failure. Incorrect passcode.", 400);
 				}
-				
-				
-			} catch (Exception e) {
-				resp = new CancelMeetingResponse(
-						"Unable to cancel meeting" + " because of (" + e.getMessage() + ")", 400);
+
+			}
+
+			catch (Exception e) {
+				resp = new CancelMeetingResponse("Unable to cancel meeting" + " because of (" + e.getMessage() + ")",
+						400);
 			}
 
 			// compute proper response

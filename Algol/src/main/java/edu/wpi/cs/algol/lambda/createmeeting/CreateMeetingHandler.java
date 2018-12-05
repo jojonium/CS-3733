@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Random;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -23,14 +24,14 @@ import edu.wpi.cs.algol.db.TimeSlotDAO;
 import edu.wpi.cs.algol.model.TimeSlot;
 
 public class CreateMeetingHandler implements RequestStreamHandler {
-	
+
 	public LambdaLogger logger = null;
 	public TimeSlot t;
-	
+
 	boolean createMeeting(String date, String time, String name, String id) throws Exception {
 		TimeSlotDAO daoT = new TimeSlotDAO();
-		
-		//parse into date and time
+
+		// parse into date and time
 		String[] tsDate = date.split("/");
 		int month = Integer.parseInt(tsDate[0]);
 		int day = Integer.parseInt(tsDate[1]);
@@ -38,39 +39,63 @@ public class CreateMeetingHandler implements RequestStreamHandler {
 		String[] tsTime = time.split(":");
 		int hour = Integer.parseInt(tsTime[0]);
 		int minute = Integer.parseInt(tsTime[1]);
-		
+
 		LocalDateTime ldt = LocalDateTime.of(LocalDate.of(year, month, day), (LocalTime.of(hour, minute)));
-		
-		//compareDatetime with list of timeslots to add meeting to correct timeslot
-		t = daoT.getTimeSlot(id,ldt);
-		
-		//return true if meeting is created
+
+		// compareDatetime with list of timeslots to add meeting to correct timeslot
+		t = daoT.getTimeSlot(id, ldt);
+
+		// return true if meeting is created
 		boolean created = false;
-		if(t.isOpen() == true) {
+		if (t.isOpen() == true) {
+			String secretC = generateCode();
 			t.setOpen(false);
 			created = true;
 			t.setRequester(name);
+			t.setSecretCode(secretC);
 		}
 		return created;
 	}
 
-    @SuppressWarnings("unchecked")
+	private static String generateCode() {
+
+		String code = "";
+		Random r = new Random();
+		// 48-57, 65-90, 97-122
+		for (int i = 0; i < 6; i++) {
+
+			if ((r.nextInt(3) + 1) == 1) {
+				code += Character.toString((char) (r.nextInt(58 - 48) + 48));
+			} else if ((r.nextInt(3) + 1) == 1) {
+				code += Character.toString((char) (r.nextInt(91 - 65) + 65));
+			} else {
+				code += Character.toString((char) (r.nextInt(123 - 97) + 97));
+			}
+
+		}
+		
+		return code;
+		
+	}
+
+	@SuppressWarnings("unchecked")
 	@Override
-    public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
-    	logger = context.getLogger();
+	public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
+		logger = context.getLogger();
 		logger.log("Loading Java Lambda handler to create constant");
 
 		JSONObject headerJson = new JSONObject();
-		headerJson.put("Content-Type",  "application/json");  // not sure if needed anymore?
+		headerJson.put("Content-Type", "application/json"); // not sure if needed anymore?
 		headerJson.put("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-	    headerJson.put("Access-Control-Allow-Origin",  "*");
-	        
+		headerJson.put("Access-Control-Allow-Origin", "*");
+
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("headers", headerJson);
 
 		CreateMeetingResponse response = null;
-		
-		// extract body from incoming HTTP POST request. If any error, then return 422 error
+
+		// extract body from incoming HTTP POST request. If any error, then return 422
+		// error
 		String body;
 		boolean processed = false;
 		try {
@@ -78,26 +103,26 @@ public class CreateMeetingHandler implements RequestStreamHandler {
 			JSONParser parser = new JSONParser();
 			JSONObject event = (JSONObject) parser.parse(reader);
 			logger.log("event:" + event.toJSONString());
-			
+
 			String method = (String) event.get("httpMethod");
 			if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 				logger.log("Options request");
-				response = new CreateMeetingResponse("name", 200);  // OPTIONS needs a 200 response
-		        responseJson.put("body", new Gson().toJson(response));
-		        processed = true;
-		        body = null;
+				response = new CreateMeetingResponse("name", 200); // OPTIONS needs a 200 response
+				responseJson.put("body", new Gson().toJson(response));
+				processed = true;
+				body = null;
 			} else {
-				body = (String)event.get("body");
+				body = (String) event.get("body");
 				if (body == null) {
-					body = event.toJSONString();  // this is only here to make testing easier
+					body = event.toJSONString(); // this is only here to make testing easier
 				}
 			}
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
-			response = new CreateMeetingResponse("Bad Request:" + pe.getMessage(), 422);  // unable to process input
-	        responseJson.put("body", new Gson().toJson(response));
-	        processed = true;
-	        body = null;
+			response = new CreateMeetingResponse("Bad Request:" + pe.getMessage(), 422); // unable to process input
+			responseJson.put("body", new Gson().toJson(response));
+			processed = true;
+			body = null;
 		}
 
 		if (!processed) {
@@ -107,23 +132,25 @@ public class CreateMeetingHandler implements RequestStreamHandler {
 			CreateMeetingResponse resp;
 			try {
 				if (createMeeting(req.date, req.time, req.requester, req.scheduleID) == true) {
-					resp = new CreateMeetingResponse("You have succesfully scheduled a meeting, " + req.requester, t.getSecretCode());
+					resp = new CreateMeetingResponse("You have succesfully scheduled a meeting, " + req.requester,
+							t.getSecretCode());
 				} else {
 					resp = new CreateMeetingResponse("Meeting schedule failure. Meeting already scheduled.", 409);
 				}
 			} catch (Exception e) {
-				resp = new CreateMeetingResponse("Unable to schedule meeting: " + req.requester + " because of (" + e.getMessage() + ")", 400);
+				resp = new CreateMeetingResponse(
+						"Unable to schedule meeting: " + req.requester + " because of (" + e.getMessage() + ")", 400);
 			}
 
 			// compute proper response
-	        responseJson.put("body", new Gson().toJson(resp));  
+			responseJson.put("body", new Gson().toJson(resp));
 		}
-		
+
 		logger.log("end result:" + responseJson.toJSONString());
-        logger.log(responseJson.toJSONString());
-        OutputStreamWriter writer = new OutputStreamWriter(output, "UTF-8");
-        writer.write(responseJson.toJSONString());  
-        writer.close();
-    }
+		logger.log(responseJson.toJSONString());
+		OutputStreamWriter writer = new OutputStreamWriter(output, "UTF-8");
+		writer.write(responseJson.toJSONString());
+		writer.close();
+	}
 
 }

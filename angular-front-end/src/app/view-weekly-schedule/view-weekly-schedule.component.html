@@ -4,7 +4,7 @@
   </div>
 
   <div *ngIf="!errorMessage">
-    <h1 *ngIf="week">{{week.name}}</h1>
+    <h1 *ngIf="week">{{week.name}}<span *ngIf="secretCode" color="primary"> — Organizer Mode</span></h1>
 
     <p *ngIf="week">Click on an open time slot to schedule a meeting</p>
     
@@ -25,42 +25,68 @@
 </div>
 
 <div class="button-container" *ngIf="week && !errorMessage">
-  <button mat-raised-button type="button" (click)="goToPreviousWeek()">
+  <button mat-raised-button color="primary" type="button" (click)="goToPreviousWeek()">
     <i class="material-icons">navigate_before</i>
     PREVIOUS WEEK
   </button>
     
-  <button mat-raised-button type="button" (click)="goToNextWeek()">
+  <button mat-raised-button color="primary" type="button" (click)="goToNextWeek()">
     NEXT WEEK
     <i class="material-icons">navigate_next</i>
   </button>
 </div>
 
 <div class="options">
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Show my meeting
-      </mat-panel-title>
-      <mat-panel-description>
-        View or cancel a meeting based on its secret code
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-    
-    <p>
-    Enter the secret code you received when you created your meeting in the box below.
-    </p>
-    
-    <mat-form-field>
-      <input matInput maxlength="6" #scInput placeholder="Your secret code">
-    </mat-form-field>
-    
-    <p color="warn">{{this.vsMessage}}</p>
-       
-    <mat-action-row>
-      <button mat-button type="button" (click)="getMeeting(scInput.value)">VIEW MEETING</button>
-      <button mat-button type="button" (click)="cancelMeeting(scInput.value)" color="warn">CANCEL MEETING</button>
-    </mat-action-row>
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Show my meeting
+        </mat-panel-title>
+        <mat-panel-description>
+          View or cancel a meeting based on its secret code
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      
+      <p>
+      Enter the secret code you received when you created your meeting in the box below.
+      </p>
+      
+      <mat-form-field>
+        <input matInput maxlength="6" #mscInput placeholder="Your secret code">
+      </mat-form-field>
+      
+      <p>{{this.vsMessage}}</p>
+        
+      <mat-action-row>
+        <button mat-button type="button" (click)="cancelMeeting(mscInput.value)" color="warn">CANCEL MEETING</button>
+        <button mat-button type="button" (click)="getMeeting(mscInput.value)">VIEW MEETING</button>
+      </mat-action-row>
 
-  </mat-expansion-panel>
+    </mat-expansion-panel>
+    
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Edit this schedule
+        </mat-panel-title>
+        <mat-panel-description>
+          Options for organizers
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      
+      <p>
+      Enter the secret code for this schedule below to all the details and organizer options available.
+      </p>
+      
+      <mat-form-field>
+        <input matInput maxlength="6" #sscInput placeholder="Your secret code">
+      </mat-form-field>
+      
+      <mat-action-row>
+        <button mat-button type="button" color="warn" (click)="deleteSchedule(sscInput.value)">DELETE SCHEDULE</button>
+        <button mat-button type="button" (click)="getTimeSlotsOrganizer(sscInput.value)">VIEW PARTICIPANTS</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </mat-accordion>
 </div>

@@ -56,7 +56,7 @@ public class TimeSlotDAO {
 	public boolean closeTimeSlot(String scheduleID, String secretCode, String date, String time) throws Exception {
 
 		try {
-
+			
 			// configure input strings
 			String[] dateString = date.split("/");
 			String[] timeString = time.split(":");
@@ -74,6 +74,8 @@ public class TimeSlotDAO {
 			LocalDateTime dateTime = LocalDateTime.of(inputDate, inputTime);
 			ScheduleDAO sDao = new ScheduleDAO();
 			Schedule s = sDao.getSchedule(scheduleID);
+			if (this.getTimeSlot(scheduleID, dateTime).isOpen() == false) { return true; }
+			
 			if (secretCode.equals(s.getSecretCode())) {
 				PreparedStatement ps = conn.prepareStatement("UPDATE TimeSlots SET isOpen =? WHERE beginDateTime =? AND scheduleID =?;");
 				ps.setString(1, "false");
@@ -237,7 +239,7 @@ public class TimeSlotDAO {
 			// check which date begins on 
 			startts = daoT.getTimeSlot(scheduleID, ldt);
 
-			if(startts.getBeginDateTime().getDayOfWeek() == DayOfWeek.MONDAY) {
+			if(startts.getBeginDateTime().getDayOfWeek().equals(DayOfWeek.MONDAY)) {
 
 				for (int i = 0; i < 4; i ++) {
 					for(LocalTime time = (s.getStartTime().getMinute()% s.getDuration() == 0) ? s.getStartTime() : s.getStartTime().plusMinutes(s.getDuration() - s.getStartTime().getMinute()%s.getDuration()); time.isBefore(s.getEndTime()); time = time.plusMinutes(s.getDuration())) {
@@ -249,7 +251,7 @@ public class TimeSlotDAO {
 
 			else {
 				int newDay = day;
-				while (startts.getBeginDateTime().getDayOfWeek() != DayOfWeek.MONDAY) {
+				while (!startts.getBeginDateTime().getDayOfWeek().equals(DayOfWeek.MONDAY)) {
 					startts = daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, newDay--), s.getStartTime()));
 					if (startts == null) {
 						startts = daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, newDay++), s.getStartTime()));
@@ -277,7 +279,7 @@ public class TimeSlotDAO {
 			int month = startts.getBeginDateTime().getMonthValue();
 			int year = startts.getBeginDateTime().getYear();
 
-			for (int i = 0; startts.getBeginDateTime().getDayOfWeek() != DayOfWeek.SATURDAY; i ++) {
+			for (int i = 0; !startts.getBeginDateTime().getDayOfWeek().equals(DayOfWeek.FRIDAY); i ++) {
 				for(LocalTime time = (s.getStartTime().getMinute()% s.getDuration() == 0) ? s.getStartTime() : s.getStartTime().plusMinutes(s.getDuration() - s.getStartTime().getMinute()%s.getDuration()); time.isBefore(s.getEndTime()); time = time.plusMinutes(s.getDuration())) {
 					startts = daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, day).plusDays(i), time));
 

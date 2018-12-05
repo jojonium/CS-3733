@@ -138,6 +138,7 @@ public class Schedule {
 		if ((endMinute % duration) != 0) {
 			endMinute -= (startMinute % duration);
 		}
+		
 		this.name = name;
 		this.startDate = LocalDate.of(startYear, startMonth, startDay);
 		this.endDate = LocalDate.of(endYear, endMonth, endDay);

@@ -2,7 +2,6 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 
 public class DeleteScheduleResponse {
 	public String response;
-	public String secretCode;
 	public String scheduleID;
 	public int httpCode;
 	
@@ -19,7 +18,7 @@ public class DeleteScheduleResponse {
 	}
 
 	public String toString(){
-		if (secretCode != null )
+		if (scheduleID != null )
 			return ("Delete schedule was successful, response: " + response + "\n");
 		else
 			return ("Delete schedule null error \n");

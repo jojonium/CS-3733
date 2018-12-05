@@ -117,7 +117,50 @@ public class TimeSlotDAO {
 			return false;
 
 		} catch (Exception e) {
-			throw new Exception("Failed in deleting timeslot: " + e.getMessage());
+			throw new Exception("Failed in closing timeslot: " + e.getMessage());
+		}
+	}
+	
+	public boolean openTimeSlot(String scheduleID, String secretCode, String date, String time) throws Exception {
+		
+		try {
+
+			// configure input strings
+			String[] dateString = date.split("/");
+			String[] timeString = time.split(":");
+
+			int month = Integer.parseInt(dateString[0]);
+			int dayOfMonth = Integer.parseInt(dateString[1]);
+			int year = Integer.parseInt(dateString[2]);
+
+			int hour = Integer.parseInt(timeString[0]);
+			int minute = Integer.parseInt(timeString[1]);
+
+
+			LocalDate inputDate = LocalDate.of(year, month, dayOfMonth);
+			LocalTime inputTime = LocalTime.of(hour, minute);
+			LocalDateTime dateTime = LocalDateTime.of(inputDate, inputTime);
+			ScheduleDAO sDao = new ScheduleDAO();
+			Schedule s = sDao.getSchedule(scheduleID);
+			if (this.getTimeSlot(scheduleID, dateTime).isOpen() == true) { return true; }
+
+			if (secretCode.equals(s.getSecretCode())) {
+				PreparedStatement ps = conn.prepareStatement("UPDATE TimeSlots SET isOpen =? WHERE beginDateTime =? AND scheduleID =?;");
+				ps.setString(1, "true");
+				ps.setString(2, dateTime.toString());
+				ps.setString(3, scheduleID);
+
+
+				int valsAffected = ps.executeUpdate();
+				ps.close();
+
+				return (valsAffected ==1);
+
+			}
+			return false;
+
+		} catch (Exception e) {
+			throw new Exception("Failed in opening timeslot: " + e.getMessage());
 		}
 	}
 

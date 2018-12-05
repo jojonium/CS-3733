@@ -17,17 +17,17 @@ import com.google.gson.Gson;
 
 
 import edu.wpi.cs.algol.db.TimeSlotDAO;
-import edu.wpi.cs.algol.lambda.deleteschedule.DeleteScheduleRequest;
-import edu.wpi.cs.algol.lambda.deleteschedule.DeleteScheduleResponse;
+import edu.wpi.cs.algol.lambda.closetimeslot.CloseTimeSlotRequest;
+import edu.wpi.cs.algol.lambda.closetimeslot.CloseTimeSlotResponse;
 
 public class CloseTimeSlotHandler implements RequestStreamHandler {
-	//test
+	//logger
 	public LambdaLogger logger = null;
 	
 	boolean CloseTimeSlot(String sid, String scd, String d, String t) throws Exception {
 		if (logger != null) { logger.log("in CloseTimeSlot"); }
 
-		//variable setup
+
 		TimeSlotDAO daoTS = new TimeSlotDAO();
 		try {
 			return daoTS.closeTimeSlot(sid, scd, d, t);

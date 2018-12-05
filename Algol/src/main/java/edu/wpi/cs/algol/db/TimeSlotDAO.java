@@ -261,9 +261,10 @@ public class TimeSlotDAO {
 			LocalDateTime ldt;
 
 			ldt = LocalDateTime.of(LocalDate.of(year, month, day), s.getStartTime());
-			// check which date begins on 
+			// check which date schedule begins on
 			startts = daoT.getTimeSlot(scheduleID, ldt);
 
+			// starts on a monday
 			if(startts.getBeginDateTime().getDayOfWeek().equals(DayOfWeek.MONDAY)) {
 
 				for (int i = 0; i < 5; i ++) { // if day starts on monday
@@ -277,7 +278,7 @@ public class TimeSlotDAO {
 				}
 
 			}
-
+			// does not start on a monday
 			else {
 				int newDay = day;
 				while (!startts.getBeginDateTime().getDayOfWeek().equals(DayOfWeek.MONDAY)) {
@@ -286,11 +287,16 @@ public class TimeSlotDAO {
 						startts = daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, newDay).plusDays(1), s.getStartTime()));
 						break;
 					}
-					startts = daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, newDay).plusDays(0), s.getStartTime()));
+
 				}
+				year = startts.getBeginDateTime().getYear();
+				month = startts.getBeginDateTime().getMonthValue();
+				day = startts.getBeginDateTime().getDayOfMonth();
 				for (int i = 0; i < 5; i ++) {
-					for(LocalTime time = (s.getStartTime().getMinute()% s.getDuration() == 0) ? s.getStartTime() : s.getStartTime().plusMinutes(s.getDuration() - s.getStartTime().getMinute()%s.getDuration()); time.isBefore(s.getEndTime()); time = time.plusMinutes(s.getDuration())) {
-						weekts.add(daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, day).plusDays(i), time)));
+					if (LocalDate.of(year, month, day).plusDays(i).isBefore(s.getEndDate().plusDays(1))) {
+						for(LocalTime time = (s.getStartTime().getMinute()% s.getDuration() == 0) ? s.getStartTime() : s.getStartTime().plusMinutes(s.getDuration() - s.getStartTime().getMinute()%s.getDuration()); time.isBefore(s.getEndTime()); time = time.plusMinutes(s.getDuration())) {
+							weekts.add(daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, day).plusDays(i), time)));
+						}
 					}
 				}
 			}
@@ -300,7 +306,7 @@ public class TimeSlotDAO {
 
 
 		}
-
+		// no date has been indicated to show (shows default
 		else {
 
 			startts = daoT.getTimeSlot(scheduleID, LocalDateTime.of(s.getStartDate(),s.getStartTime()));
@@ -309,12 +315,14 @@ public class TimeSlotDAO {
 			int month = startts.getBeginDateTime().getMonthValue();
 			int year = startts.getBeginDateTime().getYear();
 
-			for (int i = 0; !startts.getBeginDateTime().getDayOfWeek().equals(DayOfWeek.FRIDAY); i ++) {
-				for(LocalTime time = (s.getStartTime().getMinute()% s.getDuration() == 0) ? s.getStartTime() : s.getStartTime().plusMinutes(s.getDuration() - s.getStartTime().getMinute()%s.getDuration()); time.isBefore(s.getEndTime()); time = time.plusMinutes(s.getDuration())) {
-					startts = daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, day).plusDays(i), time));
+			for (int i = 0;LocalDate.of(year, month, day).plusDays(i).isBefore(s.getEndDate().plusDays(1)); i ++) {
+				if ( !startts.getBeginDateTime().getDayOfWeek().equals(DayOfWeek.FRIDAY)) {
+					for(LocalTime time = (s.getStartTime().getMinute()% s.getDuration() == 0) ? s.getStartTime() : s.getStartTime().plusMinutes(s.getDuration() - s.getStartTime().getMinute()%s.getDuration()); time.isBefore(s.getEndTime()); time = time.plusMinutes(s.getDuration())) {
 
-					weekts.add(startts);
+						startts = daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, day).plusDays(i), time));
+						weekts.add(startts);
 
+					}
 				}
 			}
 

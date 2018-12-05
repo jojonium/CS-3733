@@ -15,6 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatDialogModule } from '@angular/material/dialog';
 import { RouterModule, Routes } from '@angular/router'
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 import { AppComponent } from './app.component';
@@ -22,6 +23,7 @@ import { CreateScheduleComponent, DialogFailure, DialogSuccess } from './create-
 import { ViewWeeklyScheduleComponent, CreateMeetingDialog } from './view-weekly-schedule/view-weekly-schedule.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AppRoutingModule } from './app-routing.module';
+import { ViewScheduleFormComponent } from './view-schedule-form/view-schedule-form.component';
 
 
 @NgModule({
@@ -32,7 +34,8 @@ import { AppRoutingModule } from './app-routing.module';
     DialogSuccess,
     CreateMeetingDialog,
     ViewWeeklyScheduleComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    ViewScheduleFormComponent
   ],
   imports: [
     BrowserModule,
@@ -44,6 +47,7 @@ import { AppRoutingModule } from './app-routing.module';
     MatNativeDateModule,
     MatToolbarModule,
     MatGridListModule,
+    MatProgressSpinnerModule,
     FormsModule,
     ReactiveFormsModule,
     MatSelectModule,

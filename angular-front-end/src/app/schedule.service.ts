@@ -39,13 +39,16 @@ export class ScheduleService {
 
   
   /* GETs a schedule from the server */
-  getSchedule(scheduleID: string): Observable<ViewWeeklyScheduleResponse> {
-    console.log('ScheduleService.getSchdeule(): Attempting to send with scheduleID=' + scheduleID);
+  getSchedule(scheduleID: string, date: string | null): Observable<ViewWeeklyScheduleResponse> {
+    console.log('ScheduleService.getSchdeule(): Attempting to send with scheduleID=' + scheduleID + ' and date=' + date);
+
+    var parameters = {"scheduleID":scheduleID};
+    if (date != null) parameters['date'] = date;
+
+    console.log(parameters);
     
     return this.http.get<ViewWeeklyScheduleResponse>(this.viewWeeklyScheduleUrl, {
-      params: {
-        "scheduleID": scheduleID
-      },
+      params: parameters,
     }).pipe(
       tap((vwsResponse: ViewWeeklyScheduleResponse) => {
         console.log('received vwsResponse:');

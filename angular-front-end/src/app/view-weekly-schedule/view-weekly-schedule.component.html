@@ -1,10 +1,14 @@
 <div class="mat-elevation-z5 raised" id="schedule-view-container">
+  <div class="spinner-container">
+    <mat-progress-spinner *ngIf="!week" mode="indeterminate"></mat-progress-spinner>
+  </div>
+
   <div *ngIf="!errorMessage">
     <h2 *ngIf="week">{{week.name}}</h2>
 
-    <p>Click on an open time slot to schedule a meeting</p>
+    <p *ngIf="week">Click on an open time slot to schedule a meeting</p>
     
-    <mat-grid-list [cols]="numDays + 1" rowHeight="100px">
+    <mat-grid-list *ngIf="week" [cols]="numDays + 1" rowHeight="100px">
       <mat-grid-tile
           *ngFor="let tile of tiles; let i = index"
           [attr.data-index]="i"
@@ -21,7 +25,7 @@
   
 </div>
 
-<div class="button-container">
+<div class="button-container" *ngIf="week && !errorMessage">
   <button mat-raised-button type="button" (click)="goToPreviousWeek()">
     <i class="material-icons">navigate_before</i>
     PREVIOUS WEEK

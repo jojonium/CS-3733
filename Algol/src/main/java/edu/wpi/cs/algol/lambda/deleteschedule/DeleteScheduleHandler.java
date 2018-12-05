@@ -21,8 +21,6 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 	public class DeleteScheduleHandler implements RequestStreamHandler {
 		//test
 		public LambdaLogger logger = null;
-		public Schedule s;
-	  
 		
 		boolean deleteSchedule(String sid, String scd) throws Exception {
 			if (logger != null) { logger.log("in deleteSchedule"); }
@@ -33,7 +31,7 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 				return daoS.deleteSchedule(sid, scd);
 				
 			} catch (Exception e) {
-				throw new Exception(e.getMessage());
+				throw e;
 			}
 		}
 		  @SuppressWarnings("unchecked")
@@ -93,7 +91,7 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 				try {
 					deleteSchedule(req.scheduleID, req.secretCode);
 						logger.log("deleteSchedule worked");
-						resp = new DeleteScheduleResponse(s.getId());
+						resp = new DeleteScheduleResponse(req.scheduleID);
 						logger.log("schedule successfully deleted");
 					
 				} catch (Exception e) {

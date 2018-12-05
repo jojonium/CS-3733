@@ -82,7 +82,13 @@ public class Schedule {
 		endMinute = Integer.parseInt(timeEndArray[1]);
 
 		// check for valid minutes 
-
+		if (startMinute % duration != 0) {
+			startMinute += duration - (startMinute %duration);
+		}
+		
+		if ((endMinute % duration) != 0) {
+			endMinute -= (startMinute % duration);
+		}
 		this.name = name;
 		this.startDate = LocalDate.of(startYear, startMonth, startDay);
 		this.endDate = LocalDate.of(endYear, endMonth, endDay);
@@ -122,13 +128,23 @@ public class Schedule {
 		String[] timeEndArray = endTime.split(":");
 		endHour = Integer.parseInt(timeEndArray[0]);
 		endMinute = Integer.parseInt(timeEndArray[1]);
-
+		this.duration = duration;
+		
+		// check for valid minutes for string constructor
+		if (startMinute % duration != 0) {
+			startMinute += duration - (startMinute %duration);
+		}
+		
+		if ((endMinute % duration) != 0) {
+			endMinute -= (startMinute % duration);
+		}
+		
 		this.name = name;
 		this.startDate = LocalDate.of(startYear, startMonth, startDay);
 		this.endDate = LocalDate.of(endYear, endMonth, endDay);
 		this.startTime = LocalTime.of(startHour, startMinute);
 		this.endTime = LocalTime.of(endHour, endMinute);
-		this.duration = duration;
+		
 
 		this.secretCode = secretCode;
 		this.id = id;

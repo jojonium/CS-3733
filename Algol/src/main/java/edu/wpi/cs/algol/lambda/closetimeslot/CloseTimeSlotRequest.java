@@ -1,6 +1,7 @@
 package edu.wpi.cs.algol.lambda.closetimeslot;
 
 public class CloseTimeSlotRequest {
+	String scheduleID;
 	String secretCode;
 	String date;
 	String time;
@@ -9,7 +10,8 @@ public class CloseTimeSlotRequest {
  * @param d The date of the meeting
  * @param t The time of the meeting
  */
-	public CloseTimeSlotRequest(String scd, String d, String t) {
+	public CloseTimeSlotRequest(String sid, String scd, String d, String t) {
+		this.scheduleID = sid;
 		this.secretCode = scd;
 		this.date = d;
 		this.time = t;

@@ -2,18 +2,18 @@ package edu.wpi.cs.algol.lambda.retrievedetails;
 
 import edu.wpi.cs.algol.model.TimeSlot;
 
-public class retrieveDetailsResponse {
+public class RetrieveDetailsResponse {
 	String message;
 	TimeSlot timeslot;
 	int httpCode;
 	
-	public retrieveDetailsResponse (String m, int code) {
+	public RetrieveDetailsResponse (String m, int code) {
 		this.message = m;
 		this.httpCode = code;
 	}
 	
 	// 200 means success
-	public retrieveDetailsResponse (String m, TimeSlot t) {
+	public RetrieveDetailsResponse (String m, TimeSlot t) {
 		this.message = m;
 		this.timeslot = t;
 		this.httpCode = 200;

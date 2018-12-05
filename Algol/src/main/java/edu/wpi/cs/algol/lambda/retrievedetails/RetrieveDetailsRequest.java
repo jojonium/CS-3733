@@ -1,11 +1,11 @@
 package edu.wpi.cs.algol.lambda.retrievedetails;
 
-public class retrieveDetailsRequest {
+public class RetrieveDetailsRequest {
 	String scheduleID;
 	String secretCode;
 
 	
-	public retrieveDetailsRequest (String sid, String secretCode) {
+	public RetrieveDetailsRequest (String sid, String secretCode) {
 		this.scheduleID = sid;
 		this.secretCode = secretCode;
 	}

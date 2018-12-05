@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 import edu.wpi.cs.algol.db.TimeSlotDAO;
 import edu.wpi.cs.algol.model.TimeSlot;
 
-public class retrieveDetailsHandler implements RequestStreamHandler {
+public class RetrieveDetailsHandler implements RequestStreamHandler {
 
 	public LambdaLogger logger = null;
 	public TimeSlot t;
@@ -48,7 +48,7 @@ public class retrieveDetailsHandler implements RequestStreamHandler {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("headers", headerJson);
 
-		retrieveDetailsResponse response = null;
+		RetrieveDetailsResponse response = null;
 
 		// extract body from incoming HTTP POST request. If any error, then return 422
 		// error
@@ -63,7 +63,7 @@ public class retrieveDetailsHandler implements RequestStreamHandler {
 			String method = (String) event.get("httpMethod");
 			if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 				logger.log("Options request");
-				response = new retrieveDetailsResponse("name", 200); // OPTIONS needs a 200 response
+				response = new RetrieveDetailsResponse("name", 200); // OPTIONS needs a 200 response
 				responseJson.put("body", new Gson().toJson(response));
 				processed = true;
 				body = null;
@@ -75,25 +75,25 @@ public class retrieveDetailsHandler implements RequestStreamHandler {
 			}
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
-			response = new retrieveDetailsResponse("Bad Request:" + pe.getMessage(), 422); // unable to process input
+			response = new RetrieveDetailsResponse("Bad Request:" + pe.getMessage(), 422); // unable to process input
 			responseJson.put("body", new Gson().toJson(response));
 			processed = true;
 			body = null;
 		}
 
 		if (!processed) {
-			retrieveDetailsRequest req = new Gson().fromJson(body, retrieveDetailsRequest.class);
+			RetrieveDetailsRequest req = new Gson().fromJson(body, RetrieveDetailsRequest.class);
 			logger.log(req.toString());
 
-			retrieveDetailsResponse resp;
+			RetrieveDetailsResponse resp;
 			try {
 				if (retrieveTimeslot(req.scheduleID, req.secretCode) == true) {
-					resp = new retrieveDetailsResponse("You have succesfully retrieved timeslot details, ", t);
+					resp = new RetrieveDetailsResponse("You have succesfully retrieved timeslot details, ", t);
 				} else {
-					resp = new retrieveDetailsResponse("Failure. Timeslot not retrieved.", 409);
+					resp = new RetrieveDetailsResponse("Failure. Timeslot not retrieved.", 409);
 				}
 			} catch (Exception e) {
-				resp = new retrieveDetailsResponse(
+				resp = new RetrieveDetailsResponse(
 						"Unable to retrieve timeslot because of (" + e.getMessage() + ")", 400);
 			}
 

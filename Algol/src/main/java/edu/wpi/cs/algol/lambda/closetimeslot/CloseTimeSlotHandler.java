@@ -17,8 +17,8 @@ import com.google.gson.Gson;
 
 
 import edu.wpi.cs.algol.db.TimeSlotDAO;
-import edu.wpi.cs.algol.lambda.deleteschedule.DeleteScheduleRequest;
-import edu.wpi.cs.algol.lambda.deleteschedule.DeleteScheduleResponse;
+import edu.wpi.cs.algol.lambda.closetimeslot.CloseTimeSlotRequest;
+import edu.wpi.cs.algol.lambda.closetimeslot.CloseTimeSlotResponse;
 
 public class CloseTimeSlotHandler implements RequestStreamHandler {
 	//test

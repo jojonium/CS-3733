@@ -14,7 +14,7 @@ public class CreateMeetingRequest {
 	}
 	
 	public String toString() {
-		return "CreateScheduleRequest [requester:" + requester + "schedule ID" + scheduleID + 
+		return "CreateMeetingRequest [requester:" + requester + "schedule ID" + scheduleID + 
 				"date:" + date + "time:" + time + "]";
 	}
 }

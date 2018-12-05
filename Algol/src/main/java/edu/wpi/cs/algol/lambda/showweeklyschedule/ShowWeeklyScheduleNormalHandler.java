@@ -246,7 +246,7 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 				TimeSlot lastts = ts.get(ts.size()-1);
 				logger.log("Retrieving last timeslot of weekly schedule: " + lastts.toString() + "\n");
 				LocalDate endOfWeek = LocalDate.of(lastts.getBeginDateTime().getYear(), lastts.getBeginDateTime().getMonth(), lastts.getBeginDateTime().getDayOfMonth());
-				LocalDate startOfWeek = LocalDate.of(firstts.getBeginDateTime().getDayOfYear(),firstts.getBeginDateTime().getMonth() , firstts.getBeginDateTime().getDayOfMonth());
+				LocalDate startOfWeek = LocalDate.of(firstts.getBeginDateTime().getYear(),firstts.getBeginDateTime().getMonth() , firstts.getBeginDateTime().getDayOfMonth());
 				logger.log("Retrieving endOfWeek date: " + endOfWeek.toString() + "\n");
 				resp = new ShowWeeklyScheduleResponse(s.getName(),startOfWeek,endOfWeek,LocalTime.of(firstts.getBeginDateTime().getHour(), firstts.getBeginDateTime().getMinute()),LocalTime.of(lastts.getBeginDateTime().getHour(), lastts.getBeginDateTime().getMinute()),s.getDuration(), ts);
 				logger.log("ShowWeeklySchedule response: " + resp.toString() + "\n");

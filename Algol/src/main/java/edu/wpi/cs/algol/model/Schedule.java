@@ -275,8 +275,8 @@ public class Schedule {
 	public void timeSlotGeneration() {
 		// timeslot generation
 		for (LocalDate date = this.startDate; date.isBefore(this.endDate); date = date.plusDays(1)) {
-			if ((date.getDayOfWeek() != DayOfWeek.SUNDAY)) {
-				if((date.getDayOfWeek() != DayOfWeek.SATURDAY)) {
+			if ((!date.getDayOfWeek().equals(DayOfWeek.SUNDAY))) {
+				if(!(date.getDayOfWeek().equals(DayOfWeek.SATURDAY))) {
 					for(LocalTime time = (this.startTime.getMinute()%duration == 0) ? this.startTime : this.startTime.plusMinutes(duration - this.startTime.getMinute()%duration); time.isBefore(this.endTime); time = time.plusMinutes(duration)) {
 
 

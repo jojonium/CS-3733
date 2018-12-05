@@ -52,43 +52,43 @@ public class TimeSlotDAO {
 		}
 
 	}
-	
+
 	public boolean closeTimeSlot(String scheduleID, String secretCode, String date, String time) throws Exception {
-		
+
 		try {
-			
+
 			// configure input strings
 			String[] dateString = date.split("/");
 			String[] timeString = time.split(":");
-			
+
 			int month = Integer.parseInt(dateString[0]);
 			int dayOfMonth = Integer.parseInt(dateString[1]);
 			int year = Integer.parseInt(dateString[2]);
-			
+
 			int hour = Integer.parseInt(timeString[0]);
 			int minute = Integer.parseInt(timeString[1]);
-			
-			
+
+
 			LocalDate inputDate = LocalDate.of(year, month, dayOfMonth);
 			LocalTime inputTime = LocalTime.of(hour, minute);
 			LocalDateTime dateTime = LocalDateTime.of(inputDate, inputTime);
 			ScheduleDAO sDao = new ScheduleDAO();
 			Schedule s = sDao.getSchedule(scheduleID);
-			if (secretCode == s.getSecretCode()) {
-			PreparedStatement ps = conn.prepareStatement("UPDATE TimeSlots SET isOpen = ? WHERE beginDateTime =? AND scheduleID = ?;");
-			ps.setString(1, "false");
-			ps.setString(2, dateTime.toString());
-			ps.setString(3, scheduleID);
-			
-			
-			int valsAffected = ps.executeUpdate();
-			ps.close();
+			if (secretCode.equals(s.getSecretCode())) {
+				PreparedStatement ps = conn.prepareStatement("UPDATE TimeSlots SET isOpen =? WHERE beginDateTime =? AND scheduleID =?;");
+				ps.setString(1, "false");
+				ps.setString(2, dateTime.toString());
+				ps.setString(3, scheduleID);
 
-			return (valsAffected ==1);
-			
+
+				int valsAffected = ps.executeUpdate();
+				ps.close();
+
+				return (valsAffected ==1);
+
 			}
 			return false;
-			
+
 		} catch (Exception e) {
 			throw new Exception("Failed in deleting timeslot: " + e.getMessage());
 		}
@@ -175,7 +175,7 @@ public class TimeSlotDAO {
 			ps.setString(4, beginDateTime.toString());
 			ps.setString(5, scheduleID);
 			int numAffected = ps.executeUpdate();
-			
+
 			return (numAffected == 1);
 		} catch (Exception e) {
 			throw new Exception ("Fail to cancel meeting: "+ e.getMessage());
@@ -214,14 +214,14 @@ public class TimeSlotDAO {
 
 
 	}
-	
+
 	public ArrayList<TimeSlot> getWeeklyTimeSlots(String scheduleID, String dateStart) throws Exception {
-		
+
 		ArrayList<TimeSlot> weekts = new ArrayList<TimeSlot>();
 		//allts = daoT.getAllTimeSlots(id);
 		ScheduleDAO daoS = new ScheduleDAO();
 		TimeSlotDAO daoT = new TimeSlotDAO();
-		
+
 		Schedule s = daoS.getSchedule(scheduleID);
 		TimeSlot startts;
 		if (!dateStart.isEmpty()) {			// a valid date has been included
@@ -270,9 +270,9 @@ public class TimeSlotDAO {
 		}
 
 		else {
-			
+
 			startts = daoT.getTimeSlot(scheduleID, LocalDateTime.of(s.getStartDate(),s.getStartTime()));
-			
+
 			int day = startts.getBeginDateTime().getDayOfMonth();
 			int month = startts.getBeginDateTime().getMonthValue();
 			int year = startts.getBeginDateTime().getYear();
@@ -280,7 +280,7 @@ public class TimeSlotDAO {
 			for (int i = 0; startts.getBeginDateTime().getDayOfWeek() != DayOfWeek.SATURDAY; i ++) {
 				for(LocalTime time = (s.getStartTime().getMinute()% s.getDuration() == 0) ? s.getStartTime() : s.getStartTime().plusMinutes(s.getDuration() - s.getStartTime().getMinute()%s.getDuration()); time.isBefore(s.getEndTime()); time = time.plusMinutes(s.getDuration())) {
 					startts = daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, day).plusDays(i), time));
-					
+
 					weekts.add(startts);
 
 				}
@@ -291,7 +291,7 @@ public class TimeSlotDAO {
 
 		}
 
-		
+
 	}
 
 	public TimeSlot createTimeSlot(ResultSet resultSet) throws Exception {

@@ -100,7 +100,8 @@ public class ScheduleDAO {
 
 			int numAffected = ps.executeUpdate();
 			ps.close();
-
+			TimeSlotDAO daoT = new TimeSlotDAO(); 
+			daoT.deleteAllTimeSlots(id);
 			return (numAffected == 1);
 
 		} catch (Exception e) {

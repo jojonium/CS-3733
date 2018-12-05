@@ -41,10 +41,8 @@ export class ViewWeeklyScheduleComponent implements OnInit {
     let period = ' AM';
     let hour = t.hour;
     let minute = t.minute.toString();
-    if (t.hour > 12) {
-      period = ' PM';
-      hour = t.hour - 12;
-    }
+    if (t.hour > 11) period = ' PM';
+    if (t.hour > 12) hour = t.hour - 12;
     if (minute.length < 2)
       minute += "0";
     return hour.toString() + ':' + minute + period;
@@ -78,7 +76,8 @@ export class ViewWeeklyScheduleComponent implements OnInit {
         timeString: this.prettyPrintTime(t),
         scheduleID: this.id,
         requester: '',
-        secretCode: ''
+        secretCode: '',
+        backRef: this
       }
       this.openCreateMeetingDialog();
     }
@@ -87,6 +86,13 @@ export class ViewWeeklyScheduleComponent implements OnInit {
   makeTiles = (input : TimeSlot[]) => {
     this.numDays = (Math.abs(this.getDate(this.week.startDate).valueOf() - this.getDate(this.week.endDate).valueOf()) / 8.64e+7) + 1;
     this.numTimes = input.length / this.numDays;
+    
+    var tileIndex = 0;
+    
+    this.tiles = new Array<Tile>((this.numDays + 1) * (this.numTimes + 1));
+    this.dateArray = new Array<Date>(this.numDays);
+    this.timeArray = new Array<MyTime>(this.numTimes);
+
     
     console.log(`numDays: ${this.numDays}, numTimes: ${this.numTimes}`);
     
@@ -108,7 +114,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
     console.log(this.timeArray);
     
     // blank tile for the top left
-    this.tiles.push({class: "blank", text: "", text2: "", click: null});
+    this.tiles[tileIndex++] = {class: "blank", text: "", text2: "", click: null};
     
     // add in the date headers at the top of each column
     var runningDate = this.getDate(this.week.startDate);
@@ -117,11 +123,11 @@ export class ViewWeeklyScheduleComponent implements OnInit {
       if (i == 0) extraClass += ' first-dh';
       if (i == this.numDays - 1) extraClass += ' last-dh';
       this.dateArray[i]  = runningDate;
-      this.tiles.push({class: "date-header" + extraClass,
+      this.tiles[tileIndex++] = {class: "date-header" + extraClass,
         text: this.weekdays[runningDate.getDay()] + ",",
         text2: this.prettyPrintDate(runningDate),
         click: ''
-      });
+      };
       runningDate = new Date(runningDate.valueOf() + 8.64e+7); // add a day
     }
     
@@ -132,32 +138,23 @@ export class ViewWeeklyScheduleComponent implements OnInit {
         let extraClass = '';
         if (i == 0) extraClass += ' first-th';
         if (i == input.length + this.numTimes - this.numDays - 1) extraClass += ' last-th';
-        this.tiles.push({class: "time-header" + extraClass,
+        this.tiles[tileIndex++] = {class: "time-header" + extraClass,
           text: this.prettyPrintTime(this.timeArray[k++]),
           text2: "",
           click: ''
-        });
+        };
       } else {
         // add an open/closed timeslot
-        this.tiles.push({class: input[j].isOpen ? 'open' : 'closed',
+        this.tiles[tileIndex++] = {class: input[j].isOpen ? 'open' : 'closed',
           text: input[j].isOpen ? 'Open' : '—',
           text2: "",
           click: input[j++].isOpen ? 'openTimeSlotClick()' : ''
-        });
+        };
       }
     }
   };
   
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private scheduleService: ScheduleService,
-    public createMeetingDialog: MatDialog,
-  ) { }
-
-  ngOnInit() {
-    console.log('ngOnInit: about to call scheduleService.getSchedule');
-    this.tiles = [];
+  getTimeSlots(): void {
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) => {
         console.log('ID: ' + params.get('id'));
@@ -174,9 +171,18 @@ export class ViewWeeklyScheduleComponent implements OnInit {
         this.errorMessage = "400 Error: Unable to show schedule with ID " + this.id;
       }
     });
-    /*this.week = JSON.parse("{\"name\":\"Multi-week schedule\",\"startDate\":{\"year\":2018,\"month\":12,\"day\":3},\"endDate\":{\"year\":2018,\"month\":12,\"day\":8},\"startTime\":{\"hour\":9,\"minute\":0,\"second\":0,\"nano\":0},\"endTime\":{\"hour\":11,\"minute\":0,\"second\":0,\"nano\":0},\"duration\":60,\"timeSlots\":[{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":3},\"time\":{\"hour\":9,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":true,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":3},\"time\":{\"hour\":10,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":false,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":4},\"time\":{\"hour\":9,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":true,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":4},\"time\":{\"hour\":10,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":false,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":5},\"time\":{\"hour\":9,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":true,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":5},\"time\":{\"hour\":10,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":true,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":6},\"time\":{\"hour\":9,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":false,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":6},\"time\":{\"hour\":10,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":false,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":7},\"time\":{\"hour\":9,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":false,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":7},\"time\":{\"hour\":10,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":false,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":8},\"time\":{\"hour\":9,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":true,\"scheduleID\":\"nm111n\"},{\"beginDateTime\":{\"date\":{\"year\":2018,\"month\":12,\"day\":8},\"time\":{\"hour\":10,\"minute\":0,\"second\":0,\"nano\":0}},\"isOpen\":false,\"scheduleID\":\"nm111n\"}],\"httpCode\":200}");
-    console.log(this.week);
-    this.makeTiles(this.week.timeSlots);*/
+  }
+  
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private scheduleService: ScheduleService,
+    public createMeetingDialog: MatDialog,
+  ) { }
+
+  ngOnInit() {
+    console.log('ngOnInit: about to call scheduleService.getSchedule');
+    this.getTimeSlots();
   }
 
 }
@@ -191,8 +197,27 @@ export interface CreateMeetingData {
   timeString: string,
   scheduleID: string,
   requester: string,
-  secretCode: string
+  secretCode: string,
+  backRef: ViewWeeklyScheduleComponent
 }
+
+export class CreateMeetingRequest{
+  constructor(
+    public requester: string,
+    public scheduleID: string,
+    public date: string,
+    public time: string
+  ) { }
+}
+
+export class CreateMeetingResponse {
+  constructor(
+    public body: string,
+    public headers?: any
+  ) {  }
+}
+
+
 
 @Component({
   selector: 'create-meeting-dialog',
@@ -204,12 +229,43 @@ export class CreateMeetingDialog {
     @Inject(MAT_DIALOG_DATA) public data: CreateMeetingData,
     private scheduleService: ScheduleService
   ) { }
+  
+  message: string;
+  message2: string;
+  header = "Request meeting";
+  secretCode: string;
+  finished = false;
+  closeButton = "CANCEL";
 
   closeCreateMeetingDialog(): void {
     this.dialogRef.close();
   }
   
   requestMeeting(data: CreateMeetingData): void {
-    
+    var modelToSend = {"requester": data.requester,
+      "scheduleID": data.scheduleID,
+      "date": data.dateString,
+      "time": data.time.hour + ":" + data.time.minute
+    };
+    console.log(modelToSend);
+    this.scheduleService.createMeeting(modelToSend)
+      .subscribe(cmResponse => {
+        console.log(`CreateMeetingComponent received response: ${cmResponse}`);
+        var responseBody = JSON.parse(cmResponse.body);
+        this.finished = true;
+        this.closeButton = "CLOSE";
+        if (responseBody.httpCode == 200 ) {          // success
+          console.log("RESPONSE BODY:");
+          console.log(responseBody);
+          this.header = "Meeting created"
+          this.message = "Your meeting was successfully scheduled! Your secret code is:";
+          this.secretCode = responseBody['password'];
+          this.message2 = "Write this down. You'll need it if you want to cancel your meeting in the future.";
+          data.backRef.getTimeSlots();
+        } else if (responseBody.httpCode == 400) {    // failure
+          this.header = "409 error"
+          this.message = "That time slot isn't open.";
+        }
+      });
   }
 }

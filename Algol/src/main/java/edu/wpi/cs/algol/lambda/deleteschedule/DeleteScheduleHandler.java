@@ -29,19 +29,13 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 
 			//variable setup
 			ScheduleDAO daoS = new ScheduleDAO();
+			try {
+				return daoS.deleteSchedule(sid, scd);
+				
+			} catch (Exception e) {
+				throw new Exception(e.getMessage());
+			}
 			
-			Schedule s = daoS.getSchedule(sid);
-			if (logger != null) { logger.log("Matt HAGAN"); }
-			if (logger != null) { logger.log(s.getId() + " " + sid + ", " + s.getSecretCode() + " " + scd); }
-			if(s.getSecretCode().equals(scd)) { 
-				if (logger != null) { logger.log("\n about to hit Justin's Code \n"); }
-				//ADD STUFF HERE TO MAKE WORK
-			return daoS.deleteSchedule(s);
-				//END OF STUFF HERE TO MAKE WORK
-			}
-			else {
-				return false;
-			}
 		}
 		  @SuppressWarnings("unchecked")
 			@Override
@@ -98,14 +92,11 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 				DeleteScheduleResponse resp;
 				if (logger != null) { logger.log(req.scheduleID + " " +  ", " + req.secretCode + " "); }
 				try {
-					if(deleteSchedule(req.scheduleID, req.secretCode)){
+					deleteSchedule(req.scheduleID, req.secretCode);
 						logger.log("deleteSchedule worked");
 						resp = new DeleteScheduleResponse(s.getId());
 						logger.log("schedule successfully deleted");
-					} else {
-						resp = new DeleteScheduleResponse("Unable to delete schedule: ", 404);
-						logger.log("schedule deletion failed");
-					}
+					
 				} catch (Exception e) {
 					resp = new DeleteScheduleResponse("Unable to delete schedule: " + req.scheduleID + " because of (" + e.getMessage() + ")", 404);
 				}

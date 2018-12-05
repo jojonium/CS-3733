@@ -7,7 +7,7 @@ public class CloseTimeSlotResponse {
 	public int httpCode;
 	
 	/* used for errors or other responses that require a message */
-	public CloseTimeSloteResponse(String response, int code) {
+	public CloseTimeSlotResponse(String response, int code) {
 		this.response = response;
 		this.httpCode = code;
 	}
@@ -19,9 +19,9 @@ public class CloseTimeSlotResponse {
 	}
 
 	public String toString(){
-		if (secretCode != null )
+		if (scheduleID != null )
 			return ("Close Time Slot was successful, response: " + response + "\n");
 		else
-			return ("Delete schedule null error \n");
+			return ("Close Time Slot null error \n");
 	}
 }

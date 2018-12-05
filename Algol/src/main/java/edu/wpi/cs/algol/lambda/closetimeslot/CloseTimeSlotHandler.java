@@ -15,7 +15,8 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.google.gson.Gson;
 
-import edu.wpi.cs.algol.db.ScheduleDAO;
+
+import edu.wpi.cs.algol.db.TimeSlotDAO;
 import edu.wpi.cs.algol.lambda.deleteschedule.DeleteScheduleRequest;
 import edu.wpi.cs.algol.lambda.deleteschedule.DeleteScheduleResponse;
 
@@ -28,9 +29,9 @@ public class CloseTimeSlotHandler implements RequestStreamHandler {
 		if (logger != null) { logger.log("in CloseTimeSlot"); }
 
 		//variable setup
-		ScheduleDAO daoS = new ScheduleDAO();
+		TimeSlotDAO daoTS = new TimeSlotDAO();
 		try {
-			return daoS.deleteSchedule(sid, scd);
+			return daoTS.closeTimeSlot(sid, scd, d, t);
 			
 		} catch (Exception e) {
 			throw e;
@@ -51,7 +52,7 @@ public class CloseTimeSlotHandler implements RequestStreamHandler {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("headers", headerJson);
 
-		DeleteScheduleResponse response = null;
+		CloseTimeSlotResponse response = null;
 		
 		// extract body from incoming HTTP POST request. If any error, then return 422 error
 		String body;
@@ -65,7 +66,7 @@ public class CloseTimeSlotHandler implements RequestStreamHandler {
 			String method = (String) event.get("httpMethod");
 			if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 				logger.log("Options request");
-				response = new DeleteScheduleResponse("name", 200);  // OPTIONS needs a 200 response
+				response = new CloseTimeSlotResponse("name", 200);  // OPTIONS needs a 200 response
 		        responseJson.put("body", new Gson().toJson(response));
 		        processed = true;
 		        body = null;
@@ -77,27 +78,26 @@ public class CloseTimeSlotHandler implements RequestStreamHandler {
 			}
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
-			response = new DeleteScheduleResponse("Bad Request:" + pe.getMessage(), 422);  // unable to process input
+			response = new CloseTimeSlotResponse("Bad Request:" + pe.getMessage(), 422);  // unable to process input
 	        responseJson.put("body", new Gson().toJson(response));
 	        processed = true;
 	        body = null;
 		}
 
 		if (!processed) {
-			DeleteScheduleRequest req = new Gson().fromJson(body, DeleteScheduleRequest.class);
+			CloseTimeSlotRequest req = new Gson().fromJson(body, CloseTimeSlotRequest.class);
 			
 			logger.log(req.toString());
 
-			DeleteScheduleResponse resp;
-			if (logger != null) { logger.log(req.scheduleID + " " +  ", " + req.secretCode + " "); }
+			CloseTimeSlotResponse resp;
 			try {
-				deleteSchedule(req.scheduleID, req.secretCode);
-					logger.log("deleteSchedule worked");
-					resp = new DeleteScheduleResponse(req.scheduleID);
-					logger.log("schedule successfully deleted");
+				CloseTimeSlot(req.scheduleID, req.secretCode, req.date, req.time);
+					logger.log("CloseTimeSlot worked");
+					resp = new CloseTimeSlotResponse(req.scheduleID);
+					logger.log("TimeSlot successfully closed");
 				
 			} catch (Exception e) {
-				resp = new DeleteScheduleResponse("Unable to delete schedule: " + req.scheduleID + " because of (" + e.getMessage() + ")", 404);
+				resp = new CloseTimeSlotResponse("Unable to close time slot at " + req.time + " at date " + req.date + " of schedule " + req.scheduleID + " because of (" + e.getMessage() + ")", 404);
 			}
 
 			// compute proper response

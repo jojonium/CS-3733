@@ -9,7 +9,6 @@ import java.io.OutputStreamWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Random;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -81,6 +80,10 @@ public class CancelMeetingHandler implements RequestStreamHandler {
 		t = daoT.getTimeSlot(sid, ldt);
 		s = daoS.getSchedule(sid);
 
+		logger.log("Entered code:" + passcode);
+		logger.log("\n Timeslot Code:" + t.getSecretCode());
+		logger.log("\n Schedule Code:" + s.getSecretCode());
+		
 		if (t.getSecretCode() == passcode) {
 			same = true;
 		}
@@ -144,15 +147,16 @@ public class CancelMeetingHandler implements RequestStreamHandler {
 
 			CancelMeetingResponse resp;
 			try {
-				if (checkCode(req.secretCode, req.date, req.time, req.scheduleID) == true) {
-					if (cancelMeeting(req.date, req.time, req.scheduleID) == true) {
+				if (cancelMeeting(req.date, req.time, req.scheduleID) == true) {
+					if (checkCode(req.secretCode, req.date, req.time, req.scheduleID) == true) {
 						resp = new CancelMeetingResponse("You have succesfully cancelled a meeting.");
 					} else {
-						resp = new CancelMeetingResponse("Meeting cancel failure. No meeting scheduled.", 409);
+						resp = new CancelMeetingResponse("Meeting cancel failure. Incorrect passcode.", 400);
 					}
 				} else {
-					resp = new CancelMeetingResponse("Meeting cancel failure. Incorrect passcode.", 400);
+					resp = new CancelMeetingResponse("Meeting cancel failure. No meeting scheduled.", 409);
 				}
+				
 				
 			} catch (Exception e) {
 				resp = new CancelMeetingResponse(

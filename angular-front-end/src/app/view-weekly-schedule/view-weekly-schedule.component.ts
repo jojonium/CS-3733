@@ -66,6 +66,20 @@ export class ViewWeeklyScheduleComponent implements OnInit {
     });
   }
   
+  goToNextWeek() {
+    var nextDate = this.dateArray[0];
+    nextDate = new Date(nextDate.valueOf() + 7 * 8.64e+7); // add 7 days to this week
+    var dateString = (nextDate.getMonth() + 1) + '-' + nextDate.getDate() + '-' + nextDate.getFullYear();
+    this.router.navigate(['/schedule/' + this.id + '/' + dateString]);
+  }
+  
+  goToPreviousWeek() {
+    var nextDate = this.dateArray[0];
+    nextDate = new Date(nextDate.valueOf() - 7 * 8.64e+7); // subtract7 days to this week
+    var dateString = (nextDate.getMonth() + 1) + '-' + nextDate.getDate() + '-' + nextDate.getFullYear();
+    this.router.navigate(['/schedule/' + this.id + '/' + dateString]);
+  }
+  
   timeSlotClick(text: string, index: number): void {
     console.log("openTimeSlotClick, index: " + index);
     if (text == "Open") {

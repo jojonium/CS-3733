@@ -84,18 +84,33 @@ export class ViewWeeklyScheduleComponent implements OnInit {
     console.log("openTimeSlotClick, index: " + index);
     if (text == "Open") {
       let d = this.dateArray[(index % (this.numDays + 1)) - 1];
-      let t = this.timeArray[Math.floor(index / (this.numDays + 1)) - 1]
-      this.createMeetingData = {date: d,
-        dateString: this.prettyPrintDate(d),
-        dayOfWeek: this.weekdays[d.getDay()],
-        time: t,
-        timeString: this.prettyPrintTime(t),
-        scheduleID: this.id,
-        requester: '',
-        secretCode: '',
-        backRef: this
+      let t = this.timeArray[Math.floor(index / (this.numDays + 1)) - 1];
+
+      
+      if (this.secretCode) {  // organizer close timeslot
+        this.scheduleService.closeTimeSlot(this.id, this.secretCode, this.prettyPrintDate(d), (t.hour + ':' + t.minute))
+          .subscribe(resp => {
+            var respBody = JSON.parse(resp.body);
+            if (respBody.httpCode == 200 || respBody.httpCode == 202) {
+              console.log(respBody);
+              this.getTimeSlots();
+            } else if (this.week.httpCode > 400) {
+              //TODO open snackbar for error message
+            }
+          });
+      } else {  // participant create meeting
+        this.createMeetingData = {date: d,
+          dateString: this.prettyPrintDate(d),
+          dayOfWeek: this.weekdays[d.getDay()],
+          time: t,
+          timeString: this.prettyPrintTime(t),
+          scheduleID: this.id,
+          requester: '',
+          secretCode: '',
+          backRef: this
+        }
+        this.openCreateMeetingDialog();
       }
-      this.openCreateMeetingDialog();
     }
   }
   

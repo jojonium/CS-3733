@@ -107,10 +107,10 @@ public class ScheduleDAO {
 					TimeSlotDAO daoT = new TimeSlotDAO(); 
 					daoT.deleteAllTimeSlots(id);
 				}
-				return (numAffected == 1);
+				
 			}
-			throw new Exception();
-			
+
+			return (numAffected == 1);
 
 		} catch (Exception e) {
 			throw new Exception("Failed to delete Schedule: " + e.getMessage());
@@ -118,6 +118,7 @@ public class ScheduleDAO {
 
 
 	}
+	
 	// might just get schedule id and then update. 
 	public boolean updateSchedule(Schedule schedule) throws Exception {
 

@@ -100,22 +100,23 @@ public class TimeSlotDAO {
 			ScheduleDAO sDao = new ScheduleDAO();
 			Schedule s = sDao.getSchedule(scheduleID);
 			if (this.getTimeSlot(scheduleID, dateTime).isOpen() == false) { return true; }
+			if (this.getTimeSlot(scheduleID, LocalDateTime.of(inputDate, inputTime)).getSecretCode() == null) {
+				if (secretCode.equals(s.getSecretCode())) {
+					PreparedStatement ps = conn.prepareStatement("UPDATE TimeSlots SET isOpen =? WHERE beginDateTime =? AND scheduleID =?;");
+					ps.setString(1, "false");
+					ps.setString(2, dateTime.toString());
+					ps.setString(3, scheduleID);
 
-			if (secretCode.equals(s.getSecretCode())) {
-				PreparedStatement ps = conn.prepareStatement("UPDATE TimeSlots SET isOpen =? WHERE beginDateTime =? AND scheduleID =?;");
-				ps.setString(1, "false");
-				ps.setString(2, dateTime.toString());
-				ps.setString(3, scheduleID);
 
+					int valsAffected = ps.executeUpdate();
+					ps.close();
 
-				int valsAffected = ps.executeUpdate();
-				ps.close();
+					return (valsAffected ==1);
 
-				return (valsAffected ==1);
-
+				}
+				return false;
 			}
 			return false;
-
 		} catch (Exception e) {
 			throw new Exception("Failed in closing timeslot: " + e.getMessage());
 		}
@@ -143,22 +144,23 @@ public class TimeSlotDAO {
 			ScheduleDAO sDao = new ScheduleDAO();
 			Schedule s = sDao.getSchedule(scheduleID);
 			if (this.getTimeSlot(scheduleID, dateTime).isOpen() == true) { return true; }
+			if (this.getTimeSlot(scheduleID, LocalDateTime.of(inputDate, inputTime)).getSecretCode() == null) {
+				if (secretCode.equals(s.getSecretCode())) {
+					PreparedStatement ps = conn.prepareStatement("UPDATE TimeSlots SET isOpen =? WHERE beginDateTime =? AND scheduleID =?;");
+					ps.setString(1, "true");
+					ps.setString(2, dateTime.toString());
+					ps.setString(3, scheduleID);
 
-			if (secretCode.equals(s.getSecretCode())) {
-				PreparedStatement ps = conn.prepareStatement("UPDATE TimeSlots SET isOpen =? WHERE beginDateTime =? AND scheduleID =?;");
-				ps.setString(1, "true");
-				ps.setString(2, dateTime.toString());
-				ps.setString(3, scheduleID);
 
+					int valsAffected = ps.executeUpdate();
+					ps.close();
 
-				int valsAffected = ps.executeUpdate();
-				ps.close();
+					return (valsAffected ==1);
 
-				return (valsAffected ==1);
-
+				}
+				return false;
 			}
 			return false;
-
 		} catch (Exception e) {
 			throw new Exception("Failed in opening timeslot: " + e.getMessage());
 		}
@@ -404,9 +406,9 @@ public class TimeSlotDAO {
 				boolean status = false;
 				LocalTime t = startTime;
 				while (t.isBefore(s.getEndTime())) {
-					if (this.getTimeSlot(scheduleID, LocalDateTime.of(inputDate, t)).getSecretCode() != null) {
+					
 						status = this.openTimeSlot(scheduleID, secretCode, date, t.toString());
-					}
+					
 					t=t.plusMinutes(s.getDuration());
 					t=t.plusMinutes(0);
 				}
@@ -441,13 +443,13 @@ public class TimeSlotDAO {
 			if (secretCode.equals(s.getSecretCode())) {
 				boolean status = true;
 				LocalDate d = startDate;
-				while (d.isBefore(s.getEndDate().plusDays(1)) && status == true) {
+				while (d.isBefore(s.getEndDate().plusDays(1))) {
 					String[] dateS = d.toString().split("-");
 					String date ="";
 					date = dateS[1]+ "/" + dateS[2]+ "/" + dateS[0];
-					if (this.getTimeSlot(scheduleID, LocalDateTime.of(d,LocalTime.of(hour, minute))).getSecretCode() != null) {
-						status = this.openTimeSlot(scheduleID, secretCode, date, time);
-					}
+					//	if (this.getTimeSlot(scheduleID, LocalDateTime.of(d,LocalTime.of(hour, minute))).getSecretCode() == null) {
+					status = this.openTimeSlot(scheduleID, secretCode, date, time);
+					//	}
 					d=d.plusDays(1);
 					d=d.plusDays(0);
 				}
@@ -473,7 +475,7 @@ public class TimeSlotDAO {
 			return false; */
 
 		} catch (Exception e) {
-			throw new Exception("Failed in opening timeslot: " + e.getMessage());
+			throw new Exception("Failed in opening timeslot: " + e.getMessage() + e);
 		}
 	}
 
@@ -524,9 +526,9 @@ public class TimeSlotDAO {
 				boolean status = false;
 				LocalTime t = startTime;
 				while (t.isBefore(s.getEndTime())) {
-					if (this.getTimeSlot(scheduleID, LocalDateTime.of(inputDate, t)).getSecretCode() != null) {
-						status = this.closeTimeSlot(scheduleID, secretCode, date, t.toString());
-					}
+
+					status = this.closeTimeSlot(scheduleID, secretCode, date, t.toString());
+
 					t=t.plusMinutes(s.getDuration());
 					t=t.plusMinutes(0);
 				}
@@ -547,7 +549,7 @@ public class TimeSlotDAO {
 	 */
 	public boolean closeTimeSlotsAtTime(String scheduleID, String secretCode, String time) throws Exception {
 		try {
-			
+
 			String[] inputTime = time.split(":");
 			int hour = Integer.parseInt(inputTime[0]);
 			int minute = Integer.parseInt(inputTime[1]);
@@ -562,9 +564,9 @@ public class TimeSlotDAO {
 					String[] dateS = d.toString().split("-");
 					String date ="";
 					date = dateS[1]+ "/" + dateS[2]+ "/" + dateS[0];
-					if (this.getTimeSlot(scheduleID, LocalDateTime.of(d,LocalTime.of(hour, minute))).getSecretCode() != null) {
-						status = this.closeTimeSlot(scheduleID, secretCode, date, time);
-						}
+
+					status = this.closeTimeSlot(scheduleID, secretCode, date, time);
+
 					d=d.plusDays(1);
 					d=d.plusDays(0);
 				}

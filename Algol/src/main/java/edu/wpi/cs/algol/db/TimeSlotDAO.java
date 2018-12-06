@@ -120,9 +120,9 @@ public class TimeSlotDAO {
 			throw new Exception("Failed in closing timeslot: " + e.getMessage());
 		}
 	}
-	
+
 	public boolean openTimeSlot(String scheduleID, String secretCode, String date, String time) throws Exception {
-		
+
 		try {
 
 			// configure input strings
@@ -376,7 +376,142 @@ public class TimeSlotDAO {
 
 
 	}
+
+	/*
+	 * Open All slots on given day date as mm/dd/yyyy or mm-dd-yyyy
+	 */
+
+	public boolean openTimeSlotsOnDay(String scheduleID, String secretCode, String date) throws Exception {
+		try {
+
+			// configure input strings
+			String[] dateString = date.split("/");
+
+
+			int month = Integer.parseInt(dateString[0]);
+			int dayOfMonth = Integer.parseInt(dateString[1]);
+			int year = Integer.parseInt(dateString[2]);
+
+			// acquiring time
+			ScheduleDAO sDao = new ScheduleDAO();
+			Schedule s = sDao.getSchedule(scheduleID);
+			LocalTime startTime = s.getStartTime();
+
+
+			LocalDate inputDate = LocalDate.of(year, month, dayOfMonth);
+			//			LocalDate nextDate = inputDate.plusDays(1);
+			//LocalTime inputTime = LocalTime.of(startTime.getHour(), startTime.getMinute());
+			
+			//			LocalDateTime nextDateTime = LocalDateTime.of(nextDate, inputTime);
+			// if (this.getTimeSlot(scheduleID, dateTime).isOpen() == true) { return true; }
+
+			if (secretCode.equals(s.getSecretCode())) {
+				/*int valsAffected = 0;
+				PreparedStatement ps = null;
+				LocalTime t = startTime;
+				while (t.isBefore(s.getEndTime())) {
+					LocalDateTime dateTime = LocalDateTime.of(inputDate, t);
+					ps = conn.prepareStatement("UPDATE TimeSlots SET isOpen =? WHERE beginDateTime =? AND scheduleID =?;");
+					ps.setString(1, "true");
+					ps.setString(2, dateTime.toString());
+					ps.setString(3, scheduleID);
+
+					valsAffected = ps.executeUpdate();
+					t = t.plusMinutes(s.getDuration());
+
+				}
+				ps.close();
+
+				return (valsAffected ==1);*/
+				boolean status = false;
+				LocalTime t = startTime;
+				while (t.isBefore(s.getEndTime())) {
+					status = this.openTimeSlot(scheduleID, secretCode, date, t.toString());
+					t=t.plusMinutes(s.getDuration());
+					t=t.plusMinutes(0);
+				}
+				return status;
+
+			}
+			return false;
+
+		} catch (Exception e) {
+			throw new Exception("Failed in opening timeslot: " + e.getMessage());
+		}
+
+	}
+
+	/*
+	 * Open All slots on given time
+	 */
+
+	/*
+	 * Close All slots on given day
+	 */
+
+	public boolean closeTimeSlotsOnDay(String scheduleID, String secretCode, String date) throws Exception {
+		try {
+
+			// configure input strings
+			String[] dateString = date.split("/");
+
+
+			int month = Integer.parseInt(dateString[0]);
+			int dayOfMonth = Integer.parseInt(dateString[1]);
+			int year = Integer.parseInt(dateString[2]);
+
+			// acquiring time
+			ScheduleDAO sDao = new ScheduleDAO();
+			Schedule s = sDao.getSchedule(scheduleID);
+			LocalTime startTime = s.getStartTime();
+
+
+			LocalDate inputDate = LocalDate.of(year, month, dayOfMonth);
+			//			LocalDate nextDate = inputDate.plusDays(1);
+			//LocalTime inputTime = LocalTime.of(startTime.getHour(), startTime.getMinute());
+			
+			//			LocalDateTime nextDateTime = LocalDateTime.of(nextDate, inputTime);
+			// if (this.getTimeSlot(scheduleID, dateTime).isOpen() == true) { return true; }
+
+			if (secretCode.equals(s.getSecretCode())) {
+				/*int valsAffected = 0;
+				PreparedStatement ps = null;
+				LocalTime t = startTime;
+				while (t.isBefore(s.getEndTime().plusMinutes(s.getDuration()))) {
+					LocalDateTime dateTime = LocalDateTime.of(inputDate, t);
+					ps = conn.prepareStatement("UPDATE TimeSlots SET isOpen =? WHERE beginDateTime =? AND scheduleID =?;");
+					ps.setString(1, "false");
+					ps.setString(2, dateTime.toString());
+					ps.setString(3, scheduleID);
+					t.plusMinutes(s.getDuration());
+					valsAffected = ps.executeUpdate();
+					
+
+				}
+				ps.close();*/
+				boolean status = false;
+				LocalTime t = startTime;
+				while (t.isBefore(s.getEndTime())) {
+					status = this.closeTimeSlot(scheduleID, secretCode, date, t.toString());
+					t=t.plusMinutes(s.getDuration());
+					t=t.plusMinutes(0);
+				}
+				return status;
+
+			}
+			return false;
+
+		} catch (Exception e) {
+			throw new Exception("Failed in closing timeslot: " + e.getMessage());
+		}
+
+	}
+
 	
+	/*
+	 * Close All slots on given time
+	 */
+
 
 	public TimeSlot createTimeSlot(ResultSet resultSet) throws Exception {
 

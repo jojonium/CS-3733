@@ -92,17 +92,25 @@ public class ScheduleDAO {
 
 	public boolean deleteSchedule(String id, String secretCode) throws Exception {
 		try {
-			PreparedStatement ps = conn.prepareStatement("DELETE FROM Schedules WHERE id =? AND secretCode = ?");
+			int numAffected = -1;
+			// checks if secret code is valid
+			if (secretCode.equals(this.getSchedule(id).getSecretCode())) {
+				PreparedStatement ps = conn.prepareStatement("DELETE FROM Schedules WHERE id =? AND secretCode = ?");
 
+
+				ps.setString(1, id);
+				ps.setString(2, secretCode);
+
+				numAffected = ps.executeUpdate();
+				ps.close();
+				if (numAffected == 1) {
+					TimeSlotDAO daoT = new TimeSlotDAO(); 
+					daoT.deleteAllTimeSlots(id);
+				}
+				return (numAffected == 1);
+			}
+			throw new Exception();
 			
-			ps.setString(1, id);
-			ps.setString(2, secretCode);
-
-			int numAffected = ps.executeUpdate();
-			ps.close();
-			TimeSlotDAO daoT = new TimeSlotDAO(); 
-			daoT.deleteAllTimeSlots(id);
-			return (numAffected == 1);
 
 		} catch (Exception e) {
 			throw new Exception("Failed to delete Schedule: " + e.getMessage());

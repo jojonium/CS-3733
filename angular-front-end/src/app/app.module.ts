@@ -16,6 +16,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { RouterModule, Routes } from '@angular/router'
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 
 import { AppComponent } from './app.component';
@@ -24,6 +25,7 @@ import { ViewWeeklyScheduleComponent, CreateMeetingDialog } from './view-weekly-
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ViewScheduleFormComponent } from './view-schedule-form/view-schedule-form.component';
+import { DeletedComponent } from './deleted/deleted.component';
 
 
 @NgModule({
@@ -35,7 +37,8 @@ import { ViewScheduleFormComponent } from './view-schedule-form/view-schedule-fo
     CreateMeetingDialog,
     ViewWeeklyScheduleComponent,
     PageNotFoundComponent,
-    ViewScheduleFormComponent
+    ViewScheduleFormComponent,
+    DeletedComponent
   ],
   imports: [
     BrowserModule,
@@ -48,6 +51,7 @@ import { ViewScheduleFormComponent } from './view-schedule-form/view-schedule-fo
     MatToolbarModule,
     MatGridListModule,
     MatProgressSpinnerModule,
+    MatExpansionModule,
     FormsModule,
     ReactiveFormsModule,
     MatSelectModule,

@@ -22,6 +22,6 @@ public class CloseTimeSlotResponse {
 		if (scheduleID != null )
 			return ("Close Time Slot was successful, response: " + response + "\n");
 		else
-			return ("Close Time Slot null error \n");
+			return ("Close Time Slot null error: " + httpCode+ "\n");
 	}
 }

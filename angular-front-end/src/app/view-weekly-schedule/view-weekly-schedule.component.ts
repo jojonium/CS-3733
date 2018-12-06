@@ -32,6 +32,8 @@ export class ViewWeeklyScheduleComponent implements OnInit {
   weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   dateArray: Date[];
   timeArray: MyTime[];
+  vsMessage: string;
+  secretCode: string;
   
   getDate = (d : MyDate) => {
     return new Date(d.year, d.month - 1, d.day);
@@ -111,8 +113,6 @@ export class ViewWeeklyScheduleComponent implements OnInit {
       }
     }
     
-    console.log(this.timeArray);
-    
     // blank tile for the top left
     this.tiles[tileIndex++] = {class: "blank", text: "", text2: "", click: null};
     
@@ -131,25 +131,54 @@ export class ViewWeeklyScheduleComponent implements OnInit {
       runningDate = new Date(runningDate.valueOf() + 8.64e+7); // add a day
     }
     
+    var s = new Array<TimeSlot[]>(this.numDays);
+    var z = 0;
+    for (let i = 0; i < this.numDays; ++i) {
+      s[i] = new Array<TimeSlot>(this.numTimes);
+      for (let j = 0; j < this.numTimes; ++j) {
+        s[i][j] = input[z];
+        ++z;
+      }
+    }
+    
+    console.log(s);
+    console.log(this.secretCode);
+    console.log(this.secretCode ? true : false);
+    
+    var nextText;
     // add in the times and timeslots
-    for (let i = 0, j = 0, k = 0; i < input.length + this.numTimes; ++i) {
+    var j = 0; var c = 0; var r = 0;
+    for (let i = 0; i < input.length + this.numTimes; ++i) {
       if (i % (this.numDays + 1) == 0) { // beginning of a row
         // add a time to the start of the row
         let extraClass = '';
         if (i == 0) extraClass += ' first-th';
         if (i == input.length + this.numTimes - this.numDays - 1) extraClass += ' last-th';
         this.tiles[tileIndex++] = {class: "time-header" + extraClass,
-          text: this.prettyPrintTime(this.timeArray[k++]),
+          text: this.prettyPrintTime(this.timeArray[j++]),
           text2: "",
-          click: ''
+          click: ""
         };
       } else {
+        nextText = '';
         // add an open/closed timeslot
-        this.tiles[tileIndex++] = {class: input[j].isOpen ? 'open' : 'closed',
-          text: input[j].isOpen ? 'Open' : '—',
-          text2: "",
-          click: input[j++].isOpen ? 'openTimeSlotClick()' : ''
+        if (this.secretCode) { // TODO Temporary hack because viewweeklyschedule still sends names for some reason. Fix it!
+          nextText = s[c][r].requester;
+          if (!nextText) nextText = s[c][r].isOpen ? 'Open' : '—';
+          console.log(nextText);
+        } else {
+          nextText = s[c][r].isOpen ? 'Open' : '—';
+        }
+        this.tiles[tileIndex++] = {class: s[c][r].isOpen ? 'open' : 'closed',
+          text: nextText,
+          text2: '',
+          click: s[c][r].isOpen ? 'openTimeSlotClick()' : ''
         };
+        c++;
+        if (c == this.numDays) {
+          c = 0;
+          r++;
+        }
       }
     }
   };
@@ -173,6 +202,97 @@ export class ViewWeeklyScheduleComponent implements OnInit {
     });
   }
   
+  getTimeSlotsOrganizer(secretCode: string): void {
+    this.secretCode = secretCode;
+    this.scheduleService.getScheduleOrganizer(this.id, this.secretCode, this.reqDate)
+      .subscribe(vwsResponse => {
+        this.week = JSON.parse(vwsResponse.body);
+        if (this.week.httpCode == '200') {
+          console.log(this.week);
+          console.log(this.week.timeSlots);
+          this.makeTiles(this.week.timeSlots);
+        } else if (this.week.httpCode == '400') {
+          this.errorMessage = "400 Error: Unable to show schedule with ID " + this.id;
+        }
+      });
+  }
+  
+  
+  getMeeting(sc: string): void {
+    console.log(`getMeeting: secretCode: ${sc}, scheduleID: ${this.id}`);
+    this.scheduleService.retrieveDetails(sc, this.id)
+      .subscribe(getResponse => {
+        console.log(`ViewWeeklyScheduleComponent received response: ${getResponse}`);
+        var responseBody = JSON.parse(getResponse.body);
+        if (responseBody.httpCode == 200 ) {          // success
+          console.log("RESPONSE BODY:");
+          console.log(responseBody);
+          this.vsMessage = `Meeting details: requester: ${responseBody.timeslot.requester}, time: ${this.prettyPrintTime(responseBody.timeslot.beginDateTime.time)}, date: ${this.prettyPrintDate(this.getDate(responseBody.timeslot.beginDateTime.date))}`;
+        } else if (responseBody.httpCode == 400) {    // failure
+          this.vsMessage = "400 error: invalid secret code";
+        }
+      });
+  }
+  
+  
+  cancelMeeting(sc: string): void {
+    console.log(`cancelMeeting: secretCode: ${sc}, scheduleID: ${this.id}`);
+    
+    // get the details of the meeting
+    this.scheduleService.retrieveDetails(sc, this.id)
+      .subscribe(getResponse => {
+        console.log(`ViewWeeklyScheduleComponent received response: ${getResponse}`);
+        var responseBody = JSON.parse(getResponse.body);
+        if (responseBody.httpCode == 200 ) {          // success
+          console.log("RESPONSE BODY:");
+          console.log(responseBody);
+          
+          var dateString = this.prettyPrintDate(this.getDate(responseBody.timeslot.beginDateTime.date)); // 12/5/2018
+          console.log("DATESTRING: " + dateString);
+          var timeString = responseBody.timeslot.beginDateTime.time.hour + ":" + responseBody.timeslot.beginDateTime.time.minute;
+          
+          var modelToSend = new CancelMeetingRequest(this.id, dateString, timeString, sc);
+                                                     
+          this.scheduleService.cancelMeeting(modelToSend)
+            .subscribe(cancelResponse => {
+              console.log(`ViewWeeklyScheduleComponent received response: ${cancelResponse}`);
+              responseBody = JSON.parse(cancelResponse.body);
+              if (responseBody.httpCode == 200) { // success
+                console.log("RESPONSE BODY:");
+                console.log(responseBody);
+                this.vsMessage = "Meeting cancelled";
+                this.getTimeSlots();
+              } else if (responseBody.httpCode == 400) { // failure
+                this.vsMessage = "400 error: invalid secret code";
+              }
+            });
+
+        } else if (responseBody.httpCode == 400) {    // failure
+          this.vsMessage = "400 error: invalid secret code";
+        }
+      });
+    
+  }
+  
+  deleteSchedule(sc: string): void {
+    // TODO this should probably get confirmation first
+    console.log(`deleteSchedule: secretCode: ${sc}`);
+    
+    this.scheduleService.deleteSchedule(sc, this.id)
+      .subscribe(dsResponse => {
+        console.log(`deleteSchedule got response: ${dsResponse}`);
+        var responseBody = JSON.parse(dsResponse.body);
+        if (responseBody.httpCode == 202) { // success
+          console.log("RESPONSE BODY:");
+          console.log(responseBody);
+          this.router.navigate(['/deleted']);
+        } else if (responseBody.httpCode == 400) { // failure
+          this.vsMessage = "400 error: invalid secret code";
+        } 
+      });
+  }
+  
+  
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -189,6 +309,9 @@ export class ViewWeeklyScheduleComponent implements OnInit {
 
 
 
+
+
+
 export interface CreateMeetingData {
   date: Date,
   dateString: string,
@@ -201,6 +324,15 @@ export interface CreateMeetingData {
   backRef: ViewWeeklyScheduleComponent
 }
 
+export class CancelMeetingRequest{
+  constructor(
+    public scheduleID: string,
+    public date: string,
+    public time: string,
+    public secretCode: string
+  ) { }
+}
+
 export class CreateMeetingRequest{
   constructor(
     public requester: string,
@@ -210,7 +342,7 @@ export class CreateMeetingRequest{
   ) { }
 }
 
-export class CreateMeetingResponse {
+export class Response {
   constructor(
     public body: string,
     public headers?: any

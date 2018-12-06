@@ -56,3 +56,7 @@ div.button-container {
   justify-content: space-between;
 }
 
+div.options {
+  height: 500px;
+  padding: 20px;
+}

@@ -27,7 +27,7 @@ public class Schedule {
 	public LambdaLogger logger = null;
 	// month/day/year 
 	public Schedule (String name, String startDate, String endDate,
-			String startTime, String endTime, int duration) { 
+			String startTime, String endTime, int duration) throws Exception{ 
 		// date formatted "(\\d){1,2}([/]){1} (\\d){1,2} ([/]){1}(\\d){4}"
 		// time formatted "(\\d){1,2}([:]){1}(\\d){2}"
 		/*StringTokenizer stSDate = new StringTokenizer(startDate,"/");
@@ -95,7 +95,11 @@ public class Schedule {
 		this.startTime = LocalTime.of(startHour, startMinute);
 		this.endTime = LocalTime.of(endHour, endMinute);
 		this.duration = duration;
-
+		
+		if (this.endDate.isBefore(this.startDate))
+			throw new Exception("Error End Date is before start Date");
+		if (this.endTime.isBefore(this.startTime))
+			throw new Exception("Error End Time is before start Time");
 		// unique value generations
 		this.secretCode = generateCode();
 		this.id = generateCode();
@@ -107,7 +111,7 @@ public class Schedule {
 	}
 
 	public Schedule(String secretCode, String id, String name, String startDate, String endDate,
-			String startTime, String endTime, int duration) {
+			String startTime, String endTime, int duration) throws Exception {
 		int startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute;
 		String[] dateStartArray = startDate.split("/");
 		startMonth = Integer.parseInt(dateStartArray[0]);
@@ -145,7 +149,11 @@ public class Schedule {
 		this.startTime = LocalTime.of(startHour, startMinute);
 		this.endTime = LocalTime.of(endHour, endMinute);
 		
-
+		if (this.endDate.isBefore(this.startDate))
+			throw new Exception("Error End Date is before start Date");
+		if (this.endTime.isBefore(this.startTime))
+			throw new Exception("Error End Time is before start Time");
+		
 		this.secretCode = secretCode;
 		this.id = id;
 	}

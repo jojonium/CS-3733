@@ -244,10 +244,10 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 				LocalDate startOfWeek = LocalDate.of(firstts.getBeginDateTime().getYear(),firstts.getBeginDateTime().getMonth() , firstts.getBeginDateTime().getDayOfMonth());
 				logger.log("Retrieving endOfWeek date: " + endOfWeek.toString() + "\n");
 				boolean hasPreviousWeek = false, hasNextWeek = false;
-				if (startOfWeek.plusDays(-1).isAfter(s.getStartDate())) {
+				if (startOfWeek.plusDays(-3).isAfter(s.getStartDate())) {
 					hasPreviousWeek = true;
 				}
-				if (endOfWeek.plusDays(1).isBefore(s.getEndDate())) {
+				if (endOfWeek.plusDays(3).isBefore(s.getEndDate())) {
 					hasNextWeek = true;
 				}
 				

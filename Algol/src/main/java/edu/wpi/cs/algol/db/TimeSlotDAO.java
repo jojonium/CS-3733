@@ -296,6 +296,7 @@ public class TimeSlotDAO {
 
 		Schedule s = daoS.getSchedule(scheduleID);
 		TimeSlot startts;
+		
 		if (!dateStart.isEmpty()) {			// a valid date has been included
 			String[] date = dateStart.split("-");
 			//String[] time = dateTime.split(":");
@@ -315,7 +316,7 @@ public class TimeSlotDAO {
 				for (int i = 0; i < 5; i ++) { // if day starts on monday
 
 					for(LocalTime time = (s.getStartTime().getMinute()% s.getDuration() == 0) ? s.getStartTime() : s.getStartTime().plusMinutes(s.getDuration() - s.getStartTime().getMinute()%s.getDuration()); time.isBefore(s.getEndTime()); time = time.plusMinutes(s.getDuration())) {
-						if (LocalDate.of(year, month, day).plusDays(i).isBefore(s.getEndDate())) {
+						if (LocalDate.of(year, month, day).plusDays(i).isBefore(s.getEndDate().plusDays(1))) {
 							weekts.add(daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, day).plusDays(i), time)));
 						}
 					}
@@ -326,18 +327,21 @@ public class TimeSlotDAO {
 			// does not start on a monday
 			else {
 				int newDay = day;
+				int i = 1;
 				while (!startts.getBeginDateTime().getDayOfWeek().equals(DayOfWeek.MONDAY)) {
-					startts = daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, newDay).plusDays(-1), s.getStartTime()));
+					
+					startts = daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, newDay).minusDays(i).plusDays(0), s.getStartTime()));
 					if (startts == null) {
 						startts = daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, newDay).plusDays(1), s.getStartTime()));
 						break;
 					}
+					i++;
 
 				}
 				year = startts.getBeginDateTime().getYear();
 				month = startts.getBeginDateTime().getMonthValue();
 				day = startts.getBeginDateTime().getDayOfMonth();
-				for (int i = 0; i < 5; i ++) {
+				for (i = 0; i < 5; i ++) {
 					if (LocalDate.of(year, month, day).plusDays(i).isBefore(s.getEndDate().plusDays(1))) {
 						for(LocalTime time = (s.getStartTime().getMinute()% s.getDuration() == 0) ? s.getStartTime() : s.getStartTime().plusMinutes(s.getDuration() - s.getStartTime().getMinute()%s.getDuration()); time.isBefore(s.getEndTime()); time = time.plusMinutes(s.getDuration())) {
 							weekts.add(daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, day).plusDays(i), time)));
@@ -386,15 +390,6 @@ public class TimeSlotDAO {
 	public boolean openTimeSlotsOnDay(String scheduleID, String secretCode, String date) throws Exception {
 		try {
 
-			String[] dateString = date.split("/");
-
-
-			int month = Integer.parseInt(dateString[0]);
-			int dayOfMonth = Integer.parseInt(dateString[1]);
-			int year = Integer.parseInt(dateString[2]);
-
-			LocalDate inputDate = LocalDate.of(year, month, dayOfMonth);
-
 			// acquiring time
 			ScheduleDAO sDao = new ScheduleDAO();
 			Schedule s = sDao.getSchedule(scheduleID);
@@ -433,9 +428,6 @@ public class TimeSlotDAO {
 			// configure input strings
 
 
-			String[] inputTime = time.split(":");
-			int hour = Integer.parseInt(inputTime[0]);
-			int minute = Integer.parseInt(inputTime[1]);
 
 			ScheduleDAO sDao = new ScheduleDAO();
 			Schedule s = sDao.getSchedule(scheduleID);
@@ -487,12 +479,6 @@ public class TimeSlotDAO {
 		try {
 
 			// configure input strings
-			String[] dateString = date.split("/");
-
-
-			int month = Integer.parseInt(dateString[0]);
-			int dayOfMonth = Integer.parseInt(dateString[1]);
-			int year = Integer.parseInt(dateString[2]);
 
 			// acquiring time
 			ScheduleDAO sDao = new ScheduleDAO();
@@ -500,7 +486,7 @@ public class TimeSlotDAO {
 			LocalTime startTime = s.getStartTime();
 
 
-			LocalDate inputDate = LocalDate.of(year, month, dayOfMonth);
+		
 			//			LocalDate nextDate = inputDate.plusDays(1);
 			//LocalTime inputTime = LocalTime.of(startTime.getHour(), startTime.getMinute());
 
@@ -549,10 +535,6 @@ public class TimeSlotDAO {
 	 */
 	public boolean closeTimeSlotsAtTime(String scheduleID, String secretCode, String time) throws Exception {
 		try {
-
-			String[] inputTime = time.split(":");
-			int hour = Integer.parseInt(inputTime[0]);
-			int minute = Integer.parseInt(inputTime[1]);
 
 			ScheduleDAO sDao = new ScheduleDAO();
 			Schedule s = sDao.getSchedule(scheduleID);

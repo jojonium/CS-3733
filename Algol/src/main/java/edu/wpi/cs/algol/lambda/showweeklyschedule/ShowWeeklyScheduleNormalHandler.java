@@ -243,7 +243,15 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 				LocalDate endOfWeek = LocalDate.of(lastts.getBeginDateTime().getYear(), lastts.getBeginDateTime().getMonth(), lastts.getBeginDateTime().getDayOfMonth());
 				LocalDate startOfWeek = LocalDate.of(firstts.getBeginDateTime().getYear(),firstts.getBeginDateTime().getMonth() , firstts.getBeginDateTime().getDayOfMonth());
 				logger.log("Retrieving endOfWeek date: " + endOfWeek.toString() + "\n");
-				resp = new ShowWeeklyScheduleResponse(s.getName(),startOfWeek,endOfWeek,LocalTime.of(firstts.getBeginDateTime().getHour(), firstts.getBeginDateTime().getMinute()),LocalTime.of(lastts.getBeginDateTime().getHour(), lastts.getBeginDateTime().getMinute()),s.getDuration(), ts);
+				boolean hasPreviousWeek = false, hasNextWeek = false;
+				if (startOfWeek.plusDays(-1).isAfter(s.getStartDate())) {
+					hasPreviousWeek = true;
+				}
+				if (endOfWeek.plusDays(1).isBefore(s.getEndDate())) {
+					hasNextWeek = true;
+				}
+				
+				resp = new ShowWeeklyScheduleResponse(s.getName(),startOfWeek,endOfWeek,LocalTime.of(firstts.getBeginDateTime().getHour(), firstts.getBeginDateTime().getMinute()),LocalTime.of(lastts.getBeginDateTime().getHour(), lastts.getBeginDateTime().getMinute()),s.getDuration(), ts, hasPreviousWeek, hasNextWeek);
 				logger.log("ShowWeeklySchedule response: " + resp.toString() + "\n");
 			} catch (Exception e) {
 				resp = new ShowWeeklyScheduleResponse(

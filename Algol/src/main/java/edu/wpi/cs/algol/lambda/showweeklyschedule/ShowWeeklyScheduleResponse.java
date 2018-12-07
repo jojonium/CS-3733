@@ -47,8 +47,8 @@ public class ShowWeeklyScheduleResponse {
 		if (timeSlots != null) 
 			return "ShowWeeklyScheduleResponse [name=" + name + ", startDate=" + startDate
 					+ ", endDate=" + endDate + ", startTime=" + startTime + ", endTime=" + endTime + ", duration="
-					+ duration + ", timeSlot=" + timeSlots + " , hasPreviousWeek=" + hasPreviousWeek + 
-					" , hasNextWeek=" + hasNextWeek +", httpCode=" + httpCode + "]";
+					+ duration + ", timeSlot=" + timeSlots + ", hasPreviousWeek=" + hasPreviousWeek + 
+					", hasNextWeek=" + hasNextWeek +", httpCode=" + httpCode + "]";
 		else
 			return "response=\" " + response + ", httpCode=" + httpCode + "]";
 	

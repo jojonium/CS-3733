@@ -27,12 +27,12 @@
 </div>
 
 <div class="button-container" *ngIf="week && !errorMessage">
-  <button mat-raised-button color="primary" type="button" (click)="goToPreviousWeek()" [disabled]="!week.hasPreviousWeek">
+  <button mat-raised-button color="primary" type="button" (click)="goToPreviousWeek()" [disabled]="!hasPreviousWeek">
     <i class="material-icons">navigate_before</i>
     PREVIOUS WEEK
   </button>
     
-  <button mat-raised-button color="primary" type="button" (click)="goToNextWeek()" [disabled]="!week.hasNextWeek">
+  <button mat-raised-button color="primary" type="button" (click)="goToNextWeek()" [disabled]="!hasNextWeek">
     NEXT WEEK
     <i class="material-icons">navigate_next</i>
   </button>
@@ -87,7 +87,8 @@
       
       <mat-action-row>
         <button mat-button type="button" color="warn" (click)="deleteSchedule(sscInput.value)">DELETE SCHEDULE</button>
-        <button mat-button type="button" (click)="getTimeSlotsOrganizer(sscInput.value)">ORGANIZER MODE</button>
+        <button mat-button type="button" (click)="leaveOrganizerMode()" *ngIf="secretCode">LEAVE ORGANIZER MODE</button>
+        <button mat-button type="button" (click)="getTimeSlotsOrganizer(sscInput.value)" #secretCodeInput>ORGANIZER MODE</button>
       </mat-action-row>
     </mat-expansion-panel>
   </mat-accordion>

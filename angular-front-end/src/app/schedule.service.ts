@@ -24,7 +24,8 @@ export class ScheduleService {
   private cancelMeetingUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/cancelmeeting";
   private viewWeeklyScheduleOrganizerUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/viewweeklyscheduleorganizer";
   private deleteScheduleUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/deleteschedule";
-  private closeTimeSlotUrl = " https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/closetimeslot";
+  private closeTimeSlotUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/closetimeslot";
+  private openTimeSlotUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/opentimeslot";
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -158,6 +159,21 @@ export class ScheduleService {
         console.log(resp);
       }),
       catchError(this.handleError<Response>('closeTimeSlot')));
+  }
+  
+  /* POSTs a request to open a timeslot */
+  openTimeSlot(scheduleID: string, secretCode: string, date: string, time: string): Observable<Response> {
+    console.log(`openTimeSlot: Attempting to send with scheduleID=${scheduleID}, secretCode=${secretCode}, date=${date}, and time=${time}`);
+    
+    var parameters = {"scheduleID":scheduleID, "secretCode":secretCode, "date":date, "time":time};
+    console.log(parameters);
+    
+    return this.http.post<Response>(this.openTimeSlotUrl, parameters, this.httpOptions).pipe(
+      tap((resp: Response) => {
+        console.log('received response:');
+        console.log(resp);
+      }),
+      catchError(this.handleError<Response>('openTimeSlot')));
   }
 
     

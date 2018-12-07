@@ -83,20 +83,18 @@ export class ViewWeeklyScheduleComponent implements OnInit {
   }
   
   timeSlotClick(text: string, index: number): void {
-    console.log("openTimeSlotClick, index: " + index);
-    if (text == "Open") {
-      let d = this.dateArray[(index % (this.numDays + 1)) - 1];
-      let t = this.timeArray[Math.floor(index / (this.numDays + 1)) - 1];
-
+    let d = this.dateArray[(index % (this.numDays + 1)) - 1];
+    let t = this.timeArray[Math.floor(index / (this.numDays + 1)) - 1];
       
+    if (text == "Open") {
       if (this.secretCode) {  // organizer close timeslot
         this.scheduleService.closeTimeSlot(this.id, this.secretCode, this.prettyPrintDate(d), (t.hour + ':' + t.minute))
           .subscribe(resp => {
             var respBody = JSON.parse(resp.body);
-            if (respBody.httpCode == 200 || respBody.httpCode == 202) {
+            if (respBody.httpCode == 202) {
               console.log(respBody);
-              this.getTimeSlots();
-            } else if (this.week.httpCode > 400) {
+              this.refresh();
+            } else if (+this.week.httpCode > 400) {
               //TODO open snackbar for error message
             }
           });
@@ -113,12 +111,24 @@ export class ViewWeeklyScheduleComponent implements OnInit {
         }
         this.openCreateMeetingDialog();
       }
+    } else if (text == "—" && this.secretCode) {
+      // organizer open time slot
+      this.scheduleService.openTimeSlot(this.id, this.secretCode, this.prettyPrintDate(d), (t.hour + ':' + t.minute))
+        .subscribe(resp => {
+          var respBody = JSON.parse(resp.body);
+          if (respBody.httpCode == 202) {
+            console.log(respBody);
+            this.refresh();
+          } else if (+this.week.httpCode > 400) {
+            //TODO open snackbar for error message
+          }
+        });
     }
   }
   
   makeTiles = (input : TimeSlot[]) => {
-    console.log(this.week.hasPreviousWeek);
-    console.log(this.week.hasNextWeek);
+    this.hasPreviousWeek = (this.week.hasPreviousWeek == 'true');
+    this.hasNextWeek = (this.week.hasNextWeek == 'true');
     
     this.numDays = (Math.abs(this.getDate(this.week.startDate).valueOf() - this.getDate(this.week.endDate).valueOf()) / 8.64e+7) + 1;
     this.numTimes = input.length / this.numDays;
@@ -213,6 +223,18 @@ export class ViewWeeklyScheduleComponent implements OnInit {
     }
   };
   
+  refresh(): void {
+    if (this.secretCode)
+      this.getTimeSlotsOrganizer(this.secretCode);
+    else
+      this.getTimeSlots();
+  }
+  
+  leaveOrganizerMode() {
+    this.secretCode = '';
+    this.refresh();
+  }
+  
   getTimeSlots(): void {
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) => {
@@ -234,6 +256,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
   
   getTimeSlotsOrganizer(secretCode: string): void {
     this.secretCode = secretCode;
+    
     this.scheduleService.getScheduleOrganizer(this.id, this.secretCode, this.reqDate)
       .subscribe(vwsResponse => {
         this.week = JSON.parse(vwsResponse.body);
@@ -291,7 +314,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
                 console.log("RESPONSE BODY:");
                 console.log(responseBody);
                 this.vsMessage = "Meeting cancelled";
-                this.getTimeSlots();
+                this.refresh();
               } else if (responseBody.httpCode == 400) { // failure
                 this.vsMessage = "400 error: invalid secret code";
               }
@@ -332,7 +355,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
 
   ngOnInit() {
     console.log('ngOnInit: about to call scheduleService.getSchedule');
-    this.getTimeSlots();
+    this.refresh();
   }
 
 }
@@ -423,7 +446,7 @@ export class CreateMeetingDialog {
           this.message = "Your meeting was successfully scheduled! Your secret code is:";
           this.secretCode = responseBody['password'];
           this.message2 = "Write this down. You'll need it if you want to cancel your meeting in the future.";
-          data.backRef.getTimeSlots();
+          data.backRef.refresh();
         } else if (responseBody.httpCode == 400) {    // failure
           this.header = "409 error"
           this.message = "That time slot isn't open.";

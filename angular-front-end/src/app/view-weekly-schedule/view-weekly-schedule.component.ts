@@ -34,6 +34,8 @@ export class ViewWeeklyScheduleComponent implements OnInit {
   timeArray: MyTime[];
   vsMessage: string;
   secretCode: string;
+  hasPreviousWeek: boolean;
+  hasNextWeek: boolean;
   
   getDate = (d : MyDate) => {
     return new Date(d.year, d.month - 1, d.day);
@@ -115,6 +117,9 @@ export class ViewWeeklyScheduleComponent implements OnInit {
   }
   
   makeTiles = (input : TimeSlot[]) => {
+    console.log(this.week.hasPreviousWeek);
+    console.log(this.week.hasNextWeek);
+    
     this.numDays = (Math.abs(this.getDate(this.week.startDate).valueOf() - this.getDate(this.week.endDate).valueOf()) / 8.64e+7) + 1;
     this.numTimes = input.length / this.numDays;
     
@@ -169,11 +174,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
         ++z;
       }
     }
-    
-    console.log(s);
-    console.log(this.secretCode);
-    console.log(this.secretCode ? true : false);
-    
+        
     var nextText;
     // add in the times and timeslots
     var j = 0; var c = 0; var r = 0;

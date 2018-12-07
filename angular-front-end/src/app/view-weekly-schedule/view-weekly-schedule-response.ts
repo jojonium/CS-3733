@@ -14,6 +14,8 @@ export class ViewWeeklyScheduleResponseBody {
     public startDate: MyDate,
     public startTime: MyTime,
     public timeSlots: TimeSlot[],
+    public hasPreviousWeek: boolean,
+    public hasNextWeek: boolean,
     public httpCode: string
   ) { }
 }

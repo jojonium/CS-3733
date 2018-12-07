@@ -16,8 +16,8 @@ public class ShowWeeklyScheduleResponse {
 	public LocalTime endTime;
 	public int duration;
 	public ArrayList<TimeSlot> timeSlots;
-	public boolean hasPreviousWeek;
-	public boolean hasNextWeek;
+	public String hasPreviousWeek;
+	public String hasNextWeek;
 	public int httpCode;
 
 	/* used for errors or other responses that require a message */
@@ -29,7 +29,7 @@ public class ShowWeeklyScheduleResponse {
 
 	/* used for successful responses */
 	public ShowWeeklyScheduleResponse(String name, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime, 
-			int duration, ArrayList<TimeSlot> timeSlots, boolean hasPreviousWeek, boolean hasNextWeek) {
+			int duration, ArrayList<TimeSlot> timeSlots, String hasPreviousWeek, String hasNextWeek) {
 		
 		this.name = name;
 		this.startDate = startDate;
@@ -38,6 +38,8 @@ public class ShowWeeklyScheduleResponse {
 		this.endTime = endTime;
 		this.duration = duration;
 		this.timeSlots = timeSlots;
+		this.hasPreviousWeek = hasPreviousWeek;
+		this.hasNextWeek = hasNextWeek;
 		this.httpCode = 200;
 	}
 

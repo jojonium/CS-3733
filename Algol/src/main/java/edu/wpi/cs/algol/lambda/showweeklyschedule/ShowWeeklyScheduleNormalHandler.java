@@ -247,7 +247,9 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 				
 				boolean hasNextWeek = endOfWeek.plusDays(3).isBefore(s.getEndDate().plusDays(1)); 
 			
-				resp = new ShowWeeklyScheduleResponse(s.getName(),startOfWeek,endOfWeek,LocalTime.of(firstts.getBeginDateTime().getHour(), firstts.getBeginDateTime().getMinute()),LocalTime.of(lastts.getBeginDateTime().getHour(), lastts.getBeginDateTime().getMinute()),s.getDuration(), ts, hasPreviousWeek, hasNextWeek);
+				resp = new ShowWeeklyScheduleResponse(s.getName(),startOfWeek,endOfWeek,LocalTime.of(firstts.getBeginDateTime().getHour(), 
+						firstts.getBeginDateTime().getMinute()),LocalTime.of(lastts.getBeginDateTime().getHour(), 
+								lastts.getBeginDateTime().getMinute()),s.getDuration(), ts, String.valueOf(hasPreviousWeek), String.valueOf(hasNextWeek));
 				logger.log("ShowWeeklySchedule response: " + resp.toString() + "\n");
 			} catch (Exception e) {
 				resp = new ShowWeeklyScheduleResponse(

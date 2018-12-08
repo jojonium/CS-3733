@@ -296,7 +296,7 @@ public class TimeSlotDAO {
 
 		Schedule s = daoS.getSchedule(scheduleID);
 		TimeSlot startts;
-		
+
 		if (!dateStart.isEmpty()) {			// a valid date has been included
 			String[] date = dateStart.split("-");
 			//String[] time = dateTime.split(":");
@@ -326,27 +326,33 @@ public class TimeSlotDAO {
 			}
 			// does not start on a monday
 			else {
-				int newDay = day;
-				int i = 1;
+
+				int i = 0; // 12/21/2018
 				while (!startts.getBeginDateTime().getDayOfWeek().equals(DayOfWeek.MONDAY)) {
-					
-					startts = daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, newDay).minusDays(i).plusDays(0), s.getStartTime()));
+
+					startts = daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, day).minusDays(i), s.getStartTime()));
 					if (startts == null) {
-						startts = daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, newDay).plusDays(1), s.getStartTime()));
+						startts = this.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, day).minusDays(i).plusDays(1), s.getStartTime()));
 						break;
 					}
+
 					i++;
 
 				}
 				year = startts.getBeginDateTime().getYear();
 				month = startts.getBeginDateTime().getMonthValue();
 				day = startts.getBeginDateTime().getDayOfMonth();
-				for (i = 0; i < 5; i ++) {
-					if (LocalDate.of(year, month, day).plusDays(i).isBefore(s.getEndDate().plusDays(1))) {
+				LocalDate ldate = LocalDate.of(year, month, day);
+				int j = 0;
+				while (ldate.plusDays(j).isBefore(s.getEndDate().plusDays(1)) && !LocalDateTime.of(ldate.plusDays(j), s.getStartTime()).getDayOfWeek().equals(DayOfWeek.SATURDAY)) {
+					if (LocalDate.of(year, month, day).plusDays(j).isBefore(s.getEndDate().plusDays(1))) {
 						for(LocalTime time = (s.getStartTime().getMinute()% s.getDuration() == 0) ? s.getStartTime() : s.getStartTime().plusMinutes(s.getDuration() - s.getStartTime().getMinute()%s.getDuration()); time.isBefore(s.getEndTime()); time = time.plusMinutes(s.getDuration())) {
-							weekts.add(daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, day).plusDays(i), time)));
+							if (daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, day).plusDays(j), time)) !=null ) {
+								weekts.add(daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, day).plusDays(j), time)));
+							}
 						}
 					}
+					j++;
 				}
 			}
 
@@ -363,9 +369,10 @@ public class TimeSlotDAO {
 			int day = startts.getBeginDateTime().getDayOfMonth();
 			int month = startts.getBeginDateTime().getMonthValue();
 			int year = startts.getBeginDateTime().getYear();
+			weekts.add(startts);
+			for (int i = 1;LocalDate.of(year, month, day).plusDays(i).plusDays(0).isBefore(s.getEndDate().plusDays(1).plusDays(0)); i ++) {
 
-			for (int i = 0;LocalDate.of(year, month, day).plusDays(i).isBefore(s.getEndDate().plusDays(1)); i ++) {
-				if ( !startts.getBeginDateTime().getDayOfWeek().equals(DayOfWeek.FRIDAY)) {
+				if (!startts.getBeginDateTime().getDayOfWeek().equals(DayOfWeek.FRIDAY)) {
 					for(LocalTime time = (s.getStartTime().getMinute()% s.getDuration() == 0) ? s.getStartTime() : s.getStartTime().plusMinutes(s.getDuration() - s.getStartTime().getMinute()%s.getDuration()); time.isBefore(s.getEndTime()); time = time.plusMinutes(s.getDuration())) {
 
 						startts = daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, day).plusDays(i), time));
@@ -401,9 +408,9 @@ public class TimeSlotDAO {
 				boolean status = false;
 				LocalTime t = startTime;
 				while (t.isBefore(s.getEndTime())) {
-					
-						status = this.openTimeSlot(scheduleID, secretCode, date, t.toString());
-					
+
+					status = this.openTimeSlot(scheduleID, secretCode, date, t.toString());
+
 					t=t.plusMinutes(s.getDuration());
 					t=t.plusMinutes(0);
 				}
@@ -486,7 +493,7 @@ public class TimeSlotDAO {
 			LocalTime startTime = s.getStartTime();
 
 
-		
+
 			//			LocalDate nextDate = inputDate.plusDays(1);
 			//LocalTime inputTime = LocalTime.of(startTime.getHour(), startTime.getMinute());
 

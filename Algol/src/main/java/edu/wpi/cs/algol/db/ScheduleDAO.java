@@ -204,31 +204,52 @@ public class ScheduleDAO {
 	}
 
 	// Adjusting times
-	/*public boolean adjustTimes(String id, String secretCode, String startTime, String endTime) throws Exception {
+	public boolean adjustTimes(String id, String secretCode, String startTime, String endTime) throws Exception {
 		try {
 			if (this.getSchedule(id).getSecretCode().equals(secretCode)){
 				PreparedStatement ps = conn.prepareStatement("UPDATE Schedules SET startTime=?, endTime=? WHERE id=?;");
 
-				LocalTime sameStartDate = this.getSchedule(id).getStartTime();
-				LocalTime sameEndDate = this.getSchedule(id).getEndTime();
+				LocalTime sameStartTime = this.getSchedule(id).getStartTime();
+				LocalTime sameEndTime = this.getSchedule(id).getEndTime();
+				
+				int startHour, startMinute, endHour, endMinute;
+				int duration = this.getSchedule(id).getDuration();
+				String[] timeStartArray = startTime.split(":");
+				startHour = Integer.parseInt(timeStartArray[0]);
+				startMinute = Integer.parseInt(timeStartArray[1]);
 
+				String[] timeEndArray = endTime.split(":");
+				endHour = Integer.parseInt(timeEndArray[0]);
+				endMinute = Integer.parseInt(timeEndArray[1]);
+			
+				// check for valid minutes 
+				if (startMinute % duration != 0) {
+					startMinute += duration - (startMinute %duration);
+				}
+				
+				if ((endMinute % duration) != 0) {
+					endMinute -= (endMinute % duration);
+				}
+				String newStartTime = convT(startHour, startMinute);
+				String newEndTime = convT(endHour,endMinute);
 				int numAffected = -1;
 
-				ps.setString(1, (!startTime.isEmpty()) ? startTime : rewriteS(sameStartDate.toString()));
-				ps.setString(2, (!endTime.isEmpty()) ? endTime : rewriteS(sameEndDate.toString()));
+				ps.setString(1, (!startTime.isEmpty()) ? newStartTime : sameStartTime.toString());
+				ps.setString(2, (!endTime.isEmpty()) ? newEndTime : sameEndTime.toString());
 				ps.setString(3, id);
 
 				numAffected = ps.executeUpdate();
 
 				TimeSlotDAO tDao = new TimeSlotDAO();
 				// add more timeslots
-				if(!startTime.equals(rewriteS(sameStartDate.toString()))) {
+				if(!newStartTime.equals(sameStartTime.toString())) {
 					
-					String[] splitDate = startTime.split(":");
+					String[] splitTime = newStartTime.split(":");
+					int hour = Integer.parseInt(splitTime[0]);
+					int minute = Integer.parseInt(splitTime[1]);
 
-					for (LocalDate d = LocalDate.of(Integer.parseInt(splitDate[2]), Integer.parseInt(splitDate[0]), 
-							Integer.parseInt(splitDate[1])); d.isBefore(sameStartDate); d= d.plusDays(1)) {
-						for (LocalTime t = this.getSchedule(id).getStartTime(); t.isBefore(this.getSchedule(id).getEndTime());
+					for (LocalDate d = this.getSchedule(id).getStartDate(); d.isBefore(this.getSchedule(id).getEndDate().plusDays(1)); d= d.plusDays(1)) {
+						for (LocalTime t = LocalTime.of(hour, minute); t.isBefore(this.getSchedule(id).getStartTime());
 								t = t.plusMinutes(this.getSchedule(id).getDuration())) {
 						
 							tDao.addTimeSlot(new TimeSlot(LocalDateTime.of(d,t), id));
@@ -237,16 +258,16 @@ public class ScheduleDAO {
 					}
 				}
 
-				if(!endTime.equals(rewriteS(sameEndDate.toString()))) {
+				if(!newEndTime.equals(sameEndTime.toString())) {
 					
-					String[] splitDate = endTime.split(":");
-					sameEndDate = sameEndDate.plusDays(1);
-					
-					for (LocalDate d = sameEndDate; d.isBefore(LocalDate.of(Integer.parseInt(splitDate[2]), Integer.parseInt(splitDate[0]), 
-							Integer.parseInt(splitDate[1])).plusDays(1)); d= d.plusDays(1)) {
-						for (LocalTime t = this.getSchedule(id).getStartTime(); t.isBefore(this.getSchedule(id).getEndTime());
+					String[] splitTime = newEndTime.split(":");
+					int hour = Integer.parseInt(splitTime[0]);
+					int minute = Integer.parseInt(splitTime[1]);
+
+					for (LocalDate d = this.getSchedule(id).getStartDate(); d.isBefore(this.getSchedule(id).getEndDate().plusDays(1)); d= d.plusDays(1)) {
+						for (LocalTime t = this.getSchedule(id).getEndTime(); t.isBefore(LocalTime.of(hour, minute));
 								t = t.plusMinutes(this.getSchedule(id).getDuration())) {
-							
+						
 							tDao.addTimeSlot(new TimeSlot(LocalDateTime.of(d,t), id));
 						
 						}
@@ -260,7 +281,7 @@ public class ScheduleDAO {
 		} catch (Exception e) {
 			throw new Exception("Unable to adjust start/end dates: " + e.getMessage());
 		}
-	}*/
+	}
 
 
 	private Schedule createSchedule(ResultSet resultSet) throws Exception {
@@ -298,6 +319,10 @@ public class ScheduleDAO {
 
 	}
 
+	private String convT(int hour, int minute) {
+		
+		return LocalTime.of(hour,minute).toString();
+	}
 
 
 }

@@ -1,5 +1,6 @@
 header h1 {
   margin-left: 20px;
+  font-size: 1.3em;
 }
 
 header a {
@@ -9,4 +10,17 @@ header a {
 div.app-container {
   display: flex;
   justify-content: center;
+}
+
+.fill-remaining-space {
+  flex: 1 1 auto;
+}
+
+.spacer {
+  width: 30px;
+}
+
+mat-toolbar a {
+  color: white;
+  text-decoration: none;
 }

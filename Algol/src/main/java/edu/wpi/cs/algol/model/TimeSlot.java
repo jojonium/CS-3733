@@ -122,6 +122,10 @@ public class TimeSlot {
 	public String getSecretCode() {
 		return secretCode;
 	}
+	
+	public void setSecretCode(String s) {
+		this.secretCode = s;
+	}
 
 
 	public LocalDateTime getBeginDateTime() {
@@ -133,10 +137,19 @@ public class TimeSlot {
 	public boolean isOpen() {
 		return isOpen;
 	}
+	
+	public void setOpen(boolean b) {
+		this.isOpen = b;
+	}
+	
 
 
 	public String getRequester() {
 		return requester;
+	}
+	
+	public void setRequester(String s) {
+		this.requester = s;
 	}
 
 	public String getScheduleId() {

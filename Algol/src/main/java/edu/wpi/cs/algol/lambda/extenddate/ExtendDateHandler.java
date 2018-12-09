@@ -17,12 +17,10 @@ import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.google.gson.Gson;
 
 import edu.wpi.cs.algol.db.ScheduleDAO;
-import edu.wpi.cs.algol.model.TimeSlot;
 
 public class ExtendDateHandler implements RequestStreamHandler {
 
 	public LambdaLogger logger = null;
-	public TimeSlot t;
 
 	boolean extendDate(String id, String sc, String sd, String ed) throws Exception{
 		boolean extended = false;

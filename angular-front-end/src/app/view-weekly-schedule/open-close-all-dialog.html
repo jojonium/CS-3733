@@ -14,10 +14,9 @@
     <p *ngIf="finished">{{message2}}</p>
     
   </div>
-  <div mat-dialog-actions style="display: flex; justify-content: flex-end; margin: 0">
-    <mat-progress-spinner diameter="60" mode="indeterminate" *ngIf="submitted && !finished"></mat-progress-spinner>
-    <button mat-raised-button type="button" (click)="closeCreateMeetingDialog()" style="margin: 0 5px 0 10px;">{{closeButton}}</button>
-    <button mat-raised-button *ngIf="!finished" type="submit" (click)="requestMeeting(data)" color="primary" style="margin-left: 5px;" [disabled]="submitted">SUBMIT</button>
+  <div mat-dialog-actions style="display: flex; justify-content: flex-end">
+    <button mat-raised-button type="button" (click)="closeCreateMeetingDialog()" style="margin-right: 5px;">{{closeButton}}</button>
+    <button mat-raised-button *ngIf="!finished" type="submit" (click)="requestMeeting(data)" color="primary" style="margin-left: 5px;">SUBMIT</button>
   </div>
 </form>
 

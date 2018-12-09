@@ -377,6 +377,13 @@ export interface CreateMeetingData {
   backRef: ViewWeeklyScheduleComponent
 }
 
+export interface OpenCloseAllData {
+  date: Date,
+  time: MyTime,
+  scheduleID: string,
+  secretCode: string
+}
+
 export class CancelMeetingRequest{
   constructor(
     public scheduleID: string,
@@ -420,6 +427,7 @@ export class CreateMeetingDialog {
   header = "Request meeting";
   secretCode: string;
   finished = false;
+  submitted = false;
   closeButton = "CANCEL";
 
   closeCreateMeetingDialog(): void {
@@ -433,6 +441,7 @@ export class CreateMeetingDialog {
       "time": data.time.hour + ":" + data.time.minute
     };
     console.log(modelToSend);
+    this.submitted = true;
     this.scheduleService.createMeeting(modelToSend)
       .subscribe(cmResponse => {
         console.log(`CreateMeetingComponent received response: ${cmResponse}`);
@@ -454,3 +463,33 @@ export class CreateMeetingDialog {
       });
   }
 }
+
+@Component({
+  selector: 'open-close-all-dialog',
+  templateUrl: 'open-close-all-dialog.html',
+})
+export class OpenCloseAllDialog {
+  constructor(
+    public dialogRef: MatDialogRef<OpenCloseAllDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: OpenCloseAllDialog,
+    private scheduleService: ScheduleService
+  ) { }
+  
+  date: Date;
+  time: MyTime;
+  
+  closeOpenCloseAllDialog(): void {
+    this.dialogRef.close();
+  }
+  
+  openAllTime(data: OpenCloseAllData): void {
+    var timeString = data.time.hour + ':' + data.time.minute;
+    /*this.scheduleService.openAllTimeSlotTime(timeString, data.scheduleID, data.secretCode)
+      .subscribe(resp => {
+        console.log(`OpenCloseAllComponent received response: ${resp}`);
+        var respBody = JSON.parse(resp.body);*/
+        
+  }
+}
+    
+  

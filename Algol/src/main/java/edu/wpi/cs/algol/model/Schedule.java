@@ -1,11 +1,13 @@
 package edu.wpi.cs.algol.model;
 
+import java.sql.Timestamp;
 import java.time.DayOfWeek;
 //import java.awt.List;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 //import java.util.Iterator;
 //import java.util.NoSuchElementException;
 import java.util.Random;
@@ -23,7 +25,7 @@ public class Schedule {
 	private LocalTime endTime;
 	private int duration;
 	private ArrayList<TimeSlot> timeSlots = new ArrayList<TimeSlot>();
-
+	private java.sql.Timestamp timestamp;
 	public LambdaLogger logger = null;
 	// month/day/year 
 	public Schedule (String name, String startDate, String endDate,
@@ -81,37 +83,47 @@ public class Schedule {
 		endHour = Integer.parseInt(timeEndArray[0]);
 		endMinute = Integer.parseInt(timeEndArray[1]);
 
+
 		// check for valid minutes 
 		if (startMinute % duration != 0) {
 			startMinute += duration - (startMinute %duration);
 		}
-		
+
 		if ((endMinute % duration) != 0) {
 			endMinute -= (endMinute % duration);
 		}
+
+		// check if enough time between start and end time for a time slot
+		if (LocalTime.of(startHour, startMinute).equals(LocalTime.of(endHour,endMinute))) {
+			throw new Exception("Error: Not enough time between start & end time for a time slot");
+		}
+
 		this.name = name;
 		this.startDate = LocalDate.of(startYear, startMonth, startDay);
 		this.endDate = LocalDate.of(endYear, endMonth, endDay);
-		this.startTime = LocalTime.of(startHour, startMinute);
-		this.endTime = LocalTime.of(endHour, endMinute);
+		this.startTime = (startMinute == 60) ? LocalTime.of(startHour, 0).plusHours(1) : LocalTime.of(startHour, startMinute);
+		this.endTime = (endMinute == 60) ? LocalTime.of(endHour, 0).plusHours(1) : LocalTime.of(endHour, endMinute);
 		this.duration = duration;
-		
-		if (this.endDate.isBefore(this.startDate))
-			throw new Exception("Error End Date is before start Date");
+		if (this.endDate.isBefore(this.startDate)) {
+			if (!this.endDate.isEqual(this.startDate))
+				throw new Exception("Error end Date is before start Date");
+		}
 		if (this.endTime.isBefore(this.startTime))
-			throw new Exception("Error End Time is before start Time");
+			throw new Exception("Error end Time is before start Time");
 		// unique value generations
 		this.secretCode = generateCode();
 		this.id = generateCode();
 
 		timeSlotGeneration();
 
-
+		Calendar calendar = Calendar.getInstance();
+		this.timestamp = new java.sql.Timestamp(calendar.getTime().getTime());
 
 	}
 
+	// db
 	public Schedule(String secretCode, String id, String name, String startDate, String endDate,
-			String startTime, String endTime, int duration) throws Exception {
+			String startTime, String endTime, int duration, String timestamp) throws Exception {
 		int startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute;
 		String[] dateStartArray = startDate.split("/");
 		startMonth = Integer.parseInt(dateStartArray[0]);
@@ -133,29 +145,34 @@ public class Schedule {
 		endHour = Integer.parseInt(timeEndArray[0]);
 		endMinute = Integer.parseInt(timeEndArray[1]);
 		this.duration = duration;
-		
+
 		// check for valid minutes for string constructor
 		if (startMinute % duration != 0) {
 			startMinute += duration - (startMinute %duration);
+
 		}
-		
+
 		if ((endMinute % duration) != 0) {
-			endMinute -= (startMinute % duration);
+			endMinute -= (endMinute % duration);
 		}
-		
+
 		this.name = name;
 		this.startDate = LocalDate.of(startYear, startMonth, startDay);
 		this.endDate = LocalDate.of(endYear, endMonth, endDay);
-		this.startTime = LocalTime.of(startHour, startMinute);
-		this.endTime = LocalTime.of(endHour, endMinute);
-		
+		this.startTime = (startMinute == 60) ? LocalTime.of(startHour, 0).plusHours(1) : LocalTime.of(startHour, startMinute);
+		this.endTime = (endMinute == 60) ? LocalTime.of(endHour, 0).plusHours(1) : LocalTime.of(endHour, endMinute);
+
 		if (this.endDate.isBefore(this.startDate))
 			throw new Exception("Error End Date is before start Date");
 		if (this.endTime.isBefore(this.startTime))
 			throw new Exception("Error End Time is before start Time");
-		
+
 		this.secretCode = secretCode;
 		this.id = id;
+		
+		
+		this.timestamp = Timestamp.valueOf(timestamp);
+		
 	}
 
 	private static String generateCode(){
@@ -239,6 +256,10 @@ public class Schedule {
 
 	public ArrayList<TimeSlot> getTimeSlots() {
 		return this.timeSlots;
+	}
+	
+	public Timestamp getTimestamp() {
+		return this.timestamp;
 	}
 
 	/*private class TimeSlotIterator implements Iterator<TimeSlot> {

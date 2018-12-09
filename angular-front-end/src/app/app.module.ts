@@ -17,7 +17,8 @@ import { RouterModule, Routes } from '@angular/router'
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+
 
 import { AppComponent } from './app.component';
 import { CreateScheduleComponent, DialogFailure, DialogSuccess } from './create-schedule/create-schedule.component';
@@ -53,8 +54,8 @@ import { AboutComponent } from './about/about.component';
     MatToolbarModule,
     MatGridListModule,
     MatProgressSpinnerModule,
+    MatIconModule,
     MatExpansionModule,
-    MatCardModule,
     FormsModule,
     ReactiveFormsModule,
     MatSelectModule,

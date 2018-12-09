@@ -10,11 +10,13 @@
     
     <p *ngIf="secretCode">Click on an unfilled time slot to toggle it between open and closed</p>
     
+    <p *ngIf="secretCode">Click on a time or date to open/close all time slots for that time/date</p>
+    
     <mat-grid-list *ngIf="week" [cols]="numDays + 1" rowHeight="100px">
       <mat-grid-tile
           *ngFor="let tile of tiles; let i = index"
           [attr.data-index]="i"
-          (click)="timeSlotClick(tile.text, i)"
+          (click)="timeSlotClick(tile.text, tile.text2, i)"
           [ngClass]="tile.class">{{tile.text}}<br>{{tile.text2}}
       </mat-grid-tile>
     </mat-grid-list>
@@ -88,7 +90,7 @@
       <mat-action-row>
         <button mat-button type="button" color="warn" (click)="deleteSchedule(sscInput.value)">DELETE SCHEDULE</button>
         <button mat-button type="button" (click)="leaveOrganizerMode()" *ngIf="secretCode">LEAVE ORGANIZER MODE</button>
-        <button mat-button type="button" (click)="getTimeSlotsOrganizer(sscInput.value)" #secretCodeInput>ORGANIZER MODE</button>
+        <button mat-button type="button" (click)="getTimeSlotsOrganizer(sscInput.value)" *ngIf="!secretCode" #secretCodeInput>ORGANIZER MODE</button>
       </mat-action-row>
     </mat-expansion-panel>
   </mat-accordion>

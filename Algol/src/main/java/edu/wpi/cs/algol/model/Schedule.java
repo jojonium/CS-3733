@@ -1,11 +1,13 @@
 package edu.wpi.cs.algol.model;
 
+import java.sql.Timestamp;
 import java.time.DayOfWeek;
 //import java.awt.List;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 //import java.util.Iterator;
 //import java.util.NoSuchElementException;
 import java.util.Random;
@@ -23,7 +25,7 @@ public class Schedule {
 	private LocalTime endTime;
 	private int duration;
 	private ArrayList<TimeSlot> timeSlots = new ArrayList<TimeSlot>();
-
+	private java.sql.Timestamp timestamp;
 	public LambdaLogger logger = null;
 	// month/day/year 
 	public Schedule (String name, String startDate, String endDate,
@@ -114,13 +116,14 @@ public class Schedule {
 
 		timeSlotGeneration();
 
-
+		Calendar calendar = Calendar.getInstance();
+		this.timestamp = new java.sql.Timestamp(calendar.getTime().getTime());
 
 	}
 
 	// db
 	public Schedule(String secretCode, String id, String name, String startDate, String endDate,
-			String startTime, String endTime, int duration) throws Exception {
+			String startTime, String endTime, int duration, String timestamp) throws Exception {
 		int startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute;
 		String[] dateStartArray = startDate.split("/");
 		startMonth = Integer.parseInt(dateStartArray[0]);
@@ -166,6 +169,10 @@ public class Schedule {
 
 		this.secretCode = secretCode;
 		this.id = id;
+		
+		
+		this.timestamp = Timestamp.valueOf(timestamp);
+		
 	}
 
 	private static String generateCode(){
@@ -195,48 +202,27 @@ public class Schedule {
 		return secretCode;
 	}
 
-	public void setSecretCode(String secretCode) {
-		this.secretCode = secretCode;
-	}
-
 	public String getId() {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public LocalDate getStartDate() {
 		return startDate;
-	}
-
-	public void setStartDate(LocalDate startDate) {
-		this.startDate = startDate;
 	}
 
 	public LocalDate getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(LocalDate endDate) {
-		this.endDate = endDate;
-	}
 
 	public LocalTime getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(LocalTime startTime) {
-		this.startTime = startTime;
-	}
 
 	public LocalTime getEndTime() {
 		return endTime;
-	}
-
-	public void setEndTime(LocalTime endTime) {
-		this.endTime = endTime;
 	}
 
 	public String getName() {
@@ -249,6 +235,10 @@ public class Schedule {
 
 	public ArrayList<TimeSlot> getTimeSlots() {
 		return this.timeSlots;
+	}
+	
+	public Timestamp getTimestamp() {
+		return this.timestamp;
 	}
 
 	/*private class TimeSlotIterator implements Iterator<TimeSlot> {

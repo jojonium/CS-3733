@@ -1,8 +1,8 @@
-package edu.wpi.cs.algol.lambda.deleteoldschedules;
+package edu.wpi.cs.algol.lambda.deletescheduleold;
 
 public class DeleteScheduleOldResponse {
 	public String response;
-	public String scheduleID;
+	public int daysOld;
 	public int httpCode;
 	
 	/* used for errors or other responses that require a message */
@@ -12,15 +12,15 @@ public class DeleteScheduleOldResponse {
 	}
 
 	/* used for successful responses */
-	public DeleteScheduleOldResponse(String sid) {
-		this.scheduleID = sid;
+	public DeleteScheduleOldResponse(int dso) {
+		this.daysOld = dso;
 		this.httpCode = 202;
 	}
 
 	public String toString(){
-		if (scheduleID != null )
-			return ("Delete schedule was successful, response: " + response + "\n");
+		if (daysOld <0 )
+			return ("Delete old schedules was successful, response: " + response + "\n");
 		else
-			return ("Delete schedule null error \n");
+			return ("Delete old schedules error: days is invalid \n");
 	}
 }

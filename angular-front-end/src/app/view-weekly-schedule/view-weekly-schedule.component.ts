@@ -28,7 +28,6 @@ export class ViewWeeklyScheduleComponent implements OnInit {
   id: string;
   reqDate: string;
   errorMessage = '';
-  createMeetingData: CreateMeetingData;
   weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   dateArray: Date[];
   timeArray: MyTime[];
@@ -61,10 +60,17 @@ export class ViewWeeklyScheduleComponent implements OnInit {
     return new MyDate(nd.getFullYear(), nd.getMonth() + 1, nd.getDate());
   }
   
-  openCreateMeetingDialog(): void {
+  openCreateMeetingDialog(data: CreateMeetingData): void {
     const dialogRef = this.createMeetingDialog.open(CreateMeetingDialog, {
       width: '400px',
-      data: this.createMeetingData
+      data: data
+    });
+  }
+  
+  openOpenCloseAllDialog(data: OpenCloseAllData): void {
+    const dialogRef = this.openCloseAllDialog.open(OpenCloseAllDialog, {
+      width: '400px',
+      data: data
     });
   }
   
@@ -82,7 +88,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
     this.router.navigate(['/schedule/' + this.id + '/' + dateString]);
   }
   
-  timeSlotClick(text: string, index: number): void {
+  timeSlotClick(text: string, text2: string, index: number): void {
     let d = this.dateArray[(index % (this.numDays + 1)) - 1];
     let t = this.timeArray[Math.floor(index / (this.numDays + 1)) - 1];
       
@@ -99,7 +105,8 @@ export class ViewWeeklyScheduleComponent implements OnInit {
             }
           });
       } else {  // participant create meeting
-        this.createMeetingData = {date: d,
+        var createMeetingData = {
+          date: d,
           dateString: this.prettyPrintDate(d),
           dayOfWeek: this.weekdays[d.getDay()],
           time: t,
@@ -109,10 +116,9 @@ export class ViewWeeklyScheduleComponent implements OnInit {
           secretCode: '',
           backRef: this
         }
-        this.openCreateMeetingDialog();
+        this.openCreateMeetingDialog(createMeetingData);
       }
-    } else if (text == "—" && this.secretCode) {
-      // organizer open time slot
+    } else if (text == "—" && this.secretCode) {      // organizer open time slot
       this.scheduleService.openTimeSlot(this.id, this.secretCode, this.prettyPrintDate(d), (t.hour + ':' + t.minute))
         .subscribe(resp => {
           var respBody = JSON.parse(resp.body);
@@ -123,6 +129,28 @@ export class ViewWeeklyScheduleComponent implements OnInit {
             //TODO open snackbar for error message
           }
         });
+    } else if (this.secretCode && index >= 1 && index <= this.numDays) { // organizer close/open all by day
+      var openCloseData = {
+        date: d,
+        time: t,
+        pretty: text + ' ' + text2,
+        type: "date",
+        scheduleID: this.id,
+        secretCode: this.secretCode,
+        backRef: this
+      }
+      this.openOpenCloseAllDialog(openCloseData);
+    } else if (this.secretCode && index > 0 && index % (this.numDays + 1) == 0) { // organizer close/open all by time
+      var openCloseData = {
+        date: d,
+        time: t,
+        pretty: text,
+        type: "time",
+        scheduleID: this.id,
+        secretCode: this.secretCode,
+        backRef: this
+      }
+      this.openOpenCloseAllDialog(openCloseData);      
     }
   }
   
@@ -205,7 +233,6 @@ export class ViewWeeklyScheduleComponent implements OnInit {
         if (this.secretCode) { // TODO Temporary hack because viewweeklyschedule still sends names for some reason. Fix it!
           nextText = s[c][r].requester;
           if (!nextText) nextText = s[c][r].isOpen ? 'Open' : '—';
-          console.log(nextText);
         } else {
           nextText = s[c][r].isOpen ? 'Open' : '—';
         }
@@ -351,6 +378,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
     private router: Router,
     private scheduleService: ScheduleService,
     public createMeetingDialog: MatDialog,
+    public openCloseAllDialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -373,6 +401,16 @@ export interface CreateMeetingData {
   timeString: string,
   scheduleID: string,
   requester: string,
+  secretCode: string,
+  backRef: ViewWeeklyScheduleComponent
+}
+
+export interface OpenCloseAllData {
+  date: Date,
+  time: MyTime,
+  pretty: string,
+  type: string, // "time" or "date"
+  scheduleID: string,
   secretCode: string,
   backRef: ViewWeeklyScheduleComponent
 }
@@ -420,6 +458,7 @@ export class CreateMeetingDialog {
   header = "Request meeting";
   secretCode: string;
   finished = false;
+  submitted = false;
   closeButton = "CANCEL";
 
   closeCreateMeetingDialog(): void {
@@ -433,6 +472,7 @@ export class CreateMeetingDialog {
       "time": data.time.hour + ":" + data.time.minute
     };
     console.log(modelToSend);
+    this.submitted = true;
     this.scheduleService.createMeeting(modelToSend)
       .subscribe(cmResponse => {
         console.log(`CreateMeetingComponent received response: ${cmResponse}`);
@@ -454,3 +494,98 @@ export class CreateMeetingDialog {
       });
   }
 }
+
+@Component({
+  selector: 'open-close-all-dialog',
+  templateUrl: 'open-close-all-dialog.html',
+})
+export class OpenCloseAllDialog {
+  constructor(
+    public dialogRef: MatDialogRef<OpenCloseAllDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: OpenCloseAllDialog,
+    private scheduleService: ScheduleService
+  ) { }
+  
+  date: Date;
+  time: MyTime;
+  closeButton = "CANCEL";
+  submitted = false;
+
+  
+  closeOpenCloseAllDialog(): void {
+    this.dialogRef.close();
+  }
+  
+  
+  openAll(data: OpenCloseAllData): void {
+    this.submitted = true;
+    if (data.type == "time") {
+      var timeString = data.time.hour + ':' + data.time.minute;
+      console.log(timeString);
+      this.scheduleService.openAllTimeSlotTime(timeString, data.scheduleID, data.secretCode)
+        .subscribe(resp => {
+          console.log('OpenCloseAllComponent received response');
+          console.log(resp);
+          var respBody = JSON.parse(resp.body);
+          this.closeOpenCloseAllDialog();
+          if (respBody.httpCode == 202) {
+            data.backRef.refresh();
+          } else {
+            // TODO snackbar should display error
+          }
+        });
+    } else if (data.type == "date") {
+      var dateString = (data.date.getMonth() + 1) + '/' + data.date.getDate() + '/' + data.date.getFullYear();
+      console.log(dateString);
+      this.scheduleService.openAllTimeSlotDate(dateString, data.scheduleID, data.secretCode)
+        .subscribe(resp => {
+          console.log('OpenCloseAllComponent received response');
+          console.log(resp);
+          var respBody = JSON.parse(resp.body);
+          this.closeOpenCloseAllDialog();
+          if (respBody.httpCode == 202) {
+            data.backRef.refresh();
+          } else {
+            // TODO snackbar should display error
+          }
+        });
+    }
+  }
+  
+  closeAll(data: OpenCloseAllData): void {
+    this.submitted = true;
+    if (data.type == "time") {
+      var timeString = data.time.hour + ':' + data.time.minute;
+      console.log(timeString);
+      this.scheduleService.closeAllTimeSlotTime(timeString, data.scheduleID, data.secretCode)
+        .subscribe(resp => {
+          console.log('OpenCloseAllComponent received response');
+          console.log(resp);
+          var respBody = JSON.parse(resp.body);
+          this.closeOpenCloseAllDialog();
+          if (respBody.httpCode == 202) {
+            data.backRef.refresh();
+          } else {
+            // TODO snackbar should display error
+          }
+        });
+    } else if (data.type == "date") {
+      var dateString = (data.date.getMonth() + 1) + '/' + data.date.getDate() + '/' + data.date.getFullYear();
+      console.log(dateString);
+      this.scheduleService.closeAllTimeSlotDate(dateString, data.scheduleID, data.secretCode)
+        .subscribe(resp => {
+          console.log('OpenCloseAllComponent received response');
+          console.log(resp);
+          var respBody = JSON.parse(resp.body);
+          this.closeOpenCloseAllDialog();
+          if (respBody.httpCode == 202) {
+            data.backRef.refresh();
+          } else {
+            // TODO snackbar should display error
+          }
+        });
+    }
+  }
+}
+    
+  

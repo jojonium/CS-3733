@@ -2,10 +2,14 @@ package edu.wpi.cs.algol.db;
 
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 //import com.amazonaws.services.lambda.runtime.LambdaLogger;
 
 import edu.wpi.cs.algol.model.Schedule;
+import edu.wpi.cs.algol.model.TimeSlot;
 
 public class ScheduleDAO {
 
@@ -92,16 +96,24 @@ public class ScheduleDAO {
 
 	public boolean deleteSchedule(String id, String secretCode) throws Exception {
 		try {
-			PreparedStatement ps = conn.prepareStatement("DELETE FROM Schedules WHERE id =? AND secretCode = ?");
+			int numAffected = -1;
+			// checks if secret code is valid
+			if (secretCode.equals(this.getSchedule(id).getSecretCode())) {
+				PreparedStatement ps = conn.prepareStatement("DELETE FROM Schedules WHERE id =? AND secretCode = ?");
 
-			
-			ps.setString(1, id);
-			ps.setString(2, secretCode);
 
-			int numAffected = ps.executeUpdate();
-			ps.close();
-			TimeSlotDAO daoT = new TimeSlotDAO(); 
-			daoT.deleteAllTimeSlots(id);
+				ps.setString(1, id);
+				ps.setString(2, secretCode);
+
+				numAffected = ps.executeUpdate();
+				ps.close();
+				if (numAffected == 1) {
+					TimeSlotDAO daoT = new TimeSlotDAO(); 
+					daoT.deleteAllTimeSlots(id);
+				}
+
+			}
+
 			return (numAffected == 1);
 
 		} catch (Exception e) {
@@ -110,6 +122,7 @@ public class ScheduleDAO {
 
 
 	}
+
 	// might just get schedule id and then update. 
 	public boolean updateSchedule(Schedule schedule) throws Exception {
 
@@ -130,6 +143,147 @@ public class ScheduleDAO {
 			throw new Exception("Failed to update Schedule: " + e.getMessage());
 		}
 	}
+
+	// Adjusting dates
+	public boolean adjustDates(String id, String secretCode, String startDate, String endDate) throws Exception {
+		try {
+			if (this.getSchedule(id).getSecretCode().equals(secretCode)){
+				PreparedStatement ps = conn.prepareStatement("UPDATE Schedules SET startDate=?, endDate=? WHERE id=?;");
+
+				LocalDate sameStartDate = this.getSchedule(id).getStartDate();
+				LocalDate sameEndDate = this.getSchedule(id).getEndDate();
+
+				int numAffected = -1;
+
+				ps.setString(1, (!startDate.isEmpty()) ? startDate : rewriteS(sameStartDate.toString()));
+				ps.setString(2, (!endDate.isEmpty()) ? endDate : rewriteS(sameEndDate.toString()));
+				ps.setString(3, id);
+
+				numAffected = ps.executeUpdate();
+
+				TimeSlotDAO tDao = new TimeSlotDAO();
+				// add more timeslots
+				if(!startDate.equals(rewriteS(sameStartDate.toString()))) {
+					
+					String[] splitDate = startDate.split("/");
+
+					for (LocalDate d = LocalDate.of(Integer.parseInt(splitDate[2]), Integer.parseInt(splitDate[0]), 
+							Integer.parseInt(splitDate[1])); d.isBefore(sameStartDate); d= d.plusDays(1)) {
+						for (LocalTime t = this.getSchedule(id).getStartTime(); t.isBefore(this.getSchedule(id).getEndTime());
+								t = t.plusMinutes(this.getSchedule(id).getDuration())) {
+						
+							tDao.addTimeSlot(new TimeSlot(LocalDateTime.of(d,t), id));
+						
+						}
+					}
+				}
+
+				if(!endDate.equals(rewriteS(sameEndDate.toString()))) {
+					
+					String[] splitDate = endDate.split("/");
+					sameEndDate = sameEndDate.plusDays(1);
+					
+					for (LocalDate d = sameEndDate; d.isBefore(LocalDate.of(Integer.parseInt(splitDate[2]), Integer.parseInt(splitDate[0]), 
+							Integer.parseInt(splitDate[1])).plusDays(1)); d= d.plusDays(1)) {
+						for (LocalTime t = this.getSchedule(id).getStartTime(); t.isBefore(this.getSchedule(id).getEndTime());
+								t = t.plusMinutes(this.getSchedule(id).getDuration())) {
+							
+							tDao.addTimeSlot(new TimeSlot(LocalDateTime.of(d,t), id));
+						
+						}
+					}
+				}
+				return (numAffected > 0);
+
+			}
+
+			return false;
+		} catch (Exception e) {
+			throw new Exception("Unable to adjust start/end dates: " + e.getMessage());
+		}
+	}
+
+	// Adjusting times
+	public boolean adjustTimes(String id, String secretCode, String startTime, String endTime) throws Exception {
+		try {
+			if (this.getSchedule(id).getSecretCode().equals(secretCode)){
+				PreparedStatement ps = conn.prepareStatement("UPDATE Schedules SET startTime=?, endTime=? WHERE id=?;");
+
+				LocalTime sameStartTime = this.getSchedule(id).getStartTime();
+				LocalTime sameEndTime = this.getSchedule(id).getEndTime();
+				
+				int startHour, startMinute, endHour, endMinute;
+				int duration = this.getSchedule(id).getDuration();
+				String[] timeStartArray = startTime.split(":");
+				startHour = Integer.parseInt(timeStartArray[0]);
+				startMinute = Integer.parseInt(timeStartArray[1]);
+
+				String[] timeEndArray = endTime.split(":");
+				endHour = Integer.parseInt(timeEndArray[0]);
+				endMinute = Integer.parseInt(timeEndArray[1]);
+			
+				// check for valid minutes 
+				if (startMinute % duration != 0) {
+					startMinute += duration - (startMinute %duration);
+				}
+				
+				if ((endMinute % duration) != 0) {
+					endMinute -= (endMinute % duration);
+				}
+				String newStartTime = convT(startHour, startMinute);
+				String newEndTime = convT(endHour,endMinute);
+				int numAffected = -1;
+
+				ps.setString(1, (!startTime.isEmpty()) ? newStartTime : sameStartTime.toString());
+				ps.setString(2, (!endTime.isEmpty()) ? newEndTime : sameEndTime.toString());
+				ps.setString(3, id);
+
+				numAffected = ps.executeUpdate();
+
+				TimeSlotDAO tDao = new TimeSlotDAO();
+				// add more timeslots
+				if(!newStartTime.equals(sameStartTime.toString())) {
+					
+					String[] splitTime = newStartTime.split(":");
+					int hour = Integer.parseInt(splitTime[0]);
+					int minute = Integer.parseInt(splitTime[1]);
+
+					for (LocalDate d = this.getSchedule(id).getStartDate(); d.isBefore(this.getSchedule(id).getEndDate().plusDays(1)); d= d.plusDays(1)) {
+						for (LocalTime t = LocalTime.of(hour, minute); t.isBefore(this.getSchedule(id).getStartTime());
+								t = t.plusMinutes(this.getSchedule(id).getDuration())) {
+						
+							tDao.addTimeSlot(new TimeSlot(LocalDateTime.of(d,t), id));
+						
+						}
+					}
+				}
+
+				if(!newEndTime.equals(sameEndTime.toString())) {
+					
+					String[] splitTime = newEndTime.split(":");
+					int hour = Integer.parseInt(splitTime[0]);
+					int minute = Integer.parseInt(splitTime[1]);
+
+					for (LocalDate d = this.getSchedule(id).getStartDate(); d.isBefore(this.getSchedule(id).getEndDate().plusDays(1)); d= d.plusDays(1)) {
+						for (LocalTime t = this.getSchedule(id).getEndTime(); t.isBefore(LocalTime.of(hour, minute));
+								t = t.plusMinutes(this.getSchedule(id).getDuration())) {
+						
+							tDao.addTimeSlot(new TimeSlot(LocalDateTime.of(d,t), id));
+						
+						}
+					}
+				}
+				return (numAffected > 0);
+
+			}
+
+			return false;
+		} catch (Exception e) {
+			throw new Exception("Unable to adjust start/end dates: " + e.getMessage());
+		}
+	}
+
+
 	private Schedule createSchedule(ResultSet resultSet) throws Exception {
 
 		String secretCode = resultSet.getString("secretCode");
@@ -165,6 +319,10 @@ public class ScheduleDAO {
 
 	}
 
+	private String convT(int hour, int minute) {
+		
+		return LocalTime.of(hour,minute).toString();
+	}
 
 
 }

@@ -89,10 +89,15 @@ package edu.wpi.cs.algol.lambda.deleteschedule;
 				DeleteScheduleResponse resp;
 				if (logger != null) { logger.log(req.scheduleID + " " +  ", " + req.secretCode + " "); }
 				try {
-					deleteSchedule(req.scheduleID, req.secretCode);
+					if (deleteSchedule(req.scheduleID, req.secretCode)) {
 						logger.log("deleteSchedule worked");
 						resp = new DeleteScheduleResponse(req.scheduleID);
 						logger.log("schedule successfully deleted");
+					}
+					else {
+						resp = new DeleteScheduleResponse("Unable to delete Schedule: " + req.scheduleID, 400);
+					}
+						
 					
 				} catch (Exception e) {
 					resp = new DeleteScheduleResponse("Unable to delete schedule: " + req.scheduleID + " because of (" + e.getMessage() + ")", 404);

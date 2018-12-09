@@ -14,6 +14,8 @@ export class ViewWeeklyScheduleResponseBody {
     public startDate: MyDate,
     public startTime: MyTime,
     public timeSlots: TimeSlot[],
+    public hasPreviousWeek: string,
+    public hasNextWeek: string,
     public httpCode: string
   ) { }
 }
@@ -35,11 +37,15 @@ export class MyTime {
   ) { }
 }
 
-export interface TimeSlot {
-  beginDateTime: {
-    date: MyDate,
-    time: MyTime,
-  },
-  isOpen: boolean,
-  scheduleID: string
+export class TimeSlot {
+  constructor(
+    public beginDateTime: {
+      date: MyDate,
+      time: MyTime,
+    },
+    public isOpen: boolean,
+    public scheduleID: string,
+    public requester?: string,
+    public secretCode?: string
+  ) { }
 }

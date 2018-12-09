@@ -106,6 +106,7 @@ public class ScheduleDAO {
 			ps.setInt(8, schedule.getDuration());
 			ps.setString(9, schedule.getTimestamp().toString());
 
+			
 			ps.execute();
 
 
@@ -114,7 +115,9 @@ public class ScheduleDAO {
 				tDao.addTimeSlot(schedule.getTimeSlots().get(i));
 
 			}
-
+			
+			ps.close();
+			
 			return true;
 
 		} catch (Exception e) {

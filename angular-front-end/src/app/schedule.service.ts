@@ -26,6 +26,11 @@ export class ScheduleService {
   private deleteScheduleUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/deleteschedule";
   private closeTimeSlotUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/closetimeslot";
   private openTimeSlotUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/opentimeslot";
+  private openAllTimeSlotTimeUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/openalltimeslottime";
+  private closeAllTimeSlotTimeUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/closealltimeslottime";
+  private openAllTimeSlotDateUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/openalltimeslotdate";
+  private closeAllTimeSlotDateUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/closealltimeslotdate";
+
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -174,6 +179,62 @@ export class ScheduleService {
         console.log(resp);
       }),
       catchError(this.handleError<Response>('openTimeSlot')));
+  }
+  
+  openAllTimeSlotTime(time: string, scheduleID: string, secretCode: string) {
+    console.log(`closeAllTimeSlotTime: Attempting to send with scheduleID=${scheduleID}, secretCode=${secretCode}, and time=${time}`);
+    
+    var parameters = {"scheduleID": scheduleID, "secretCode": secretCode, "time": time};
+    console.log(parameters);
+    
+    return this.http.post<Response>(this.openAllTimeSlotTimeUrl, parameters, this.httpOptions).pipe(
+      tap((resp: Response) => {
+        console.log('received response:');
+        console.log(resp);
+      }),
+      catchError(this.handleError<Response>('openAllTimeSlotTime')));
+  }
+  
+  closeAllTimeSlotTime(time: string, scheduleID: string, secretCode: string) {
+    console.log(`closeAllTimeSlotTime: Attempting to send with scheduleID=${scheduleID}, secretCode=${secretCode}, and time=${time}`);
+    
+    var parameters = {"scheduleID": scheduleID, "secretCode": secretCode, "time": time};
+    console.log(parameters);
+    
+    return this.http.post<Response>(this.closeAllTimeSlotTimeUrl, parameters, this.httpOptions).pipe(
+      tap((resp: Response) => {
+        console.log('received response:');
+        console.log(resp);
+      }),
+      catchError(this.handleError<Response>('closeAllTimeSlotTime')));
+  }
+  
+  openAllTimeSlotDate(date: string, scheduleID: string, secretCode: string) {
+    console.log(`closeAllTimeSlotTime: Attempting to send with scheduleID=${scheduleID}, secretCode=${secretCode}, and date=${date}`);
+    
+    var parameters = {"scheduleID": scheduleID, "secretCode": secretCode, "date": date};
+    console.log(parameters);
+    
+    return this.http.post<Response>(this.openAllTimeSlotDateUrl, parameters, this.httpOptions).pipe(
+      tap((resp: Response) => {
+        console.log('received response:');
+        console.log(resp);
+      }),
+      catchError(this.handleError<Response>('openAllTimeSlotDate')));
+  }
+  
+  closeAllTimeSlotDate(date: string, scheduleID: string, secretCode: string) {
+    console.log(`closeAllTimeSlotTime: Attempting to send with scheduleID=${scheduleID}, secretCode=${secretCode}, and date=${date}`);
+    
+    var parameters = {"scheduleID": scheduleID, "secretCode": secretCode, "date": date};
+    console.log(parameters);
+    
+    return this.http.post<Response>(this.closeAllTimeSlotDateUrl, parameters, this.httpOptions).pipe(
+      tap((resp: Response) => {
+        console.log('received response:');
+        console.log(resp);
+      }),
+      catchError(this.handleError<Response>('closeAllTimeSlotDate')));
   }
 
     

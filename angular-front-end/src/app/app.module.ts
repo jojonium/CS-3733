@@ -22,7 +22,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { AppComponent } from './app.component';
 import { CreateScheduleComponent, DialogFailure, DialogSuccess } from './create-schedule/create-schedule.component';
-import { ViewWeeklyScheduleComponent, CreateMeetingDialog } from './view-weekly-schedule/view-weekly-schedule.component';
+import { ViewWeeklyScheduleComponent, CreateMeetingDialog, OpenCloseAllDialog } from './view-weekly-schedule/view-weekly-schedule.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ViewScheduleFormComponent } from './view-schedule-form/view-schedule-form.component';
@@ -37,6 +37,7 @@ import { AboutComponent } from './about/about.component';
     DialogFailure,
     DialogSuccess,
     CreateMeetingDialog,
+    OpenCloseAllDialog,
     ViewWeeklyScheduleComponent,
     PageNotFoundComponent,
     ViewScheduleFormComponent,
@@ -67,7 +68,8 @@ import { AboutComponent } from './about/about.component';
   entryComponents: [
     DialogFailure,
     DialogSuccess,
-    CreateMeetingDialog
+    CreateMeetingDialog,
+    OpenCloseAllDialog
   ],
   providers: [
   ],

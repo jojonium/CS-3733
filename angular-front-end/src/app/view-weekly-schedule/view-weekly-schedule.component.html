@@ -16,7 +16,7 @@
       <mat-grid-tile
           *ngFor="let tile of tiles; let i = index"
           [attr.data-index]="i"
-          (click)="timeSlotClick(tile.text, i)"
+          (click)="timeSlotClick(tile.text, tile.text2, i)"
           [ngClass]="tile.class">{{tile.text}}<br>{{tile.text2}}
       </mat-grid-tile>
     </mat-grid-list>

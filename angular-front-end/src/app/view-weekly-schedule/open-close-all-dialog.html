@@ -1,21 +1,13 @@
 <h1 mat-dialog-title>Open/close all time slots by {{data.type}}</h1>
 
 <form>
-  <div mat-dialog-content>
-    <p *ngIf="!finished"></p>
-    
-    <p *ngIf="finished">{{message}}</p>
-
+  <div mat-dialog-content>    
+    <h2>{{data.pretty}}</h2>    
   </div>
-  <div mat-dialog-actions style="display: flex; justify-content: flex-end">
-    <button mat-raised-button type="button" (click)="closeCreateMeetingDialog()" style="margin-right: 5px;">{{closeButton}}</button>
-    <button mat-raised-button *ngIf="!finished" type="submit" (click)="openAllTime(data)" color="primary" style="margin-left: 5px;">OPEN</button>
-    <button mat-raised-button *ngIf="!finished" type="submit" (click)="closeAllTime(data)" color="primary" style="margin-left: 5px;">CLOSE</button>
+  <div mat-dialog-actions style="display: flex; justify-content: flex-end; margin: 0">
+    <mat-progress-spinner diameter="60" mode="indeterminate" *ngIf="submitted"></mat-progress-spinner>
+    <button mat-raised-button type="button" (click)="closeOpenCloseAllDialog()" style="margin-left: 10px;">{{closeButton}}</button>
+    <button mat-raised-button type="submit" (click)="closeAll(data)" color="primary" style="margin-left: 5px;" [disabled]="submitted">CLOSE</button>
+    <button mat-raised-button type="submit" (click)="openAll(data)" color="primary" style="margin-left: 5px;" [disabled]="submitted">OPEN</button>
   </div>
 </form>
-
-<style>
-.full-width {
-  width: 100%;
-}
-</style>

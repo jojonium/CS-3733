@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 //import com.amazonaws.services.lambda.runtime.LambdaLogger;
 
@@ -56,31 +57,31 @@ public class ScheduleDAO {
 		}
 
 	}
-	
+
 	public ArrayList<Schedule> getAllSchedules() throws Exception {
-		
+
 		ArrayList<Schedule> schedules = new ArrayList<Schedule>();
-		
+
 		try {
-			
-			
+
+
 			Statement statement = conn.createStatement();
-            String query = "SELECT * FROM Schedules;";
-            ResultSet resultSet = statement.executeQuery(query);
-            
+			String query = "SELECT * FROM Schedules where ;";
+			ResultSet resultSet = statement.executeQuery(query);
+
 			while(resultSet.next()) {
 				Schedule s = createSchedule(resultSet);
 				schedules.add(s);
 			}
 
 			resultSet.close();
-            statement.close();
+			statement.close();
 			return schedules;
-			
+
 		} catch (Exception e) {
 			throw new Exception("Failed at getting all schedules: " + e.getMessage());
 		}
-		
+
 	}
 
 	public boolean addSchedule(Schedule schedule) throws Exception{
@@ -192,32 +193,32 @@ public class ScheduleDAO {
 				TimeSlotDAO tDao = new TimeSlotDAO();
 				// add more timeslots
 				if(!startDate.equals(rewriteS(sameStartDate.toString()))) {
-					
+
 					String[] splitDate = startDate.split("/");
 
 					for (LocalDate d = LocalDate.of(Integer.parseInt(splitDate[2]), Integer.parseInt(splitDate[0]), 
 							Integer.parseInt(splitDate[1])); d.isBefore(sameStartDate); d= d.plusDays(1)) {
 						for (LocalTime t = this.getSchedule(id).getStartTime(); t.isBefore(this.getSchedule(id).getEndTime());
 								t = t.plusMinutes(this.getSchedule(id).getDuration())) {
-						
+
 							tDao.addTimeSlot(new TimeSlot(LocalDateTime.of(d,t), id));
-						
+
 						}
 					}
 				}
 
 				if(!endDate.equals(rewriteS(sameEndDate.toString()))) {
-					
+
 					String[] splitDate = endDate.split("/");
 					sameEndDate = sameEndDate.plusDays(1);
-					
+
 					for (LocalDate d = sameEndDate; d.isBefore(LocalDate.of(Integer.parseInt(splitDate[2]), Integer.parseInt(splitDate[0]), 
 							Integer.parseInt(splitDate[1])).plusDays(1)); d= d.plusDays(1)) {
 						for (LocalTime t = this.getSchedule(id).getStartTime(); t.isBefore(this.getSchedule(id).getEndTime());
 								t = t.plusMinutes(this.getSchedule(id).getDuration())) {
-							
+
 							tDao.addTimeSlot(new TimeSlot(LocalDateTime.of(d,t), id));
-						
+
 						}
 					}
 				}
@@ -239,7 +240,7 @@ public class ScheduleDAO {
 
 				LocalTime sameStartTime = this.getSchedule(id).getStartTime();
 				LocalTime sameEndTime = this.getSchedule(id).getEndTime();
-				
+
 				int startHour, startMinute, endHour, endMinute;
 				int duration = this.getSchedule(id).getDuration();
 				String[] timeStartArray = startTime.split(":");
@@ -249,12 +250,12 @@ public class ScheduleDAO {
 				String[] timeEndArray = endTime.split(":");
 				endHour = Integer.parseInt(timeEndArray[0]);
 				endMinute = Integer.parseInt(timeEndArray[1]);
-			
+
 				// check for valid minutes 
 				if (startMinute % duration != 0) {
 					startMinute += duration - (startMinute %duration);
 				}
-				
+
 				if ((endMinute % duration) != 0) {
 					endMinute -= (endMinute % duration);
 				}
@@ -271,7 +272,7 @@ public class ScheduleDAO {
 				TimeSlotDAO tDao = new TimeSlotDAO();
 				// add more timeslots
 				if(!newStartTime.equals(sameStartTime.toString())) {
-					
+
 					String[] splitTime = newStartTime.split(":");
 					int hour = Integer.parseInt(splitTime[0]);
 					int minute = Integer.parseInt(splitTime[1]);
@@ -279,15 +280,15 @@ public class ScheduleDAO {
 					for (LocalDate d = this.getSchedule(id).getStartDate(); d.isBefore(this.getSchedule(id).getEndDate().plusDays(1)); d= d.plusDays(1)) {
 						for (LocalTime t = LocalTime.of(hour, minute); t.isBefore(this.getSchedule(id).getStartTime());
 								t = t.plusMinutes(this.getSchedule(id).getDuration())) {
-						
+
 							tDao.addTimeSlot(new TimeSlot(LocalDateTime.of(d,t), id));
-						
+
 						}
 					}
 				}
 
 				if(!newEndTime.equals(sameEndTime.toString())) {
-					
+
 					String[] splitTime = newEndTime.split(":");
 					int hour = Integer.parseInt(splitTime[0]);
 					int minute = Integer.parseInt(splitTime[1]);
@@ -295,9 +296,9 @@ public class ScheduleDAO {
 					for (LocalDate d = this.getSchedule(id).getStartDate(); d.isBefore(this.getSchedule(id).getEndDate().plusDays(1)); d= d.plusDays(1)) {
 						for (LocalTime t = this.getSchedule(id).getEndTime(); t.isBefore(LocalTime.of(hour, minute));
 								t = t.plusMinutes(this.getSchedule(id).getDuration())) {
-						
+
 							tDao.addTimeSlot(new TimeSlot(LocalDateTime.of(d,t), id));
-						
+
 						}
 					}
 				}
@@ -310,8 +311,93 @@ public class ScheduleDAO {
 			throw new Exception("Unable to adjust start/end dates: " + e.getMessage());
 		}
 	}
-	
-	
+
+	// deletes old schedules past a certain number of days
+	public boolean deleteOldSchedules(String adminPass, int daysOld) throws Exception {
+		try {
+			// checks if verification
+			if (! adminPass.equals("KnoxMiami1839")) { return false; }
+
+			// gets timestamp for request made
+			Calendar calendar = Calendar.getInstance();
+			Timestamp currentStamp = new java.sql.Timestamp(calendar.getTime().getTime());
+			LocalDateTime stampDateTime = currentStamp.toLocalDateTime();
+
+			// creates timestamp daysOld # of days old to be removed
+			LocalDateTime oldStamp = LocalDateTime.of(LocalDate.of(stampDateTime.getYear(),stampDateTime.getMonth(),stampDateTime.getDayOfMonth()).minusDays(daysOld),
+					LocalTime.of(stampDateTime.getHour(), stampDateTime.getMinute()));
+			ArrayList<Schedule> schedules = new ArrayList<Schedule>();
+
+			// get schedules to delete
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM Schedules WHERE timestamp < ?;");
+			ps.setString(1, Timestamp.valueOf(oldStamp).toString());
+
+			ResultSet resultSet = ps.executeQuery();
+
+			while(resultSet.next()) {
+				Schedule s = createSchedule(resultSet);
+				schedules.add(s);
+			}
+
+			resultSet.close();
+			ps.close();
+
+			// deletes all schedules that are oldDays old
+			int i = 0;
+
+			while (i < schedules.size()) {
+				Schedule s = schedules.get(i);
+				deleteSchedule(s.getId(), s.getSecretCode());
+
+			}
+
+			return true;
+
+		} catch (Exception e) {
+			throw new Exception("Error in delete old schedules: " + e.getMessage());
+		}
+	}
+
+	// method to get schedules created in the past n hours (pastHour)
+	public ArrayList<Schedule> reportActivity (String adminPass, int pastHour) throws Exception {
+		try {
+
+			ArrayList<Schedule> schedules = new ArrayList<Schedule>();			
+
+			// gets timestamp for request made
+			Calendar calendar = Calendar.getInstance();
+			Timestamp currentStamp = new java.sql.Timestamp(calendar.getTime().getTime());
+			LocalDateTime stampDateTime = currentStamp.toLocalDateTime();
+
+			// creates timestamp pastHour # of hours to be searched
+			LocalDateTime oldStamp = LocalDateTime.of(LocalDate.of(stampDateTime.getYear(),stampDateTime.getMonth(),stampDateTime.getDayOfMonth()),
+					LocalTime.of(stampDateTime.getHour(), stampDateTime.getMinute()).minusHours(pastHour));
+		
+
+			// get schedules created in pastHour # of hours 
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM Schedules WHERE timestamp > ?;");
+			ps.setString(1, Timestamp.valueOf(oldStamp).toString());
+
+			ResultSet resultSet = ps.executeQuery();
+
+			while(resultSet.next()) {
+				Schedule s = createSchedule(resultSet);
+				schedules.add(s);
+			}
+
+			resultSet.close();
+			ps.close();
+
+
+
+			return schedules;
+			
+			
+		} catch (Exception e) {
+			throw new Exception("Error in getting recent activity: " + e.getMessage());
+		}
+	}
+
 
 	// for database
 	private Schedule createSchedule(ResultSet resultSet) throws Exception {
@@ -335,6 +421,8 @@ public class ScheduleDAO {
 		return s;
 	}
 
+
+	/* additional methods to reformat strings*/ 
 	private String rewriteS(String s) {
 
 		String[] dateArray = s.split("-");
@@ -350,7 +438,7 @@ public class ScheduleDAO {
 	}
 
 	private String convT(int hour, int minute) {
-		
+
 		return LocalTime.of(hour,minute).toString();
 	}
 

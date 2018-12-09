@@ -16,19 +16,28 @@ public class TestTimeSlotDAO {
 		try {
 			ScheduleDAO sDao = new ScheduleDAO();
 			TimeSlotDAO tDao = new TimeSlotDAO();
-			Schedule s = new Schedule("name","11/11/2011", "11/12/2011", "9:00","10:00", 30);
+			Schedule s = new Schedule("aname","12/11/2018", "12/13/2018", "9:00","10:00", 30);
 			sDao.addSchedule(s);
-			TimeSlot ts = new TimeSlot("2011-11-11T09:00",s.getId(),"name");
+			TimeSlot ts = new TimeSlot("2018-12-11T09:00",s.getId(),"name");
 			assertTrue(tDao.getAllTimeSlots(s.getId()).size() > 0);
 			tDao.getTimeSlotFromCode(s.getId(), tDao.getAllTimeSlots(s.getId()).get(0).getSecretCode());
-			assertTrue(tDao.closeTimeSlot(s.getId(), s.getSecretCode(),"11/11/2011" , "9:00"));
-			assertTrue(tDao.openTimeSlot(s.getId(), s.getSecretCode(),"11/11/2011" , "9:00"));
+			assertTrue(tDao.closeTimeSlot(s.getId(), s.getSecretCode(),"12/11/2018" , "9:00"));
+			assertTrue(tDao.openTimeSlot(s.getId(), s.getSecretCode(),"12/11/2018" , "9:00"));
 			assertTrue(tDao.addMeeting(ts));
-			assertFalse(tDao.cancelMeeting(ts.getSecretCode(),LocalDateTime.of(2011, 11, 11, 9, 0)));
+			assertFalse(tDao.cancelMeeting(ts.getSecretCode(),LocalDateTime.of(2018, 12, 11, 9, 0)));
 			assertTrue(tDao.updateTimeSlot(ts));
-			tDao.getWeeklyTimeSlots(s.getId(), "11-11-2011");
+			tDao.getWeeklyTimeSlots(s.getId(), "12-11-2018");
 			tDao.getWeeklyTimeSlots(s.getId(), "");
+			tDao.closeTimeSlotsAtTime(s.getId(), s.getSecretCode(), "9:30");
+			tDao.closeTimeSlotsOnDay(s.getId(), s.getSecretCode(), "12/11/2018");
+			tDao.openTimeSlotsAtTime(s.getId(), s.getSecretCode(), "9:30");
+			tDao.openTimeSlotsOnDay(s.getId(), s.getSecretCode(), "12/11/2018");
+			tDao.showAvailableTimeslots(s.getId(), "", "", "", "");
+			
 			tDao.deleteAllTimeSlots(s.getId());
+			
+			
+			
 			sDao.deleteSchedule(s.getId(), s.getSecretCode());
 
 

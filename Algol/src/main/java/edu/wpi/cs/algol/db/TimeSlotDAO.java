@@ -420,7 +420,7 @@ public class TimeSlotDAO {
 			throw new Exception();
 
 		} catch (Exception e) {
-			throw new Exception("Failed in opening timeslot: " + e.getMessage());
+			throw new Exception("Failed in opening timeslots on day: " + e.getMessage());
 		}
 
 	}
@@ -477,7 +477,7 @@ public class TimeSlotDAO {
 			return false; */
 
 		} catch (Exception e) {
-			throw new Exception("Failed in opening timeslot: " + e.getMessage() + e);
+			throw new Exception("Failed in opening timeslots at time: " + e.getMessage() + e);
 		}
 	}
 
@@ -534,7 +534,7 @@ public class TimeSlotDAO {
 			return false;
 
 		} catch (Exception e) {
-			throw new Exception("Failed in closing timeslot: " + e.getMessage());
+			throw new Exception("Failed in closing timeslots on day: " + e.getMessage());
 		}
 
 	}
@@ -567,7 +567,7 @@ public class TimeSlotDAO {
 			}else 
 				return false;
 		}  catch (Exception e) {
-			throw new Exception("Failed in closing timeslot: " + e.getMessage());
+			throw new Exception("Failed in closing timeslot at time: " + e.getMessage());
 		}
 	}
 
@@ -620,10 +620,15 @@ public class TimeSlotDAO {
 			LocalTime et = LocalTime.of(endHour, endMinute);
 
 			while (sl.isBefore(el.plusDays(1))) {
+				
 				while (st.isBefore(et)) {
-					availSlots.add(getTimeSlot(scheduleID, LocalDateTime.of(sl, st)));
-					st.plusMinutes(duration);
+					TimeSlot ts = getTimeSlot(scheduleID, LocalDateTime.of(sl, st));
+					if (ts.isOpen() == true) {
+						availSlots.add(ts);
+					}
+					st =st.plusMinutes(duration);
 				}
+				st = LocalTime.of(startHour, startMinute);
 				sl = sl.plusDays(1).plusDays(0);
 			}
 

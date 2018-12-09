@@ -25,7 +25,7 @@ public class TestScheduleDAO {
 			s = sDao.getSchedule(id);
 			sDao.deleteSchedule(s.getId(), s.getSecretCode());
 			sDao.deleteSchedule(s1.getId(), s1.getSecretCode());
-			assertTrue(s != null);
+
 
 		} catch (Exception e) {
 			fail("Creation test error: " + e.getMessage());
@@ -50,6 +50,11 @@ public class TestScheduleDAO {
 			
 			// update
 			sDao.updateSchedule(s);
+			
+			// reportActivity
+			sDao.reportActivity("KnoxMiami1839", 1);
+			sDao.deleteOldSchedules("KnoxMiami1839", 10);
+			
 			// delete schedule
 			boolean b = sDao.deleteSchedule(s.getId(), s.getSecretCode());
 			

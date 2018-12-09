@@ -447,7 +447,10 @@ public class TimeSlotDAO {
 					String date ="";
 					date = dateS[1]+ "/" + dateS[2]+ "/" + dateS[0];
 					//	if (this.getTimeSlot(scheduleID, LocalDateTime.of(d,LocalTime.of(hour, minute))).getSecretCode() == null) {
-					status = this.openTimeSlot(scheduleID, secretCode, date, time);
+					if (!LocalDate.of(Integer.parseInt(dateS[0]), Integer.parseInt(dateS[1]), Integer.parseInt(dateS[2])).getDayOfWeek().equals(DayOfWeek.SATURDAY)
+							&& !LocalDate.of(Integer.parseInt(dateS[0]), Integer.parseInt(dateS[1]), Integer.parseInt(dateS[2])).getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+						status = this.openTimeSlot(scheduleID, secretCode, date, time);
+					}
 					//	}
 					d=d.plusDays(1);
 					d=d.plusDays(0);
@@ -549,13 +552,14 @@ public class TimeSlotDAO {
 			if (secretCode.equals(s.getSecretCode())) {
 				boolean status = false;
 				LocalDate d = startDate;
-				while (d.isBefore(s.getEndDate().plusDays(1))) {
+				while (d.isBefore(s.getEndDate().plusDays(1))) { 
 					String[] dateS = d.toString().split("-");
 					String date ="";
 					date = dateS[1]+ "/" + dateS[2]+ "/" + dateS[0];
-
-					status = this.closeTimeSlot(scheduleID, secretCode, date, time);
-
+					if (!LocalDate.of(Integer.parseInt(dateS[0]), Integer.parseInt(dateS[1]), Integer.parseInt(dateS[2])).getDayOfWeek().equals(DayOfWeek.SATURDAY)
+							&& !LocalDate.of(Integer.parseInt(dateS[0]), Integer.parseInt(dateS[1]), Integer.parseInt(dateS[2])).getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+						status = this.closeTimeSlot(scheduleID, secretCode, date, time);
+					}
 					d=d.plusDays(1);
 					d=d.plusDays(0);
 				}
@@ -566,40 +570,40 @@ public class TimeSlotDAO {
 			throw new Exception("Failed in closing timeslot: " + e.getMessage());
 		}
 	}
-	
+
 	// shows available timeslots
-	
+
 	public ArrayList<TimeSlot> showAvailableTimeslots(String scheduleID, String startDate, String endDate, String startTime, String endTime) throws Exception {
-		
+
 		try {
-			
+
 			Schedule s = new ScheduleDAO().getSchedule(scheduleID);
 			int duration = s.getDuration();
 			ArrayList<TimeSlot> availSlots = new ArrayList<TimeSlot>();
-			
+
 			int startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute;
-				// checks if input startDate is not empty, and is before the schedule's startDate, else use default
+			// checks if input startDate is not empty, and is before the schedule's startDate, else use default
 			String[] dateStartArray = (!startDate.isEmpty() && (rewriteS(s.getStartDate().toString()).compareTo(startDate) < 0 )) ? startDate.split("/") : rewriteS(s.getStartDate().toString()).split("/");
 			startMonth = Integer.parseInt(dateStartArray[0]);
 			startDay = Integer.parseInt(dateStartArray[1]);
 			startYear = Integer.parseInt(dateStartArray[2]);
-		
-				// checks if input end date is not empty and is before schedule's end date, else use default
+
+			// checks if input end date is not empty and is before schedule's end date, else use default
 			String[] dateEndArray = (!endDate.isEmpty() && (rewriteS(s.getEndDate().toString()).compareTo(endDate) < 0 )) ? endDate.split("/") : rewriteS(s.getEndDate().toString()).split("/");
 			endMonth = Integer.parseInt(dateEndArray[0]);
 			endDay = Integer.parseInt(dateEndArray[1]);
 			endYear = Integer.parseInt(dateEndArray[2]);
 
 
-				// check input start time is not empty and is after schedule's start time, else use default
+			// check input start time is not empty and is after schedule's start time, else use default
 			String[] timeStartArray = (!startTime.isEmpty() && convLT(startTime).isAfter(s.getStartTime())) ? startTime.split(":") : s.getStartTime().toString().split(":");
 			startHour = Integer.parseInt(timeStartArray[0]);
 			startMinute = Integer.parseInt(timeStartArray[1]);
-				// check input end time is not empty and is before schedule's end time, else use default
+			// check input end time is not empty and is before schedule's end time, else use default
 			String[] timeEndArray = (!endTime.isEmpty() && convLT(endTime).isBefore(s.getEndTime())) ? endTime.split(":") : s.getEndTime().toString().split(":");
 			endHour = Integer.parseInt(timeEndArray[0]);
 			endMinute = Integer.parseInt(timeEndArray[1]);
-			
+
 			// fix start and end times to be evenly divisible to the hour by duration
 			if (startMinute % duration != 0) {
 				startMinute += duration - (startMinute %duration);
@@ -608,13 +612,13 @@ public class TimeSlotDAO {
 			if ((endMinute % duration) != 0) {
 				endMinute -= (endMinute % duration);
 			}
-			
+
 			//LocalDateTime to be entered
 			LocalDate sl = LocalDate.of(startYear, startMonth, startDay);
 			LocalTime st = LocalTime.of(startHour, startMinute);
 			LocalDate el = LocalDate.of(endYear, endMonth, endDay);
 			LocalTime et = LocalTime.of(endHour, endMinute);
-			
+
 			while (sl.isBefore(el.plusDays(1))) {
 				while (st.isBefore(et)) {
 					availSlots.add(getTimeSlot(scheduleID, LocalDateTime.of(sl, st)));
@@ -622,15 +626,15 @@ public class TimeSlotDAO {
 				}
 				sl = sl.plusDays(1).plusDays(0);
 			}
-			
-			
+
+
 			return availSlots;
-			
+
 		} catch (Exception e) {
 			throw new Exception("Error in showing available timeslots: " + e.getMessage());
 		}
 	}
-	
+
 
 	public TimeSlot createTimeSlot(ResultSet resultSet) throws Exception {
 
@@ -657,13 +661,13 @@ public class TimeSlotDAO {
 
 	}
 
-	
+
 	private LocalTime convLT(String s){
 		String[] time = s.split(":");
 		int hour = Integer.parseInt(time[0]);
 		int minute = Integer.parseInt(time[1]);
 		return LocalTime.of(hour, minute);
-		
+
 	}
 
 }

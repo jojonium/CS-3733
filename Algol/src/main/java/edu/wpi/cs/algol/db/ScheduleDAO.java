@@ -88,7 +88,7 @@ public class ScheduleDAO {
 		try {
 			PreparedStatement ps;
 			//			logger.log("made PreparedStatement ps\n");
-			ps = conn.prepareStatement("INSERT INTO Schedules (secretCode, id, name, startDate, endDate, startTime, endTime, duration) values(?,?,?,?,?,?,?,?) ");
+			ps = conn.prepareStatement("INSERT INTO Schedules (secretCode, id, name, startDate, endDate, startTime, endTime, duration, timestamp) values(?,?,?,?,?,?,?,?) ");
 			//			logger.log("in addSchedule innitial declaration of conn: " + ps.toString() + "\n");
 			ps.setString(1, schedule.getSecretCode());
 			ps.setString(2, schedule.getId());
@@ -103,6 +103,7 @@ public class ScheduleDAO {
 			ps.setString(7, schedule.getEndTime().toString());
 			//			logger.log("in addSchedule setEndTime: " + ps.toString() + "\n");
 			ps.setInt(8, schedule.getDuration());
+			ps.setString(9, schedule.getTimestamp().toString());
 
 			ps.execute();
 
@@ -309,6 +310,8 @@ public class ScheduleDAO {
 			throw new Exception("Unable to adjust start/end dates: " + e.getMessage());
 		}
 	}
+	
+	
 
 	// for database
 	private Schedule createSchedule(ResultSet resultSet) throws Exception {
@@ -321,8 +324,8 @@ public class ScheduleDAO {
 		String startTime = resultSet.getString("startTime");
 		String endTime = resultSet.getString("endTime");
 		int duration = Integer.parseInt(resultSet.getString("duration").substring(0, 2)); // regex minutes
-
-		Schedule s = new Schedule(secretCode, id, name, startDate, endDate, startTime, endTime, duration);
+		String timestamp = resultSet.getString("timestamp");
+		Schedule s = new Schedule(secretCode, id, name, startDate, endDate, startTime, endTime, duration, timestamp);
 
 		TimeSlotDAO tDao = new TimeSlotDAO();
 		for (int i = 0; i < s.getTimeSlots().size(); i++) {

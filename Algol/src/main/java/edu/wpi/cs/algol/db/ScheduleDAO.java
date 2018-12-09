@@ -310,7 +310,7 @@ public class ScheduleDAO {
 		}
 	}
 
-
+	// for database
 	private Schedule createSchedule(ResultSet resultSet) throws Exception {
 
 		String secretCode = resultSet.getString("secretCode");

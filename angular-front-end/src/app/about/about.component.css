@@ -1,0 +1,11 @@
+.card-holder {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1000px;
+  justify-content: space-evenly;
+}
+
+.about-card {
+  max-width: 400px;
+  margin: 20px;
+}

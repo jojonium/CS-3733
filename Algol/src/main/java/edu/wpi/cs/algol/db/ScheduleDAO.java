@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 //import com.amazonaws.services.lambda.runtime.LambdaLogger;
 
@@ -65,7 +66,7 @@ public class ScheduleDAO {
 			
 			
 			Statement statement = conn.createStatement();
-            String query = "SELECT * FROM Schedules;";
+            String query = "SELECT * FROM Schedules where ;";
             ResultSet resultSet = statement.executeQuery(query);
             
 			while(resultSet.next()) {
@@ -311,7 +312,51 @@ public class ScheduleDAO {
 		}
 	}
 	
-	
+	// deletes old schedules past a certain number of days
+	public boolean deleteOldSchedules(String adminPass, int daysOld) throws Exception {
+		try {
+			// checks if verification
+			if (! adminPass.equals("KnoxMiami1839")) { return false; }
+			
+			// gets timestamp for request made
+			Calendar calendar = Calendar.getInstance();
+			Timestamp currentStamp = new java.sql.Timestamp(calendar.getTime().getTime());
+			LocalDateTime stampDateTime = currentStamp.toLocalDateTime();
+			
+			// creates timestamp daysOld # of days old to be removed
+			LocalDateTime oldStamp = LocalDateTime.of(LocalDate.of(stampDateTime.getYear(),stampDateTime.getMonth(),stampDateTime.getDayOfMonth()).minusDays(daysOld),
+					LocalTime.of(stampDateTime.getHour(), stampDateTime.getMinute()));
+			ArrayList<Schedule> schedules = new ArrayList<Schedule>();
+			
+			// get schedules to delete
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM Schedules WHERE timestamp < ?;");
+			ps.setString(1, Timestamp.valueOf(oldStamp).toString());
+			
+			ResultSet resultSet = ps.executeQuery();
+		
+			while(resultSet.next()) {
+				Schedule s = createSchedule(resultSet);
+				schedules.add(s);
+			}
+			
+			resultSet.close();
+			ps.close();
+			
+			// deletes all schedules that are oldDays old
+			int i = 0;
+			
+			while (i < schedules.size()) {
+				Schedule s = schedules.get(i);
+				deleteSchedule(s.getId(), s.getSecretCode());
+				
+			}
+			
+			return true;
+			
+		} catch (Exception e) {
+			throw new Exception("Error in delete old schedules: " + e.getMessage());
+		}
+	}
 
 	// for database
 	private Schedule createSchedule(ResultSet resultSet) throws Exception {

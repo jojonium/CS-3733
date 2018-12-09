@@ -566,6 +566,9 @@ public class TimeSlotDAO {
 			throw new Exception("Failed in closing timeslot: " + e.getMessage());
 		}
 	}
+	
+	
+	
 
 	public TimeSlot createTimeSlot(ResultSet resultSet) throws Exception {
 

@@ -642,6 +642,7 @@ public class TimeSlotDAO {
 		return new TimeSlot(secretCode, beginDateTime, isOpen, requester, scheduleID);
 	}
 
+	/* additional methods to reformat strings*/ 
 	private String rewriteS(String s) {
 
 		String[] dateArray = s.split("-");
@@ -656,10 +657,6 @@ public class TimeSlotDAO {
 
 	}
 
-	private String convT(int hour, int minute) {
-		
-		return LocalTime.of(hour,minute).toString();
-	}
 	
 	private LocalTime convLT(String s){
 		String[] time = s.split(":");

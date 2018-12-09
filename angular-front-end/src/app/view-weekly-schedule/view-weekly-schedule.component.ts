@@ -380,6 +380,7 @@ export interface CreateMeetingData {
 export interface OpenCloseAllData {
   date: Date,
   time: MyTime,
+  type: string, // "time" or "date"
   scheduleID: string,
   secretCode: string
 }
@@ -477,6 +478,10 @@ export class OpenCloseAllDialog {
   
   date: Date;
   time: MyTime;
+  closeButton = "CANCEL";
+  finished = false;
+  submitted = false;
+
   
   closeOpenCloseAllDialog(): void {
     this.dialogRef.close();
@@ -484,11 +489,17 @@ export class OpenCloseAllDialog {
   
   openAllTime(data: OpenCloseAllData): void {
     var timeString = data.time.hour + ':' + data.time.minute;
+    console.log(timeString);
     /*this.scheduleService.openAllTimeSlotTime(timeString, data.scheduleID, data.secretCode)
       .subscribe(resp => {
         console.log(`OpenCloseAllComponent received response: ${resp}`);
         var respBody = JSON.parse(resp.body);*/
         
+  }
+  
+  closeAllTime(data: OpenCloseAllData): void {
+    var timeString = data.time.hour + ':' + data.time.minute;
+    console.log(timeString);
   }
 }
     

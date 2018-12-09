@@ -1,22 +1,16 @@
-<h1 mat-dialog-title>{{header}}</h1>
+<h1 mat-dialog-title>Open/close all time slots by {{data.type}}</h1>
 
 <form>
   <div mat-dialog-content>
-    <p *ngIf="!finished">To request a meeting on {{data.dateString}} at {{data.timeString}}, please enter your name below:</p>
-    <mat-form-field class="full-width" *ngIf="!finished">
-      <input matInput [(ngModel)]="data.requester" name="requester" cdkFocusInitial>
-    </mat-form-field>
+    <p *ngIf="!finished"></p>
     
     <p *ngIf="finished">{{message}}</p>
-    
-    <h2 *ngIf="finished">{{secretCode}}</h2>
-    
-    <p *ngIf="finished">{{message2}}</p>
-    
+
   </div>
   <div mat-dialog-actions style="display: flex; justify-content: flex-end">
     <button mat-raised-button type="button" (click)="closeCreateMeetingDialog()" style="margin-right: 5px;">{{closeButton}}</button>
-    <button mat-raised-button *ngIf="!finished" type="submit" (click)="requestMeeting(data)" color="primary" style="margin-left: 5px;">SUBMIT</button>
+    <button mat-raised-button *ngIf="!finished" type="submit" (click)="openAllTime(data)" color="primary" style="margin-left: 5px;">OPEN</button>
+    <button mat-raised-button *ngIf="!finished" type="submit" (click)="closeAllTime(data)" color="primary" style="margin-left: 5px;">CLOSE</button>
   </div>
 </form>
 

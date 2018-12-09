@@ -5,6 +5,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 //import com.amazonaws.services.lambda.runtime.LambdaLogger;
 
@@ -54,6 +55,32 @@ public class ScheduleDAO {
 			throw new Exception("Failed in getting schedule: " + e.getMessage());
 		}
 
+	}
+	
+	public ArrayList<Schedule> getAllSchedules() throws Exception {
+		
+		ArrayList<Schedule> schedules = new ArrayList<Schedule>();
+		
+		try {
+			
+			
+			Statement statement = conn.createStatement();
+            String query = "SELECT * FROM Schedules;";
+            ResultSet resultSet = statement.executeQuery(query);
+            
+			while(resultSet.next()) {
+				Schedule s = createSchedule(resultSet);
+				schedules.add(s);
+			}
+
+			resultSet.close();
+            statement.close();
+			return schedules;
+			
+		} catch (Exception e) {
+			throw new Exception("Failed at getting all schedules: " + e.getMessage());
+		}
+		
 	}
 
 	public boolean addSchedule(Schedule schedule) throws Exception{

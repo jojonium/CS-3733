@@ -81,25 +81,33 @@ public class Schedule {
 		endHour = Integer.parseInt(timeEndArray[0]);
 		endMinute = Integer.parseInt(timeEndArray[1]);
 
+
 		// check for valid minutes 
 		if (startMinute % duration != 0) {
 			startMinute += duration - (startMinute %duration);
 		}
-		
+
 		if ((endMinute % duration) != 0) {
 			endMinute -= (endMinute % duration);
 		}
+
+		// check if enough time between start and end time for a time slot
+		if (LocalTime.of(startHour, startMinute).equals(LocalTime.of(endHour,endMinute))) {
+			throw new Exception("Error: Not enough time between start & end time for a time slot");
+		}
+
 		this.name = name;
 		this.startDate = LocalDate.of(startYear, startMonth, startDay);
 		this.endDate = LocalDate.of(endYear, endMonth, endDay);
-		this.startTime = LocalTime.of(startHour, startMinute);
-		this.endTime = LocalTime.of(endHour, endMinute);
+		this.startTime = (startMinute == 60) ? LocalTime.of(startHour, 0).plusHours(1) : LocalTime.of(startHour, startMinute);
+		this.endTime = (endMinute == 60) ? LocalTime.of(endHour, 0).plusHours(1) : LocalTime.of(endHour, endMinute);
 		this.duration = duration;
-		
-		if (this.endDate.isBefore(this.startDate))
-			throw new Exception("Error End Date is before start Date");
+		if (this.endDate.isBefore(this.startDate)) {
+			if (!this.endDate.isEqual(this.startDate))
+				throw new Exception("Error end Date is before start Date");
+		}
 		if (this.endTime.isBefore(this.startTime))
-			throw new Exception("Error End Time is before start Time");
+			throw new Exception("Error end Time is before start Time");
 		// unique value generations
 		this.secretCode = generateCode();
 		this.id = generateCode();
@@ -110,6 +118,7 @@ public class Schedule {
 
 	}
 
+	// db
 	public Schedule(String secretCode, String id, String name, String startDate, String endDate,
 			String startTime, String endTime, int duration) throws Exception {
 		int startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute;
@@ -133,27 +142,28 @@ public class Schedule {
 		endHour = Integer.parseInt(timeEndArray[0]);
 		endMinute = Integer.parseInt(timeEndArray[1]);
 		this.duration = duration;
-		
+
 		// check for valid minutes for string constructor
 		if (startMinute % duration != 0) {
 			startMinute += duration - (startMinute %duration);
+
 		}
-		
+
 		if ((endMinute % duration) != 0) {
-			endMinute -= (startMinute % duration);
+			endMinute -= (endMinute % duration);
 		}
-		
+
 		this.name = name;
 		this.startDate = LocalDate.of(startYear, startMonth, startDay);
 		this.endDate = LocalDate.of(endYear, endMonth, endDay);
-		this.startTime = LocalTime.of(startHour, startMinute);
-		this.endTime = LocalTime.of(endHour, endMinute);
-		
+		this.startTime = (startMinute == 60) ? LocalTime.of(startHour, 0).plusHours(1) : LocalTime.of(startHour, startMinute);
+		this.endTime = (endMinute == 60) ? LocalTime.of(endHour, 0).plusHours(1) : LocalTime.of(endHour, endMinute);
+
 		if (this.endDate.isBefore(this.startDate))
 			throw new Exception("Error End Date is before start Date");
 		if (this.endTime.isBefore(this.startTime))
 			throw new Exception("Error End Time is before start Time");
-		
+
 		this.secretCode = secretCode;
 		this.id = id;
 	}

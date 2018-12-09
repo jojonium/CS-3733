@@ -202,48 +202,27 @@ public class Schedule {
 		return secretCode;
 	}
 
-	public void setSecretCode(String secretCode) {
-		this.secretCode = secretCode;
-	}
-
 	public String getId() {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public LocalDate getStartDate() {
 		return startDate;
-	}
-
-	public void setStartDate(LocalDate startDate) {
-		this.startDate = startDate;
 	}
 
 	public LocalDate getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(LocalDate endDate) {
-		this.endDate = endDate;
-	}
 
 	public LocalTime getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(LocalTime startTime) {
-		this.startTime = startTime;
-	}
 
 	public LocalTime getEndTime() {
 		return endTime;
-	}
-
-	public void setEndTime(LocalTime endTime) {
-		this.endTime = endTime;
 	}
 
 	public String getName() {

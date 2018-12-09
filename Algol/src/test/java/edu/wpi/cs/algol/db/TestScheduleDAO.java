@@ -16,10 +16,15 @@ public class TestScheduleDAO {
 		try {
 			ScheduleDAO sDao = new ScheduleDAO();
 			Schedule s = new Schedule("name","11/11/2011", "11/12/2011", "9:00","10:00", 30);
+			Schedule s1 = new Schedule("name","11/11/2011", "11/12/2011", "9:00","10:00", 30);
+			sDao.addSchedule(s);
+			sDao.addSchedule(s1);
 			ArrayList<Schedule> schedules = sDao.getAllSchedules();
 			assertTrue(schedules.size() > 0);
 			String id = schedules.get(0).getId();
 			s = sDao.getSchedule(id);
+			sDao.deleteSchedule(s.getId(), s.getSecretCode());
+			sDao.deleteSchedule(s1.getId(), s1.getSecretCode());
 			assertTrue(s != null);
 
 		} catch (Exception e) {
@@ -37,24 +42,27 @@ public class TestScheduleDAO {
 			// add schedule
 			boolean b1 = sDao.addSchedule(s);
 			
+			// schedule modification
+			boolean b2 = sDao.adjustDates(s.getId(), s.getSecretCode(), "11/10/2011", "11/12/2011");
+			boolean b3 = sDao.adjustDates(s.getId(), s.getSecretCode(), "11/10/2011", "11/13/2011");
+			boolean b4 = sDao.adjustTimes(s.getId(), s.getSecretCode(), "8:00", "10:00");
+			boolean b5 = sDao.adjustTimes(s.getId(), s.getSecretCode(), "8:00", "11:00");
+			
+			// update
+			sDao.updateSchedule(s);
 			// delete schedule
-			boolean b2 = sDao.deleteSchedule(s.getId(), s.getSecretCode());
+			boolean b = sDao.deleteSchedule(s.getId(), s.getSecretCode());
 			
 			assertTrue(b1);
 			assertTrue(b2);
+			assertTrue(b3);
+			assertTrue(b4);
+			assertTrue(b5);
+			
+			assertTrue(b);
 			
 		} catch (Exception e) {
 			fail("Creation test error: " + e.getMessage());
-		}
-	}
-
-
-	@Test
-	public void testModification() {
-		try {
-
-		} catch (Exception e) {
-			fail("Not yet implemented: ");
 		}
 	}
 

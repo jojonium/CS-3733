@@ -64,9 +64,8 @@ public class ScheduleDAO {
 
 		try {
 
-
 			Statement statement = conn.createStatement();
-			String query = "SELECT * FROM Schedules where ;";
+			String query = "SELECT * FROM Schedules;";
 			ResultSet resultSet = statement.executeQuery(query);
 
 			while(resultSet.next()) {

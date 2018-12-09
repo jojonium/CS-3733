@@ -123,41 +123,27 @@ public class TimeSlot {
 		return secretCode;
 	}
 
-	public void setSecretCode(String secretCode) {
-		this.secretCode = secretCode;
-	}
 
 	public LocalDateTime getBeginDateTime() {
 		return beginDateTime;
 	}
 
-	public void setBeginDateTime(LocalDateTime beginDateTime) {
-		this.beginDateTime = beginDateTime;
-	}
+
 
 	public boolean isOpen() {
 		return isOpen;
 	}
 
-	public void setOpen(boolean isOpen) {
-		this.isOpen = isOpen;
-	}
 
 	public String getRequester() {
 		return requester;
-	}
-
-	public void setRequester(String requester) {
-		this.requester = requester;
 	}
 
 	public String getScheduleId() {
 		return scheduleID;
 	}
 
-	public void setScheduleId(String scheduleID) {
-		this.scheduleID = scheduleID;
-	}
+
 
 	@Override
 	public String toString() {

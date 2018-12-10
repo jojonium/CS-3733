@@ -23,8 +23,8 @@ public class ReportActivityResponse {
 	}
 
 	public String toString(){
-		if (scheduleID != null )
-			return ("Delete schedule was successful, response: " + response + "\n");
+		if (schedules != null )
+		
 		else
 			return ("Delete schedule null error \n");
 	}

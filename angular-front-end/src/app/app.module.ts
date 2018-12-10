@@ -28,6 +28,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ViewScheduleFormComponent } from './view-schedule-form/view-schedule-form.component';
 import { DeletedComponent } from './deleted/deleted.component';
 import { AboutComponent } from './about/about.component';
+import { AdminComponent } from './admin/admin.component';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { AboutComponent } from './about/about.component';
     PageNotFoundComponent,
     ViewScheduleFormComponent,
     DeletedComponent,
-    AboutComponent
+    AboutComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,14 @@
+#main-heading {
+  width: 800px;
+  margin: 20px;
+  padding: 20px;
+}
+
+mat-card {
+  margin: 20px;
+  flex-grow: 1;
+}
+
+div#card-container {
+  display: flex;
+}

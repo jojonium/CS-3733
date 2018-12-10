@@ -195,6 +195,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
       let extraClass = "";
       if (i == 0) extraClass += ' first-dh';
       if (i == this.numDays - 1) extraClass += ' last-dh';
+      if (this.secretCode) extraClass += ' clickable';
       this.dateArray[i]  = runningDate;
       this.tiles[tileIndex++] = {class: "date-header" + extraClass,
         text: this.weekdays[runningDate.getDay()] + ",",
@@ -222,9 +223,10 @@ export class ViewWeeklyScheduleComponent implements OnInit {
     for (let i = 0; i < input.length + this.numTimes; ++i) {
       if (i % (this.numDays + 1) == 0) { // beginning of a row
         // add a time to the start of the row
-        let extraClass = '';
+        var extraClass = '';
         if (i == 0) extraClass += ' first-th';
         if (i == input.length + this.numTimes - this.numDays - 1) extraClass += ' last-th';
+        if (this.secretCode) extraClass += ' clickable';
         this.tiles[tileIndex++] = {class: "time-header" + extraClass,
           text: this.prettyPrintTime(this.timeArray[j++]),
           text2: "",
@@ -243,7 +245,13 @@ export class ViewWeeklyScheduleComponent implements OnInit {
           nextText = s[c][r].isOpen ? 'Open' : '—';
           nextTT = s[c][r].isOpen ? 'Request a meeting' : '';
         }
-        this.tiles[tileIndex++] = {class: s[c][r].isOpen ? 'open' : 'closed',
+        extraClass = '';
+        if (s[c][r].isOpen)
+          extraClass = 'open';
+        else
+          extraClass = 'closed';
+        if (this.secretCode) extraClass += ' clickable';
+        this.tiles[tileIndex++] = {class: extraClass,
           text: nextText,
           text2: '',
           click: s[c][r].isOpen ? 'openTimeSlotClick()' : '',

@@ -1,17 +1,16 @@
 package edu.wpi.cs.algol.lambda.reportactivity;
 
 public class ReportActivityRequest {
-	String secretCode;
-	String scheduleID;
-
-	public ReportActivityRequest(String sid, String scd) {
-		this.secretCode = scd;
-		this.scheduleID = sid;
+	String adminPass;
+	int pastHour;
+	public ReportActivityRequest(String ap, int ph) {
+		this.adminPass = ap;
+		this.pastHour = ph;
 	}
 
 
 	@Override
 	public String toString() {
-		return "DeleteScheduleRequest [Schedule ID=" + scheduleID + ", Secret Code =" + secretCode + "]";
+		return "ReportActivityRequest [Admin Password=" + adminPass + ", Hours back =" + pastHour + "]";
 	}
 }

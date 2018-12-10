@@ -1,6 +1,5 @@
 package edu.wpi.cs.algol.lambda.reportactivity;
 
-public class ReportActivityHandler {
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,22 +19,23 @@ import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.google.gson.Gson;
 
 import edu.wpi.cs.algol.db.ScheduleDAO;
-import edu.wpi.cs.algol.lambda.deleteschedule.DeleteScheduleRequest;
-import edu.wpi.cs.algol.lambda.deleteschedule.DeleteScheduleResponse;
+import edu.wpi.cs.algol.lambda.reportactivity.ReportActivityRequest;
+import edu.wpi.cs.algol.lambda.reportactivity.ReportActivityResponse;
+import edu.wpi.cs.algol.model.Schedule;
 
-public class DeleteScheduleOldHandler implements RequestStreamHandler {
+public class ReportActivityHandler implements RequestStreamHandler {
 	//test
 	public LambdaLogger logger = null;
-	
-	boolean deleteSchedule(String sid, String scd) throws Exception {
+	public ArrayList<Schedule> schedules;
+boolean reportActivity (String adminPass, int pastHour) throws Exception {
 		//logger test
-		if (logger != null) { logger.log("in deleteSchedule"); }
+		if (logger != null) { logger.log("in ReportActivity"); }
 
 		//variable setup
 		ScheduleDAO daoS = new ScheduleDAO();
 		try {
-			return daoS.deleteSchedule(sid, scd);
-			
+			schedules = daoS.reportActivity(adminPass, pastHour);
+			return true;
 		} catch (Exception e) {
 			throw e;
 		}
@@ -54,7 +55,7 @@ public class DeleteScheduleOldHandler implements RequestStreamHandler {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("headers", headerJson);
 
-		DeleteScheduleResponse response = null;
+		ReportActivityResponse response = null;
 		
 		// extract body from incoming HTTP POST request. If any error, then return 422 error
 		String body;
@@ -68,7 +69,7 @@ public class DeleteScheduleOldHandler implements RequestStreamHandler {
 			String method = (String) event.get("httpMethod");
 			if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 				logger.log("Options request");
-				response = new DeleteScheduleResponse("name", 200);  // OPTIONS needs a 200 response
+				response = new ReportActivityResponse("name", 200);  // OPTIONS needs a 200 response
 		        responseJson.put("body", new Gson().toJson(response));
 		        processed = true;
 		        body = null;
@@ -80,23 +81,23 @@ public class DeleteScheduleOldHandler implements RequestStreamHandler {
 			}
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
-			response = new DeleteScheduleResponse("Bad Request:" + pe.getMessage(), 422);  // unable to process input
+			response = new ReportActivityResponse("Bad Request:" + pe.getMessage(), 422);  // unable to process input
 	        responseJson.put("body", new Gson().toJson(response));
 	        processed = true;
 	        body = null;
 		}
 
 		if (!processed) {
-			DeleteScheduleRequest req = new Gson().fromJson(body, DeleteScheduleRequest.class);
+			ReportActivityRequest req = new Gson().fromJson(body, ReportActivityRequest.class);
 			
 			logger.log(req.toString());
 
-			DeleteScheduleResponse resp;
-			if (logger != null) { logger.log(req.scheduleID + " " +  ", " + req.secretCode + " "); }
+			ReportActivityResponse resp;
 			try {
-				if (deleteSchedule(req.scheduleID, req.secretCode)) {
-					logger.log("deleteSchedule worked");
-					resp = new DeleteScheduleResponse(req.scheduleID);
+				
+				if (reportActivity(req.adminPass, req.pastHour)) {
+					logger.log("ReportActivity worked");
+					resp = new ReportActivityResponse("You have successfully retrieved Schedule details from " + req.pastHour + " hours old.", schedules);
 					logger.log("schedule successfully deleted");
 				}
 				else {

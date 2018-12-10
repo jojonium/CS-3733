@@ -297,7 +297,7 @@ public class TimeSlotDAO {
 
 		Schedule s = daoS.getSchedule(scheduleID);
 		TimeSlot startts;
-
+		
 		if (!dateStart.isEmpty()) {			// a valid date has been included
 			String[] date = dateStart.split("-");
 			//String[] time = dateTime.split(":");
@@ -306,8 +306,16 @@ public class TimeSlotDAO {
 			int day = Integer.parseInt(date[1]);
 			int year = Integer.parseInt(date[2]);
 			LocalDateTime ldt;
-
-			ldt = LocalDateTime.of(LocalDate.of(year, month, day), s.getStartTime());
+			LocalDate checkDate = LocalDate.of(year, month, day);
+			// checks if valid input date 
+			if (checkDate.isBefore(s.getStartDate())) {
+				checkDate = s.getStartDate();
+			}
+			if (checkDate.isAfter(s.getEndDate())) {
+				checkDate = s.getEndDate();
+			}
+			
+			ldt = LocalDateTime.of(checkDate, s.getStartTime());
 			// check which date schedule begins on
 			startts = daoT.getTimeSlot(scheduleID, ldt);
 

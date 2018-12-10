@@ -126,11 +126,26 @@ export class ViewWeeklyScheduleComponent implements OnInit {
           if (respBody.httpCode == 202) {
             console.log(respBody);
             this.refresh();
-          } else if (+this.week.httpCode > 400) {
+          } else if (+respBody.httpCode > 400) {
             //TODO open snackbar for error message
           }
         });
-    } else if (this.secretCode && index >= 1 && index <= this.numDays) { // organizer close/open all by day
+    } else if (text != "Open" && this.secretCode) {      
+      var dateString = (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear(); // 12/5/2018
+      var timeString = t.hour + ":" + t.minute;
+      var modelToSend = new CancelMeetingRequest(this.id, dateString, timeString, this.secretCode);
+      console.log(dateString + ',\n' + timeString);
+      this.scheduleService.cancelMeeting(modelToSend)
+        .subscribe(resp => {
+          var respBody = JSON.parse(resp.body);
+          if (respBody.httpCode == 200) {
+            console.log(respBody);
+            this.refresh();
+          } else if (+respBody.httpCode > 400) {
+            // TODO open snackbar for error
+          }
+        });
+    } else if (this.secretCode && index >= 1 && index <= this.numDays) { // close/open all by day
       var openCloseData = {
         date: d,
         time: t,

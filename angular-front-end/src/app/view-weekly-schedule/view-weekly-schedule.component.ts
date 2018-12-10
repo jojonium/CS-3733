@@ -510,7 +510,7 @@ export class CreateMeetingDialog {
 export class OpenCloseAllDialog {
   constructor(
     public dialogRef: MatDialogRef<OpenCloseAllDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: OpenCloseAllDialog,
+    @Inject(MAT_DIALOG_DATA) public data: OpenCloseAllData,
     private scheduleService: ScheduleService
   ) { }
   

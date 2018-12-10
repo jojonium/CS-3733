@@ -23,10 +23,8 @@ public class ExtendDateHandler implements RequestStreamHandler {
 	public LambdaLogger logger = null;
 
 	boolean extendDate(String id, String sc, String sd, String ed) throws Exception{
-		boolean extended = false;
 		ScheduleDAO daoS = new ScheduleDAO();
-		extended = daoS.adjustDates(id, sc, sd, ed);
-		return extended;
+		return daoS.adjustDates(id, sc, sd, ed);
 	}
 
 	@SuppressWarnings("unchecked")

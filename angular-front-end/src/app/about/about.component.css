@@ -2,10 +2,18 @@
   display: flex;
   flex-wrap: wrap;
   max-width: 1000px;
-  justify-content: space-evenly;
+  justify-content: center;
+  margin: 0;
+  padding: 0 40px;
 }
 
 .about-card {
-  max-width: 400px;
+  width: 400px;
   margin: 20px;
+}
+
+.main-heading {
+  width: 1000px;
+  margin: 20px 20px 0 20px;
+  padding: 20px;
 }

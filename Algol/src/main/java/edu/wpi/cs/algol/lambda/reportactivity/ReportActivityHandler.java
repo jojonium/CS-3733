@@ -28,7 +28,6 @@ public class ReportActivityHandler implements RequestStreamHandler {
 	public LambdaLogger logger = null;
 	public ArrayList<Schedule> schedules;
 boolean reportActivity (String adminPass, int pastHour) throws Exception {
-		//logger test
 		if (logger != null) { logger.log("in ReportActivity"); }
 
 		//variable setup

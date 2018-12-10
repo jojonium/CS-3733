@@ -42,6 +42,10 @@ mat-grid-tile.open {
   cursor: pointer;
 }
 
+mat-grid-tile.clickable {
+  cursor: pointer;
+}
+
 mat-grid-tile.open:hover {
   background-color: #108615;
 }

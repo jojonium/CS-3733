@@ -8,7 +8,7 @@
 
     <p *ngIf="week && !secretCode">Click on an open time slot to schedule a meeting</p>
     
-    <p *ngIf="secretCode">Click on an unfilled time slot to toggle it between open and closed</p>
+    <p *ngIf="secretCode">Click on a time slot to toggle it between open and closed</p>
     
     <p *ngIf="secretCode">Click on a time or date to open/close all time slots for that time/date</p>
     
@@ -17,6 +17,7 @@
           *ngFor="let tile of tiles; let i = index"
           [attr.data-index]="i"
           (click)="timeSlotClick(tile.text, tile.text2, i)"
+          [matTooltip]="tile.tooltip"
           [ngClass]="tile.class">{{tile.text}}<br>{{tile.text2}}
       </mat-grid-tile>
     </mat-grid-list>
@@ -24,6 +25,8 @@
   
   <div *ngIf="errorMessage">
     <h2>{{errorMessage}}</h2>
+    
+    <p>This could be because you have an invalid schedule ID, date, or secret code</p>
   </div>
   
 </div>

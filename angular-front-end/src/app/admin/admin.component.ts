@@ -16,12 +16,22 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() {
   }
+  
+  onDeleteSubmit() {
+    // TODO implement
+    console.log(this.delModel);
+  }
+  
+  onRetrieveSubmit() {
+    // TODO implement
+    console.log(this.retModel);
+  }
 
 }
 
 export class Model {
   constructor(
-    age: string,
-    password: string
+    public age: string,
+    public password: string
   ) { }
 }

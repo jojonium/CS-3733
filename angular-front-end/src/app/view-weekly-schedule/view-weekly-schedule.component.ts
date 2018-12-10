@@ -13,6 +13,7 @@ export interface Tile {
   text: string;
   text2: string;
   click: string;
+  tooltip: string;
 }
 
 @Component({
@@ -186,7 +187,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
     }
     
     // blank tile for the top left
-    this.tiles[tileIndex++] = {class: "blank", text: "", text2: "", click: null};
+    this.tiles[tileIndex++] = {class: "blank", text: "", text2: "", click: null, tooltip: ""};
     
     // add in the date headers at the top of each column
     var runningDate = this.getDate(this.week.startDate);
@@ -198,7 +199,8 @@ export class ViewWeeklyScheduleComponent implements OnInit {
       this.tiles[tileIndex++] = {class: "date-header" + extraClass,
         text: this.weekdays[runningDate.getDay()] + ",",
         text2: this.prettyPrintDate(runningDate),
-        click: ''
+        click: '',
+        tooltip: (this.secretCode) ? "Open/close all time slots on this day" : ""
       };
       runningDate = new Date(runningDate.valueOf() + 8.64e+7); // add a day
     }
@@ -214,6 +216,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
     }
         
     var nextText;
+    var nextTT;
     // add in the times and timeslots
     var j = 0; var c = 0; var r = 0;
     for (let i = 0; i < input.length + this.numTimes; ++i) {
@@ -225,21 +228,26 @@ export class ViewWeeklyScheduleComponent implements OnInit {
         this.tiles[tileIndex++] = {class: "time-header" + extraClass,
           text: this.prettyPrintTime(this.timeArray[j++]),
           text2: "",
-          click: ""
+          click: "",
+          tooltip: (this.secretCode) ? "Open/close all time slots at this time" : ""
         };
       } else {
         nextText = '';
+        nextTT = '';
         // add an open/closed timeslot
         if (this.secretCode) { // TODO Temporary hack because viewweeklyschedule still sends names for some reason. Fix it!
           nextText = s[c][r].requester;
           if (!nextText) nextText = s[c][r].isOpen ? 'Open' : '—';
+          nextTT = s[c][r].isOpen ? 'Close this time slot' : 'Open this time slot';
         } else {
           nextText = s[c][r].isOpen ? 'Open' : '—';
+          nextTT = s[c][r].isOpen ? 'Request a meeting' : '';
         }
         this.tiles[tileIndex++] = {class: s[c][r].isOpen ? 'open' : 'closed',
           text: nextText,
           text2: '',
-          click: s[c][r].isOpen ? 'openTimeSlotClick()' : ''
+          click: s[c][r].isOpen ? 'openTimeSlotClick()' : '',
+          tooltip: nextTT
         };
         c++;
         if (c == this.numDays) {
@@ -502,7 +510,7 @@ export class CreateMeetingDialog {
 export class OpenCloseAllDialog {
   constructor(
     public dialogRef: MatDialogRef<OpenCloseAllDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: OpenCloseAllDialog,
+    @Inject(MAT_DIALOG_DATA) public data: OpenCloseAllData,
     private scheduleService: ScheduleService
   ) { }
   

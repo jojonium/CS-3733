@@ -239,6 +239,8 @@ public class TimeSlotDAO {
 	public boolean cancelMeeting(String scheduleID, LocalDateTime beginDateTime ) throws Exception {
 
 		try {
+			ScheduleDAO sDao = new ScheduleDAO();
+			
 			PreparedStatement ps = conn.prepareStatement("UPDATE TimeSlots SET requester=?, isOpen=?, secretCode =? WHERE beginDateTime=? AND scheduleID =?;");
 
 			ps.setString(1, null);

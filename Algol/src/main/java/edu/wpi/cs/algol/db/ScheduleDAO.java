@@ -185,7 +185,7 @@ public class ScheduleDAO {
 				LocalDate sameEndDate = this.getSchedule(id).getEndDate();
 
 				int numAffected = -1;
-
+				
 				ps.setString(1, (!startDate.isEmpty()) ? startDate : rewriteS(sameStartDate.toString()));
 				ps.setString(2, (!endDate.isEmpty()) ? endDate : rewriteS(sameEndDate.toString()));
 				ps.setString(3, id);
@@ -193,8 +193,9 @@ public class ScheduleDAO {
 				numAffected = ps.executeUpdate();
 
 				TimeSlotDAO tDao = new TimeSlotDAO();
+				
 				// add more timeslots
-				if(!startDate.equals(rewriteS(sameStartDate.toString()))) {
+				if(!startDate.isEmpty() && !startDate.equals(rewriteS(sameStartDate.toString()))) {
 
 					String[] splitDate = startDate.split("/");
 
@@ -209,7 +210,7 @@ public class ScheduleDAO {
 					}
 				}
 
-				if(!endDate.equals(rewriteS(sameEndDate.toString()))) {
+				if(!endDate.isEmpty() && !endDate.equals(rewriteS(sameEndDate.toString()))) {
 
 					String[] splitDate = endDate.split("/");
 					sameEndDate = sameEndDate.plusDays(1);
@@ -230,7 +231,7 @@ public class ScheduleDAO {
 
 			return false;
 		} catch (Exception e) {
-			throw new Exception("Unable to adjust start/end dates: " + e.getMessage());
+			throw new Exception("Unable to adjust start/end dates: " + e);
 		}
 	}
 

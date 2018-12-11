@@ -14,9 +14,11 @@ import org.junit.Test;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.google.gson.Gson;
 
+//import edu.wpi.cs.algol.db.ScheduleDAO;
 import edu.wpi.cs.algol.lambda.createschedule.CreateScheduleHandler;
 import edu.wpi.cs.algol.lambda.createschedule.CreateScheduleRequest;
 import edu.wpi.cs.algol.lambda.createschedule.CreateScheduleResponse;
+//import edu.wpi.cs.algol.model.Schedule;
 
 
 public class TestCreateSchedule {
@@ -31,7 +33,8 @@ public class TestCreateSchedule {
     public void testCreateAndChangeSchedule() throws IOException {
         CreateScheduleHandler handler = new CreateScheduleHandler();
 
-
+        //ScheduleDAO sDao = new ScheduleDAO();
+        //Schedule s= new Schedule("name", "12/9/2018",  "12/10/2018",  "9:00",  "10:00",  20);
         CreateScheduleRequest ar = new CreateScheduleRequest("name", "12/9/2018",  "12/10/2018",  "9:00",  "10:00",  "20");
         
         //String ccRequest = new Gson().toJson(ar);

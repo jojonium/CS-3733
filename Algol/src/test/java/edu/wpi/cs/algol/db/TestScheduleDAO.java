@@ -17,6 +17,7 @@ public class TestScheduleDAO {
 			ScheduleDAO sDao = new ScheduleDAO();
 			Schedule s = new Schedule("name","11/11/2011", "11/12/2011", "9:00","10:00", 30);
 			Schedule s1 = new Schedule("name","11/11/2011", "11/12/2011", "9:00","10:00", 30);
+			assertTrue(!s.toString().isEmpty());
 			sDao.addSchedule(s);
 			sDao.addSchedule(s1);
 			ArrayList<Schedule> schedules = sDao.getAllSchedules();

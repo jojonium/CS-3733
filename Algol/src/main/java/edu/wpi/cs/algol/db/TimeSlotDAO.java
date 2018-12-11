@@ -239,7 +239,7 @@ public class TimeSlotDAO {
 	public boolean cancelMeeting(String scheduleID, LocalDateTime beginDateTime ) throws Exception {
 
 		try {
-			
+
 			PreparedStatement ps = conn.prepareStatement("UPDATE TimeSlots SET requester=?, isOpen=?, secretCode =? WHERE beginDateTime=? AND scheduleID =?;");
 
 			ps.setString(1, null);
@@ -297,7 +297,7 @@ public class TimeSlotDAO {
 
 		Schedule s = daoS.getSchedule(scheduleID);
 		TimeSlot startts;
-		
+
 		if (!dateStart.isEmpty()) {			// a valid date has been included
 			String[] date = dateStart.split("-");
 			//String[] time = dateTime.split(":");
@@ -314,7 +314,7 @@ public class TimeSlotDAO {
 			if (checkDate.isAfter(s.getEndDate())) {
 				checkDate = s.getEndDate();
 			}
-			
+
 			ldt = LocalDateTime.of(checkDate, s.getStartTime());
 			// check which date schedule begins on
 			startts = daoT.getTimeSlot(scheduleID, ldt);
@@ -580,9 +580,8 @@ public class TimeSlotDAO {
 		}
 	}
 
-	// shows available timeslots
-
-	public ArrayList<TimeSlot> showAvailableTimeslots(String scheduleID, String startDate, String endDate, String startTime, String endTime) throws Exception {
+	// shows available timeslots filter 
+	/*public ArrayList<TimeSlot> showAvailableTimeslots(String scheduleID, String startDate, String endDate, String startTime, String endTime) throws Exception {
 
 		try {
 
@@ -629,7 +628,7 @@ public class TimeSlotDAO {
 			LocalTime et = LocalTime.of(endHour, endMinute);
 
 			while (sl.isBefore(el.plusDays(1))) {
-				
+
 				while (st.isBefore(et)) {
 					TimeSlot ts = getTimeSlot(scheduleID, LocalDateTime.of(sl, st));
 					if (ts.isOpen() == true) {
@@ -647,6 +646,65 @@ public class TimeSlotDAO {
 		} catch (Exception e) {
 			throw new Exception("Error in showing available timeslots: " + e.getMessage());
 		}
+	} */
+
+	/*
+	 * method that filters available timeslot based on user input on parameters: 
+	 * 	month, year, day of week, day of month, and time. 
+	 */
+	public ArrayList<TimeSlot> showAvailableTimeSlots(String scheduleID, String month, String year, String dayOfWeek, String day, String time) throws Exception {
+
+		try {
+
+			/* Configure input */	// assumes only valid rounded times
+			int inputMonth, inputYear, inputDay;
+			String[] inputTime;
+			int inputHour, inputMinute;
+			String weekday = dayOfWeek;
+
+			inputMonth = (!month.isEmpty()) ? Integer.parseInt(month) : -1;
+			inputYear = (!year.isEmpty()) ? Integer.parseInt(year) : -1;
+			inputDay = (!day.isEmpty()) ? Integer.parseInt(day) : -1;
+
+			if (!time.isEmpty()) {
+				inputTime = time.split(":");
+				inputHour = Integer.parseInt(inputTime[0]);
+				inputMinute = Integer.parseInt(inputTime[1]);
+			}
+			else {
+				inputHour = -1;
+				inputMinute = -1;
+			}
+
+
+			ArrayList<TimeSlot> timeslots = this.getAllTimeSlots(scheduleID);
+
+
+			if (inputMonth > 0) {
+				timeslots = this.filterByMonth(timeslots, inputMonth);
+			}
+			if (inputYear > 0) {
+				timeslots = this.filterByYear(timeslots, inputYear);
+			}
+			if (inputDay > 0) {
+				timeslots = this.filterByDay(timeslots, inputDay);
+			}
+			
+			if (!weekday.isEmpty()) {
+				timeslots = this.filterByDayOfWeek(timeslots, weekday);
+			}
+			if (inputHour > -1 && inputMinute > -1) {
+				timeslots = this.filterByTime(timeslots, inputHour, inputMinute);
+			}
+
+
+			return timeslots;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception("Error in showing available TimeSlots" + e.getMessage());
+
+		}
 	}
 
 
@@ -661,7 +719,7 @@ public class TimeSlotDAO {
 	}
 
 	/* additional methods to reformat strings*/ 
-	private String rewriteS(String s) {
+	/*private String rewriteS(String s) {
 
 		String[] dateArray = s.split("-");
 		int year = Integer.parseInt(dateArray[0]);
@@ -673,15 +731,86 @@ public class TimeSlotDAO {
 		return (month +"/"+ day+"/" + year );
 
 
-	}
+	}*/
 
 
-	private LocalTime convLT(String s){
+	/*private LocalTime convLT(String s){
 		String[] time = s.split(":");
 		int hour = Integer.parseInt(time[0]);
 		int minute = Integer.parseInt(time[1]);
 		return LocalTime.of(hour, minute);
 
+	}*/
+
+	private ArrayList<TimeSlot> filterByMonth(ArrayList<TimeSlot> slots, int month) {
+		ArrayList<TimeSlot> filteredSlots = new ArrayList<TimeSlot>();
+		if (slots.size() > 0) {
+			for (int i = 0; i < slots.size(); i++) {
+				LocalDateTime ldt = slots.get(i).getBeginDateTime();
+				if(ldt.getDayOfMonth() == month && slots.get(i).isOpen()) {
+					filteredSlots.add(slots.get(i));
+				}
+			}
+		}
+		return filteredSlots;
+
+	}
+
+	private ArrayList<TimeSlot> filterByYear(ArrayList<TimeSlot> slots, int year) {
+		ArrayList<TimeSlot> filteredSlots = new ArrayList<TimeSlot>();
+		if(slots.size() > 0) {
+			for (int i = 0; i < slots.size(); i++) {
+				LocalDateTime ldt = slots.get(i).getBeginDateTime();
+				if(ldt.getYear() == year && slots.get(i).isOpen()) {
+					filteredSlots.add(slots.get(i));
+				}
+			}
+		}
+
+		return filteredSlots;
+	}
+
+	// selets timeslots of same day of month
+	private ArrayList<TimeSlot> filterByDay(ArrayList<TimeSlot> slots, int day){
+		ArrayList<TimeSlot> filteredSlots = new ArrayList<TimeSlot>();
+		if(slots.size() > 0) {
+			for (int i = 0; i < slots.size(); i++) {
+				LocalDateTime ldt = slots.get(i).getBeginDateTime();
+				if(ldt.getDayOfMonth() == day && slots.get(i).isOpen()) {
+					filteredSlots.add(slots.get(i));
+				}
+			}
+		}
+
+		return filteredSlots;
+	}
+
+	private ArrayList<TimeSlot> filterByDayOfWeek(ArrayList<TimeSlot> slots, String dayOfWeek){
+		ArrayList<TimeSlot> filteredSlots = new ArrayList<TimeSlot>();
+		if (slots.size() > 0) {
+			for (int i = 0; i < slots.size(); i++) {
+				LocalDateTime ldt = slots.get(i).getBeginDateTime();
+				if(ldt.getDayOfWeek().equals(DayOfWeek.valueOf(dayOfWeek)) && slots.get(i).isOpen()) {
+					filteredSlots.add(slots.get(i));
+				}
+			}
+		}
+
+		return filteredSlots;
+	}
+
+	private ArrayList<TimeSlot> filterByTime(ArrayList<TimeSlot> slots, int hour, int min) {
+		ArrayList<TimeSlot> filteredSlots = new ArrayList<TimeSlot>();
+		if(slots.size() > 0) {
+			for (int i = 0; i < slots.size(); i++) {
+				LocalDateTime ldt = slots.get(i).getBeginDateTime();
+				if(ldt.getHour() == hour && ldt.getMinute() == min && slots.get(i).isOpen()) {
+					filteredSlots.add(slots.get(i));
+				}
+			}
+		}
+
+		return filteredSlots;
 	}
 
 }

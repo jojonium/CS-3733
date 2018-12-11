@@ -1,6 +1,6 @@
 package edu.wpi.cs.algol.db;
 
-
+import java.time.DayOfWeek;
 
 //import java.time.LocalDate;
 //import java.time.LocalDateTime;
@@ -82,6 +82,8 @@ public class Main {
 			//System.out.println(tDao.showAvailableTimeslots("5veypd", "","","","").size());
 			//sDao.adjustDates("YJwNE8", "df28h4", "12/9/2018", "");
 			//
+			
+			System.out.println(DayOfWeek.valueOf("FRIDAY"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

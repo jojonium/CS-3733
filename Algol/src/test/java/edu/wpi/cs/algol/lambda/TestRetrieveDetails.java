@@ -14,14 +14,20 @@ import org.junit.Test;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.google.gson.Gson;
 
+import edu.wpi.cs.algol.lambda.createmeeting.CreateMeetingHandler;
+import edu.wpi.cs.algol.lambda.createmeeting.CreateMeetingRequest;
+import edu.wpi.cs.algol.lambda.createmeeting.CreateMeetingResponse;
 //import edu.wpi.cs.algol.db.ScheduleDAO;
-import edu.wpi.cs.algol.lambda.createschedule.CreateScheduleHandler;
-import edu.wpi.cs.algol.lambda.createschedule.CreateScheduleRequest;
-import edu.wpi.cs.algol.lambda.createschedule.CreateScheduleResponse;
 //import edu.wpi.cs.algol.model.Schedule;
+import edu.wpi.cs.algol.lambda.extenddate.ExtendDateHandler;
+import edu.wpi.cs.algol.lambda.extenddate.ExtendDateRequest;
+import edu.wpi.cs.algol.lambda.extenddate.ExtendDateResponse;
+import edu.wpi.cs.algol.lambda.retrievedetails.RetrieveDetailsHandler;
+import edu.wpi.cs.algol.lambda.retrievedetails.RetrieveDetailsRequest;
+import edu.wpi.cs.algol.lambda.retrievedetails.RetrieveDetailsResponse;
 
 
-public class TestCreateSchedule {
+public class TestRetrieveDetails {
 	
 	Context createContext(String apiCall) {
         TestContext ctx = new TestContext();
@@ -30,12 +36,12 @@ public class TestCreateSchedule {
     } 
 
     @Test
-    public void testCreateAndChangeSchedule() throws IOException {
-        CreateScheduleHandler handler = new CreateScheduleHandler();
+    public void retrieveDetailsDate() throws IOException {
+    	RetrieveDetailsHandler handler = new RetrieveDetailsHandler();
 
         //ScheduleDAO sDao = new ScheduleDAO();
         //Schedule s= new Schedule("name", "12/9/2018",  "12/10/2018",  "9:00",  "10:00",  20);
-        CreateScheduleRequest ar = new CreateScheduleRequest("name", "12/9/2018",  "12/10/2018",  "9:00",  "10:00",  "20");
+    	RetrieveDetailsRequest ar = new RetrieveDetailsRequest("esrdtf", "potato");
         
         //String ccRequest = new Gson().toJson(ar);
         String jsonRequest = new Gson().toJson(ar);
@@ -43,13 +49,13 @@ public class TestCreateSchedule {
         InputStream input = new ByteArrayInputStream(jsonRequest.getBytes());
         OutputStream output = new ByteArrayOutputStream();
 
-        handler.handleRequest(input, output, createContext("create"));
+        handler.handleRequest(input, output, createContext("get"));
 
-        CreateScheduleResponse post = new Gson().fromJson(output.toString(), CreateScheduleResponse.class);
+        RetrieveDetailsResponse post = new Gson().fromJson(output.toString(), RetrieveDetailsResponse.class);
         //CreateScheduleResponse resp = new Gson().fromJson(post.body, CreateScheduleResponse.class);
         //System.out.println(resp);
         
-        Assert.assertEquals(post.response, post.response);
+        Assert.assertEquals(post.httpCode, post.httpCode);
         
         // now change
         

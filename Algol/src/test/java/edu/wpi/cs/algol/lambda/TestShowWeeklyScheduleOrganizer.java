@@ -12,7 +12,7 @@ import org.junit.Test;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.google.gson.Gson;
 
-import edu.wpi.cs.algol.lamda.showweeklyscheduleorganizer.*;
+import edu.wpi.cs.algol.lambda.showweeklyscheduleorganizer.*;
 
 public class TestShowWeeklyScheduleOrganizer {
 

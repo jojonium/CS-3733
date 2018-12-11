@@ -1,4 +1,4 @@
-package edu.wpi.cs.algol.lamda.showweeklyscheduleorganizer;
+package edu.wpi.cs.algol.lambda.showweeklyscheduleorganizer;
 
 public class ShowWeeklyScheduleOrganizerRequest {
 	String scheduleID;

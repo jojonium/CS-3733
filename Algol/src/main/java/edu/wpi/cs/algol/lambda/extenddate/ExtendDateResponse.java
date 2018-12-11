@@ -1,8 +1,8 @@
 package edu.wpi.cs.algol.lambda.extenddate;
 
 public class ExtendDateResponse {
-	String message;;
-	int httpCode;
+	public String message;;
+	public int httpCode;
 	
 	public ExtendDateResponse (String m, int code) {
 		this.message = m;

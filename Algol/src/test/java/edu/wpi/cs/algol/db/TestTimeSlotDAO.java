@@ -21,7 +21,7 @@ public class TestTimeSlotDAO {
 			assertTrue(!slot.toString().isEmpty());
 			ScheduleDAO sDao = new ScheduleDAO();
 			TimeSlotDAO tDao = new TimeSlotDAO();
-			Schedule s = new Schedule("aname","12/11/2018", "12/13/2018", "9:00","10:00", 30);
+			Schedule s = new Schedule("aname","12/10/2018", "12/13/2018", "9:00","10:00", 30);
 			sDao.addSchedule(s);
 			TimeSlot ts = new TimeSlot("2018-12-11T09:00",s.getId(),"name");
 			assertTrue(tDao.getAllTimeSlots(s.getId()).size() > 0);
@@ -37,7 +37,8 @@ public class TestTimeSlotDAO {
 			tDao.closeTimeSlotsOnDay(s.getId(), s.getSecretCode(), "12/11/2018");
 			tDao.openTimeSlotsAtTime(s.getId(), s.getSecretCode(), "9:30");
 			tDao.openTimeSlotsOnDay(s.getId(), s.getSecretCode(), "12/11/2018");
-			tDao.showAvailableTimeslots(s.getId(), "", "", "", "");
+			tDao.showAvailableTimeSlots(s.getId(), "12", "2018", "TUESDAY", "11","9:00");
+			tDao.showAvailableTimeSlots(s.getId(), "", "", "TUESDAY", "11","9:00");
 			
 			tDao.deleteAllTimeSlots(s.getId());
 			

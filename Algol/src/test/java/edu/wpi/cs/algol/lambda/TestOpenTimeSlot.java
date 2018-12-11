@@ -14,14 +14,17 @@ import org.junit.Test;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.google.gson.Gson;
 
+import edu.wpi.cs.algol.lambda.createmeeting.CreateMeetingHandler;
+import edu.wpi.cs.algol.lambda.createmeeting.CreateMeetingRequest;
+import edu.wpi.cs.algol.lambda.createmeeting.CreateMeetingResponse;
+import edu.wpi.cs.algol.lambda.opentimeslot.OpenTimeSlotHandler;
+import edu.wpi.cs.algol.lambda.opentimeslot.OpenTimeSlotRequest;
+import edu.wpi.cs.algol.lambda.opentimeslot.OpenTimeSlotResponse;
 //import edu.wpi.cs.algol.db.ScheduleDAO;
-import edu.wpi.cs.algol.lambda.createschedule.CreateScheduleHandler;
-import edu.wpi.cs.algol.lambda.createschedule.CreateScheduleRequest;
-import edu.wpi.cs.algol.lambda.createschedule.CreateScheduleResponse;
 //import edu.wpi.cs.algol.model.Schedule;
 
 
-public class TestCreateSchedule {
+public class TestOpenTimeSlot {
 	
 	Context createContext(String apiCall) {
         TestContext ctx = new TestContext();
@@ -30,12 +33,12 @@ public class TestCreateSchedule {
     } 
 
     @Test
-    public void testCreateAndChangeSchedule() throws IOException {
-        CreateScheduleHandler handler = new CreateScheduleHandler();
+    public void testOpenTimeSlotMeeting() throws IOException {
+    	OpenTimeSlotHandler handler = new OpenTimeSlotHandler();
 
         //ScheduleDAO sDao = new ScheduleDAO();
         //Schedule s= new Schedule("name", "12/9/2018",  "12/10/2018",  "9:00",  "10:00",  20);
-        CreateScheduleRequest ar = new CreateScheduleRequest("name", "12/9/2018",  "12/10/2018",  "9:00",  "10:00",  "20");
+    	OpenTimeSlotRequest ar = new OpenTimeSlotRequest("esrdtf", "potato",  "12/10/2018",  "9:00");
         
         //String ccRequest = new Gson().toJson(ar);
         String jsonRequest = new Gson().toJson(ar);
@@ -43,13 +46,13 @@ public class TestCreateSchedule {
         InputStream input = new ByteArrayInputStream(jsonRequest.getBytes());
         OutputStream output = new ByteArrayOutputStream();
 
-        handler.handleRequest(input, output, createContext("create"));
+        handler.handleRequest(input, output, createContext("open"));
 
-        CreateScheduleResponse post = new Gson().fromJson(output.toString(), CreateScheduleResponse.class);
+        OpenTimeSlotResponse post = new Gson().fromJson(output.toString(), OpenTimeSlotResponse.class);
         //CreateScheduleResponse resp = new Gson().fromJson(post.body, CreateScheduleResponse.class);
         //System.out.println(resp);
         
-        Assert.assertEquals(post.response, post.response);
+        Assert.assertEquals(post.httpCode, post.httpCode);
         
         // now change
         

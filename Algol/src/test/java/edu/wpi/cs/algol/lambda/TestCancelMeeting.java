@@ -14,6 +14,9 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.google.gson.Gson;
 
 import edu.wpi.cs.algol.db.ScheduleDAO;
+import edu.wpi.cs.algol.lambda.cancelmeeting.CancelMeetingHandler;
+import edu.wpi.cs.algol.lambda.cancelmeeting.CancelMeetingRequest;
+import edu.wpi.cs.algol.lambda.cancelmeeting.CancelMeetingResponse;
 import edu.wpi.cs.algol.lambda.deleteschedule.DeleteScheduleHandler;
 import edu.wpi.cs.algol.lambda.deleteschedule.DeleteScheduleRequest;
 import edu.wpi.cs.algol.lambda.deleteschedule.DeleteScheduleResponse;
@@ -21,7 +24,7 @@ import edu.wpi.cs.algol.model.Schedule;
 
 import org.junit.Assert;
 
-public class TestDeleteSchedule {
+public class TestCancelMeeting {
 
 	Context createContext(String apiCall) {
 		TestContext ctx = new TestContext();
@@ -30,12 +33,12 @@ public class TestDeleteSchedule {
 	} 
 
 	@Test
-	public void testDeleteSchedule() throws Exception {
-		DeleteScheduleHandler handler = new DeleteScheduleHandler();
+	public void testCancelMeeting() throws Exception {
+		CancelMeetingHandler handler = new CancelMeetingHandler();
 		ScheduleDAO sDao = new ScheduleDAO();
         Schedule s= new Schedule("name", "12/9/2018",  "12/10/2018",  "9:00",  "10:00",  20);
         sDao.addSchedule(s);
-		DeleteScheduleRequest ar = new DeleteScheduleRequest(s.getId(),s.getSecretCode());
+		CancelMeetingRequest ar = new CancelMeetingRequest(s.getId(),"12/10/2018","9:20",s.getSecretCode());
 
 		String jsonRequest = new Gson().toJson(ar);
 
@@ -44,9 +47,9 @@ public class TestDeleteSchedule {
 
 		handler.handleRequest(input, output, createContext("delete"));
 
-		DeleteScheduleResponse post = new Gson().fromJson(output.toString(), DeleteScheduleResponse.class);
+		CancelMeetingResponse post = new Gson().fromJson(output.toString(), CancelMeetingResponse.class);
 		//sDao.deleteSchedule(s.getId(), s.getSecretCode());
-		Assert.assertEquals(post.response, post.response);
+		Assert.assertEquals(post.httpCode, post.httpCode);
 	}
 
 }

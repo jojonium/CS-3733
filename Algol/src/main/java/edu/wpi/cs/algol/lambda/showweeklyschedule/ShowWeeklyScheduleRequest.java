@@ -18,9 +18,9 @@ public class ShowWeeklyScheduleRequest {
 		this.dateTime = dt;
 	}*/
 	
-	public ShowWeeklyScheduleRequest(String scheduleID) {
+	/*public ShowWeeklyScheduleRequest(String scheduleID) {
 		this.scheduleID = scheduleID;
-	}
+	}*/
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()

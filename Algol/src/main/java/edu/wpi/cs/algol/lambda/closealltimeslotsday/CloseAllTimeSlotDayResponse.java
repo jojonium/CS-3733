@@ -1,4 +1,4 @@
-package edu.wpi.cs.algol.lamda.closealltimeslotsday;
+package edu.wpi.cs.algol.lambda.closealltimeslotsday;
 
 public class CloseAllTimeSlotDayResponse {
 	

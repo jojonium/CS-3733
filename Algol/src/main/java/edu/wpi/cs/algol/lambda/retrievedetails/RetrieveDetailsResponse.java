@@ -3,9 +3,9 @@ package edu.wpi.cs.algol.lambda.retrievedetails;
 import edu.wpi.cs.algol.model.TimeSlot;
 
 public class RetrieveDetailsResponse {
-	String message;
+	public String message;
 	TimeSlot timeslot;
-	int httpCode;
+	public int httpCode;
 	
 	public RetrieveDetailsResponse (String m, int code) {
 		this.message = m;

@@ -1,4 +1,4 @@
-package edu.wpi.cs.algol.lamda.closealltimeslotsday;
+package edu.wpi.cs.algol.lambda.closealltimeslotsday;
 
 import java.io.BufferedReader;
 import java.io.IOException;

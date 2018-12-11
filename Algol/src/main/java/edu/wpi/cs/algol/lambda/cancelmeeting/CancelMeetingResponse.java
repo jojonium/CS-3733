@@ -1,8 +1,8 @@
 package edu.wpi.cs.algol.lambda.cancelmeeting;
 
 public class CancelMeetingResponse {
-	String message;
-	int httpCode;
+	public String message;
+	public int httpCode;
 	
 	public CancelMeetingResponse (String m, int code) {
 		this.message = m;

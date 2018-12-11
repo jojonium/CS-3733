@@ -27,7 +27,7 @@ public class ShowAvailableHandler implements RequestStreamHandler {
 
 	boolean viewAvailable(String id, String sd, String ed, String st, String et) throws Exception{
 		ScheduleDAO daoS = new ScheduleDAO();
-		viewed = daoS.showAvailableTimeslots(id, sd, ed, st, et);
+		viewed = daoS.showAvailableTimeSlot(id, sd, ed, st, et);
 		return true;
 	}
 

@@ -17,9 +17,7 @@ import edu.wpi.cs.algol.db.ScheduleDAO;
 import edu.wpi.cs.algol.lambda.cancelmeeting.CancelMeetingHandler;
 import edu.wpi.cs.algol.lambda.cancelmeeting.CancelMeetingRequest;
 import edu.wpi.cs.algol.lambda.cancelmeeting.CancelMeetingResponse;
-import edu.wpi.cs.algol.lambda.deleteschedule.DeleteScheduleHandler;
-import edu.wpi.cs.algol.lambda.deleteschedule.DeleteScheduleRequest;
-import edu.wpi.cs.algol.lambda.deleteschedule.DeleteScheduleResponse;
+
 import edu.wpi.cs.algol.model.Schedule;
 
 import org.junit.Assert;

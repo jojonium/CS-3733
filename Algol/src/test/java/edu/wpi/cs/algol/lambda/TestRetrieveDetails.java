@@ -14,14 +14,10 @@ import org.junit.Test;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.google.gson.Gson;
 
-import edu.wpi.cs.algol.lambda.createmeeting.CreateMeetingHandler;
-import edu.wpi.cs.algol.lambda.createmeeting.CreateMeetingRequest;
-import edu.wpi.cs.algol.lambda.createmeeting.CreateMeetingResponse;
+
 //import edu.wpi.cs.algol.db.ScheduleDAO;
 //import edu.wpi.cs.algol.model.Schedule;
-import edu.wpi.cs.algol.lambda.extenddate.ExtendDateHandler;
-import edu.wpi.cs.algol.lambda.extenddate.ExtendDateRequest;
-import edu.wpi.cs.algol.lambda.extenddate.ExtendDateResponse;
+
 import edu.wpi.cs.algol.lambda.retrievedetails.RetrieveDetailsHandler;
 import edu.wpi.cs.algol.lambda.retrievedetails.RetrieveDetailsRequest;
 import edu.wpi.cs.algol.lambda.retrievedetails.RetrieveDetailsResponse;

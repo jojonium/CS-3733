@@ -17,7 +17,7 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.google.gson.Gson;
 
-import edu.wpi.cs.algol.db.ScheduleDAO;
+import edu.wpi.cs.algol.db.TimeSlotDAO;
 import edu.wpi.cs.algol.model.TimeSlot;
 
 public class ShowAvailableHandler implements RequestStreamHandler {
@@ -25,9 +25,9 @@ public class ShowAvailableHandler implements RequestStreamHandler {
 	public LambdaLogger logger = null;
 	public ArrayList<TimeSlot> viewed;
 
-	boolean viewAvailable(String id, String sd, String ed, String st, String et) throws Exception{
-		ScheduleDAO daoS = new ScheduleDAO();
-		viewed = daoS.showAvailableTimeSlot(id, sd, ed, st, et);
+	boolean viewAvailable(String id, String month, String year, String dayOfWeek, String day, String time) throws Exception{
+		TimeSlotDAO tDao = new TimeSlotDAO();
+		viewed = tDao.showAvailableTimeSlots(id, month, year, dayOfWeek, day, time);
 		return true;
 	}
 
@@ -84,7 +84,7 @@ public class ShowAvailableHandler implements RequestStreamHandler {
 
 			ShowAvailableResponse resp;
 			try {
-				viewAvailable(req.scheduleID, req.startDate, req.endDate, req.startTime, req.endTime);
+				viewAvailable(req.scheduleID, req.month, req.year, req.dayOfWeek, req.day, req.time);
 				resp = new ShowAvailableResponse("You have succesfully shown the available timeslots.", viewed);
 			} catch (Exception e) {
 				resp = new ShowAvailableResponse(

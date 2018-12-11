@@ -14,9 +14,7 @@ import org.junit.Test;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.google.gson.Gson;
 
-import edu.wpi.cs.algol.lambda.createmeeting.CreateMeetingHandler;
-import edu.wpi.cs.algol.lambda.createmeeting.CreateMeetingRequest;
-import edu.wpi.cs.algol.lambda.createmeeting.CreateMeetingResponse;
+
 import edu.wpi.cs.algol.lambda.opentimeslot.OpenTimeSlotHandler;
 import edu.wpi.cs.algol.lambda.opentimeslot.OpenTimeSlotRequest;
 import edu.wpi.cs.algol.lambda.opentimeslot.OpenTimeSlotResponse;

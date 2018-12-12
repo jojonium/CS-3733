@@ -24,7 +24,7 @@ import edu.wpi.cs.algol.lambda.testing.PostResponse;
 import edu.wpi.cs.algol.model.Schedule;
 
 
-public class TestCloseAllTimeSlotsDay {
+public class TestCloseOpenAllTimeSlotsDay {
 	
 	Context createContext(String apiCall) {
         TestContext ctx = new TestContext();
@@ -33,7 +33,7 @@ public class TestCloseAllTimeSlotsDay {
     } 
 
     @Test
-    public void testCloseAllTimeSlotDayMeeting() throws Exception {
+    public void testCloseOpenAllTimeSlotDayMeeting() throws Exception {
     	CloseAllTimeSlotsDayHandler handler = new CloseAllTimeSlotsDayHandler();
     	OpenAllTimeSlotsDayHandler openHandler = new OpenAllTimeSlotsDayHandler();
 
@@ -54,7 +54,7 @@ public class TestCloseAllTimeSlotsDay {
         PostResponse post = new Gson().fromJson(output.toString(), PostResponse.class);
         CloseAllTimeSlotsDayResponse resp = new Gson().fromJson(post.body, CloseAllTimeSlotsDayResponse.class);
         
-        Assert.assertEquals(204, resp.httpCode);
+        Assert.assertEquals(200, resp.httpCode);
         
         OpenAllTimeSlotsDayRequest br = new OpenAllTimeSlotsDayRequest(sid, sc, "12/10/2018");
         
@@ -63,13 +63,13 @@ public class TestCloseAllTimeSlotsDay {
         input = new ByteArrayInputStream(jsonRequest.getBytes());
         output = new ByteArrayOutputStream();
 
-        openHandler.handleRequest(input, output, createContext("cancel"));
+        openHandler.handleRequest(input, output, createContext("open"));
 
         post = new Gson().fromJson(output.toString(), PostResponse.class);
         OpenAllTimeSlotsDayResponse openResp = new Gson().fromJson(post.body, OpenAllTimeSlotsDayResponse.class);
         
         sDao.deleteSchedule(sid, s.getSecretCode());
-        Assert.assertEquals(202, openResp.httpCode);
+        Assert.assertEquals(200, openResp.httpCode);
         
     }
 

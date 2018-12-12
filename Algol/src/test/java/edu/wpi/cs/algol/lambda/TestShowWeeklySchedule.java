@@ -2,7 +2,6 @@ package edu.wpi.cs.algol.lambda;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 //import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -62,26 +61,6 @@ public class TestShowWeeklySchedule {
 
 		sDao.deleteSchedule(s.getId(), s.getSecretCode());
 
-	}
-	
-	@Test (expected = NullPointerException.class)
-	public void testExceptionsThrown() throws IOException {
-		
-		ShowWeeklyScheduleNormalHandler handler = new ShowWeeklyScheduleNormalHandler();
-		ShowWeeklyScheduleRequest ar = new ShowWeeklyScheduleRequest("","12-10-2018");
-
-		String jsonRequest = new Gson().toJson(ar);
-
-		InputStream input = new ByteArrayInputStream(jsonRequest.getBytes());
-		OutputStream output= new ByteArrayOutputStream();
-
-		handler.handleRequest(input, output, createContext("show"));
-		PostResponse post = new Gson().fromJson(output.toString(), PostResponse.class);
-		ShowWeeklyScheduleResponse resp = new Gson().fromJson(post.body, ShowWeeklyScheduleResponse.class);
-		
-		Assert.assertEquals(400, resp.httpCode);
-
-		
 	}
 
 }

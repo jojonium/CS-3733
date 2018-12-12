@@ -26,6 +26,7 @@ import edu.wpi.cs.algol.lambda.extenddate.ExtendDateResponse;
 import edu.wpi.cs.algol.lambda.extendtime.ExtendTimeHandler;
 import edu.wpi.cs.algol.lambda.extendtime.ExtendTimeRequest;
 import edu.wpi.cs.algol.lambda.extendtime.ExtendTimeResponse;
+import edu.wpi.cs.algol.lambda.testing.PostRequest;
 //import edu.wpi.cs.algol.model.Schedule;
 import edu.wpi.cs.algol.lambda.testing.PostResponse;
 
@@ -178,6 +179,11 @@ public class TestCreateExtendDeleteSchedule {
 
 		// remember to delete the created schedule from database
 		//sDao.deleteSchedule(resp.getId(), resp.getSecretCode());
+		
+		// PostResponse
+		PostResponse post= new PostResponse("");
+		PostRequest request = new PostRequest("");
+		Assert.assertTrue(post.toString().equals(request.toString()));
 	}
 
 

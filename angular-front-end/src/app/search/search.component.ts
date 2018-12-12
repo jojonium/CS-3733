@@ -34,7 +34,7 @@ export class SearchComponent implements OnInit {
     this.submitted = true;
     this.progressBarMode = "indeterminate";
     var modelToSend = new SearchRequest(this.id,
-      (this.model.month) ? this.model.month.toUpperCase() : '',
+      (this.model.month) ? this.model.month.slice(0, 3) : '',
       (this.model.year) ? this.model.year : '',
       (this.model.dayOfWeek) ? this.model.dayOfWeek.toUpperCase() : '',
       (this.model.day) ? this.model.day : '',
@@ -48,7 +48,6 @@ export class SearchComponent implements OnInit {
         var respBody = JSON.parse(response.body);
         if (respBody.httpCode == 200 || respBody.httpCode == 404) {
           this.timeSlots = respBody.view;
-          console.log(this.timeSlots);
         } else if (+respBody.httpCode >= 400) {
           this.snackbar.open('Error, invalid request', 'DISMISS');
         }

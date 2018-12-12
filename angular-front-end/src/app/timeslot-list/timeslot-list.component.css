@@ -1,0 +1,12 @@
+div.table-container {
+  width: 500px;
+  margin: 20px;
+}
+
+table {
+  width: 100%;
+}
+
+.req-column {
+  padding-left: 40px;
+}

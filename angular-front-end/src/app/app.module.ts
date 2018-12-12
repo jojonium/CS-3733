@@ -20,6 +20,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTableModule } from '@angular/material/table';
 
 
 import { AppComponent } from './app.component';
@@ -33,6 +34,7 @@ import { AboutComponent } from './about/about.component';
 import { AdminComponent } from './admin/admin.component';
 import { LicenseComponent } from './license/license.component';
 import { SearchComponent } from './search/search.component';
+import { TimeslotListComponent, CreateMeetingDialog2 } from './timeslot-list/timeslot-list.component';
 
 
 @NgModule({
@@ -42,6 +44,7 @@ import { SearchComponent } from './search/search.component';
     DialogFailure,
     DialogSuccess,
     CreateMeetingDialog,
+    CreateMeetingDialog2,
     OpenCloseAllDialog,
     ViewWeeklyScheduleComponent,
     PageNotFoundComponent,
@@ -50,7 +53,8 @@ import { SearchComponent } from './search/search.component';
     AboutComponent,
     AdminComponent,
     LicenseComponent,
-    SearchComponent
+    SearchComponent,
+    TimeslotListComponent
   ],
   imports: [
     BrowserModule,
@@ -64,6 +68,7 @@ import { SearchComponent } from './search/search.component';
     MatGridListModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
+    MatTableModule,
     MatSnackBarModule,
     MatIconModule,
     MatExpansionModule,
@@ -79,6 +84,7 @@ import { SearchComponent } from './search/search.component';
     DialogFailure,
     DialogSuccess,
     CreateMeetingDialog,
+    CreateMeetingDialog2,
     OpenCloseAllDialog
   ],
   providers: [

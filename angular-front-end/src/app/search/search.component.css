@@ -2,6 +2,7 @@ div.form-container {
   width: 400px;
   margin: 20px;
   border-radius: 5px;
+  max-height: 638px;
 }
 
 div.form-container-internal {
@@ -18,5 +19,11 @@ mat-form-field {
 
 div.button-container {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+}
+
+div.top-container {
+  max-width: 1000px;
+  display: flex;
+  justify-content: center;
 }

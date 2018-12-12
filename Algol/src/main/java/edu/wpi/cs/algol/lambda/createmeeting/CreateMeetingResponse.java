@@ -20,4 +20,8 @@ public class CreateMeetingResponse {
 	public String toString() {
 		return "message: " + response + "secret code:" + password;
 	}
+	
+	public String getPassword() {
+		return password;
+	}
 }

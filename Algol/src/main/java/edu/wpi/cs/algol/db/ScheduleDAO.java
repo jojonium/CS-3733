@@ -316,10 +316,12 @@ public class ScheduleDAO {
 	}
 
 	// deletes old schedules past a certain number of days
-	public boolean deleteOldSchedules(String adminPass, int daysOld) throws Exception {
+	public int deleteOldSchedules(String adminPass, int daysOld) throws Exception {
 		try {
 			// checks if verification
-			if (! adminPass.equals("KnoxMiami1839")) { return false; }
+			if (! adminPass.equals("KnoxMiami1839")) { return -1; }
+			
+			int numSchedules = 0;
 
 			// gets timestamp for request made
 			Calendar calendar = Calendar.getInstance();
@@ -347,14 +349,14 @@ public class ScheduleDAO {
 
 			// deletes all schedules that are oldDays old
 			int i = 0;
-
+			numSchedules = schedules.size();
 			while (i < schedules.size()) {
 				Schedule s = schedules.get(i);
 				deleteSchedule(s.getId(), s.getSecretCode());
 
 			}
 
-			return true;
+			return numSchedules;
 
 		} catch (Exception e) {
 			throw new Exception("Error in delete old schedules: " + e.getMessage());

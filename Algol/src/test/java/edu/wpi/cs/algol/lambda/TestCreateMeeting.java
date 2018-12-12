@@ -7,6 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.LocalDate;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,11 +15,15 @@ import org.junit.Test;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.google.gson.Gson;
 
+import edu.wpi.cs.algol.db.ScheduleDAO;
+import edu.wpi.cs.algol.db.TimeSlotDAO;
 import edu.wpi.cs.algol.lambda.createmeeting.CreateMeetingHandler;
 import edu.wpi.cs.algol.lambda.createmeeting.CreateMeetingRequest;
 import edu.wpi.cs.algol.lambda.createmeeting.CreateMeetingResponse;
+import edu.wpi.cs.algol.lambda.testing.PostResponse;
 //import edu.wpi.cs.algol.db.ScheduleDAO;
 //import edu.wpi.cs.algol.model.Schedule;
+import edu.wpi.cs.algol.model.Schedule;
 
 
 public class TestCreateMeeting {
@@ -30,12 +35,15 @@ public class TestCreateMeeting {
     } 
 
     @Test
-    public void testCreateMeeting() throws IOException {
+    public void testCreateMeeting() throws Exception {
         CreateMeetingHandler handler = new CreateMeetingHandler();
 
-        //ScheduleDAO sDao = new ScheduleDAO();
-        //Schedule s= new Schedule("name", "12/9/2018",  "12/10/2018",  "9:00",  "10:00",  20);
-        CreateMeetingRequest ar = new CreateMeetingRequest("name", "potato",  "12/10/2018",  "9:00");
+        //TimeSlotDAO tDao = new TimeSlotDAO();
+        ScheduleDAO sDao = new ScheduleDAO();
+        Schedule s= new Schedule("test schedule", "12/09/2018",  "12/18/2018",  "10:00",  "12:00",  20);
+        sDao.addSchedule(s);
+        String sid = s.getId();
+        CreateMeetingRequest ar = new CreateMeetingRequest("Hagan", sid,  "12/10/2018",  "10:00");
         
         //String ccRequest = new Gson().toJson(ar);
         String jsonRequest = new Gson().toJson(ar);
@@ -45,31 +53,18 @@ public class TestCreateMeeting {
 
         handler.handleRequest(input, output, createContext("create"));
 
-        CreateMeetingResponse post = new Gson().fromJson(output.toString(), CreateMeetingResponse.class);
-        //CreateScheduleResponse resp = new Gson().fromJson(post.body, CreateScheduleResponse.class);
+        PostResponse post = new Gson().fromJson(output.toString(), PostResponse.class);
+        CreateMeetingResponse resp = new Gson().fromJson(post.body, CreateMeetingResponse.class);
         //System.out.println(resp);
         
-        Assert.assertEquals(post.httpCode, post.httpCode);
+        sDao.deleteSchedule(sid, s.getSecretCode());
+        System.out.println(post.toString());
+        System.out.println("yodel: " + resp.httpCode);
+        Assert.assertEquals(200, resp.httpCode);
+        
         
         // now change
         
-       /* ar = new CreateConstantRequest("x" + rnd, 99.12345);
-        
-        ccRequest = new Gson().toJson(ar);
-        jsonRequest = new Gson().toJson(new CreateScheduleRequest(ccRequest));
-        
-        input = new ByteArrayInputStream(jsonRequest.getBytes());
-        output = new ByteArrayOutputStream();
-
-        handler.handleRequest(input, output, createContext("create"));
-
-        post = new Gson().fromJson(output.toString(), CreateScheduleResponse.class);
-        resp = new Gson().fromJson(post.body, CreateScheduleResponse.class);
-        System.out.println(resp);
-        
-        Assert.assertEquals("Successfully defined constant:x" + rnd, resp.response);
-   	*/
     }
-
 
 }

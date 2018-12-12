@@ -17,11 +17,8 @@ import com.google.gson.Gson;
 import edu.wpi.cs.algol.lambda.closealltimeslotstime.CloseAllTimeSlotsTimeHandler;
 import edu.wpi.cs.algol.lambda.closealltimeslotstime.CloseAllTimeSlotsTimeRequest;
 import edu.wpi.cs.algol.lambda.closealltimeslotstime.CloseAllTimeSlotsTimeResponse;
-//import edu.wpi.cs.algol.db.ScheduleDAO;
-//import edu.wpi.cs.algol.model.Schedule;
 
-
-public class TestCloseAllTimeSlotTime {
+public class TestCloseAllTimeSlotsTime {
 	
 	Context createContext(String apiCall) {
         TestContext ctx = new TestContext();

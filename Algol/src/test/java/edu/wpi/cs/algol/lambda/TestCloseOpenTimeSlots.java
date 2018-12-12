@@ -17,12 +17,9 @@ import edu.wpi.cs.algol.db.ScheduleDAO;
 import edu.wpi.cs.algol.lambda.closetimeslot.CloseTimeSlotHandler;
 import edu.wpi.cs.algol.lambda.closetimeslot.CloseTimeSlotRequest;
 import edu.wpi.cs.algol.lambda.closetimeslot.CloseTimeSlotResponse;
-import edu.wpi.cs.algol.lambda.createmeeting.CreateMeetingResponse;
 import edu.wpi.cs.algol.lambda.opentimeslot.OpenTimeSlotHandler;
 import edu.wpi.cs.algol.lambda.opentimeslot.OpenTimeSlotRequest;
 import edu.wpi.cs.algol.lambda.opentimeslot.OpenTimeSlotResponse;
-//import edu.wpi.cs.algol.db.ScheduleDAO;
-//import edu.wpi.cs.algol.model.Schedule;
 import edu.wpi.cs.algol.lambda.testing.PostResponse;
 import edu.wpi.cs.algol.model.Schedule;
 
@@ -47,7 +44,6 @@ public class TestCloseOpenTimeSlots {
         String sc = s.getSecretCode();
     	CloseTimeSlotRequest ar = new CloseTimeSlotRequest(sid, sc,  "12/10/2018",  "9:00");
         
-        //String ccRequest = new Gson().toJson(ar);
         String jsonRequest = new Gson().toJson(ar);
         
         InputStream input = new ByteArrayInputStream(jsonRequest.getBytes());
@@ -62,7 +58,6 @@ public class TestCloseOpenTimeSlots {
         
         OpenTimeSlotRequest br = new OpenTimeSlotRequest(sid, sc, "12/10/2018",  "9:00");
         
-        //String ccRequest = new Gson().toJson(ar);
         jsonRequest = new Gson().toJson(br);
         
         input = new ByteArrayInputStream(jsonRequest.getBytes());
@@ -72,7 +67,6 @@ public class TestCloseOpenTimeSlots {
 
         post = new Gson().fromJson(output.toString(), PostResponse.class);
         OpenTimeSlotResponse openResp = new Gson().fromJson(post.body, OpenTimeSlotResponse.class);
-        //System.out.println(resp);
         
         sDao.deleteSchedule(sid, s.getSecretCode());
         Assert.assertEquals(200, openResp.httpCode);

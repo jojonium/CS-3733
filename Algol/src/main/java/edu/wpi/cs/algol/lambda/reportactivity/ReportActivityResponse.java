@@ -2,7 +2,6 @@ package edu.wpi.cs.algol.lambda.reportactivity;
 
 import java.util.ArrayList;
 
-import edu.wpi.cs.algol.model.Schedule;
 
 public class ReportActivityResponse {
 	public String response;

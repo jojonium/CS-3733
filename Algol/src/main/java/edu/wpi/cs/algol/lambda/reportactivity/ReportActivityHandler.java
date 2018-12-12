@@ -102,10 +102,8 @@ public class ReportActivityHandler implements RequestStreamHandler {
 					for (Schedule s : schedules) {
 						RPOS.add(new ReportActivityObject(s));
 					}
-					logger.log("ReportActivity worked");
 					resp = new ReportActivityResponse(RPOS);
-					logger.log("\nresponse works, waiting to .tostring\n");
-					logger.log("\n.tostring worked\n");
+					
 
 				} else {
 					resp = new ReportActivityResponse("Unable to report schedules " + req.pastHour + "hours back", 400);

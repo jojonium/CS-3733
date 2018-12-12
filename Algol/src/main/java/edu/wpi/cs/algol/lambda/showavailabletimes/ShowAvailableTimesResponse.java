@@ -23,6 +23,7 @@ public class ShowAvailableTimesResponse {
 	}
 
 	public String toString() {
+		//toString overloaded to show details of response
 		String retString = "\nShow Available Report\n";
 		for (TimeSlot t : view) {
 			if (t.getBeginDateTime() != null) {

@@ -307,6 +307,7 @@ public class TimeSlotDAO {
 			int year = Integer.parseInt(date[2]);
 			LocalDateTime ldt;
 			LocalDate checkDate = LocalDate.of(year, month, day);
+			
 			// checks if valid input date 
 			if (checkDate.isBefore(s.getStartDate())) {
 				checkDate = s.getStartDate();
@@ -339,9 +340,9 @@ public class TimeSlotDAO {
 				int i = 0; // 12/21/2018
 				while (!startts.getBeginDateTime().getDayOfWeek().equals(DayOfWeek.MONDAY)) {
 
-					startts = daoT.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, day).minusDays(i), s.getStartTime()));
+					startts = daoT.getTimeSlot(scheduleID, LocalDateTime.of(checkDate.minusDays(i), s.getStartTime()));
 					if (startts == null) {
-						startts = this.getTimeSlot(scheduleID, LocalDateTime.of(LocalDate.of(year, month, day).minusDays(i).plusDays(1), s.getStartTime()));
+						startts = this.getTimeSlot(scheduleID, LocalDateTime.of(checkDate.minusDays(i).plusDays(1), s.getStartTime()));
 						break;
 					}
 

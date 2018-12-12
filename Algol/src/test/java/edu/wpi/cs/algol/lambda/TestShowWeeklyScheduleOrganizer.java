@@ -32,7 +32,7 @@ public class TestShowWeeklyScheduleOrganizer {
 		sDao.addSchedule(s);
 		ShowWeeklyScheduleOrganizerHandler handler = new ShowWeeklyScheduleOrganizerHandler();
 
-		ShowWeeklyScheduleOrganizerRequest ar = new ShowWeeklyScheduleOrganizerRequest(s.getId(),"");
+		ShowWeeklyScheduleOrganizerRequest ar = new ShowWeeklyScheduleOrganizerRequest(s.getId(),s.getSecretCode(),"");
 
 		String jsonRequest = new Gson().toJson(ar);
 
@@ -46,7 +46,7 @@ public class TestShowWeeklyScheduleOrganizer {
 
 		Assert.assertEquals(200, resp.httpCode);
 
-		ar = new ShowWeeklyScheduleOrganizerRequest("","12-10-2018");
+		ar = new ShowWeeklyScheduleOrganizerRequest("","","12-10-2018");
 
 		jsonRequest = new Gson().toJson(ar);
 

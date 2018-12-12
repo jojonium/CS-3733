@@ -24,7 +24,7 @@ public class DeleteScheduleOldHandler implements RequestStreamHandler {
 	// test
 	public LambdaLogger logger = null;
 
-	boolean deleteOldSchedules(String adminPass, int daysOld) throws Exception {
+	int deleteOldSchedules(String adminPass, int daysOld) throws Exception {
 		// logger test
 		if (logger != null) {
 			logger.log("in deleteScheduleOld");
@@ -98,10 +98,11 @@ public class DeleteScheduleOldHandler implements RequestStreamHandler {
 				logger.log(req.adminPass + " " + ", " + req.daysOld + " ");
 			}
 			try {
-				if (deleteOldSchedules(req.adminPass, req.daysOld)) {
+				int numDeleted = deleteOldSchedules(req.adminPass, req.daysOld);
+				if (numDeleted>=0) {
 					logger.log("DeleteScheduleOld worked");
-					resp = new DeleteScheduleOldResponse(req.daysOld);
-					logger.log("schedules " + req.daysOld + " days old were successfully deleted");
+					resp = new DeleteScheduleOldResponse(numDeleted);
+					logger.log(resp.toString());
 				} else {
 					resp = new DeleteScheduleOldResponse("Unable to delete schedules " + req.daysOld + " days old", 400);
 				}

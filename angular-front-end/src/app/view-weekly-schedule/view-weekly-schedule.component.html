@@ -52,7 +52,7 @@
           Show my meeting
         </mat-panel-title>
         <mat-panel-description>
-          View or cancel a meeting based on its secret code
+          View or cancel a meeting
         </mat-panel-description>
       </mat-expansion-panel-header>
       
@@ -76,10 +76,10 @@
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Edit this schedule
+          Show all meetings
         </mat-panel-title>
         <mat-panel-description>
-          Options for organizers
+          Open organizer view
         </mat-panel-description>
       </mat-expansion-panel-header>
       
@@ -96,6 +96,60 @@
         <button mat-button type="button" (click)="leaveOrganizerMode()" *ngIf="secretCode">LEAVE ORGANIZER MODE</button>
         <button mat-button type="button" (click)="getTimeSlotsOrganizer(sscInput.value)" *ngIf="!secretCode" #secretCodeInput>ORGANIZER MODE</button>
       </mat-action-row>
+      
+    </mat-expansion-panel>
+    
+    
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Alter dates
+        </mat-panel-title>
+        <mat-panel-description>
+          Extend start or end dates
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      
+      <p>You can push the starting date back, push the ending date forward, or both. The secret code for this schedule is required to make this change.</p>
+      
+      <p>Note: if you're already in organizer mode the secret code is optional.</p>
+      
+      <form name="extendDateForm" (ngSubmit)="onExtendDateSubmit()" #extendDateForm="ngForm" *ngIf="week">
+        <mat-form-field>
+          <input matInput name="newStartDate" [(ngModel)]="extendDateRequest.startDate" [value]="extendDateRequest.startDate" [matDatepicker]="newStartDatePicker"  [max]="getDate(week.startDate)" [matDatepickerFilter]="weekendFilter" placeholder="New start date" maxlength="10" id="new-start-date-input" #newStartDateInput="ngModel">
+          <mat-datepicker-toggle matSuffix [for]="newStartDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #newStartDatePicker></mat-datepicker>
+          <mat-error *ngIf="!newStartDateInput.valid">
+            A valid new start date is <strong>required</strong>.
+          </mat-error>
+        </mat-form-field>
+        
+        &nbsp;
+        
+        <mat-form-field>
+          <input matInput name="newEndDate" [(ngModel)]="extendDateRequest.endDate" [matDatepicker]="newEndDatePicker"  [min]="getDate(week.endDate)" [matDatepickerFilter]="weekendFilter" placeholder="New end date" maxlength="10" id="new-end-date-input" #newEndDateInput="ngModel">
+          <mat-datepicker-toggle matSuffix [for]="newEndDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #newEndDatePicker></mat-datepicker>
+          <mat-error *ngIf="!newEndDateInput.valid">
+            A valid new end date is <strong>required</strong>.
+          </mat-error>
+        </mat-form-field>
+        
+        &nbsp;
+        
+        <mat-form-field>
+          <input matInput placeholder="Secret code" name="secretCode" [(ngModel)]="extendDateRequest.secretCode" minlength="6" maxlength="6" id="secret-code-input" #secretCodeInput="ngModel">
+          <mat-error *ngIf="secretCodeInput.hasError('minlength') && !secretCodeInput.hasError('required')">
+            Secret codes are exactly <strong>6</strong> characters long.
+          </mat-error>
+        </mat-form-field>
+        
+        &nbsp;
+        
+        <button mat-raised-button color="primary" type="submit" [disabled]="!extendDateForm.form.valid">SUBMIT</button>
+      </form>
+      
+      <p *ngIf="extendMessage">{{extendMessage}}</p>
     </mat-expansion-panel>
   </mat-accordion>
 </div>

@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 
 import { ScheduleService } from '../schedule.service';
@@ -36,6 +37,8 @@ export class ViewWeeklyScheduleComponent implements OnInit {
   secretCode: string;
   hasPreviousWeek: boolean;
   hasNextWeek: boolean;
+  extendDateRequest = new ExtendDateRequest('', '', '', '');
+  extendMessage: string;
   
   getDate = (d : MyDate) => {
     return new Date(d.year, d.month - 1, d.day);
@@ -54,6 +57,12 @@ export class ViewWeeklyScheduleComponent implements OnInit {
   
   prettyPrintDate(d : Date): string {
     return (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
+  }
+
+  weekendFilter = (d: Date): boolean => {
+    const day = d.getDay();
+    // Prevent Saturday and Sunday from being selected.
+    return day !== 0 && day !== 6;
   }
   
   addDays(d : MyDate, i : number): MyDate {
@@ -105,8 +114,8 @@ export class ViewWeeklyScheduleComponent implements OnInit {
             if (respBody.httpCode == 202) {
               console.log(respBody);
               this.refresh();
-            } else if (+this.week.httpCode > 400) {
-              //TODO open snackbar for error message
+            } else if (+this.week.httpCode >= 400) {
+              this.snackbar.open('Error: invalid input', 'DISMISS');
             }
           });
       } else {  // participant create meeting
@@ -130,8 +139,8 @@ export class ViewWeeklyScheduleComponent implements OnInit {
           if (respBody.httpCode == 202) {
             console.log(respBody);
             this.refresh();
-          } else if (+respBody.httpCode > 400) {
-            //TODO open snackbar for error message
+          } else if (+respBody.httpCode >= 400) {
+            this.snackbar.open('Error: invalid input', 'DISMISS');
           }
         });
     } else if (this.secretCode && index >= 1 && index <= this.numDays) { // close/open all by day
@@ -167,8 +176,8 @@ export class ViewWeeklyScheduleComponent implements OnInit {
           if (respBody.httpCode == 200) {
             console.log(respBody);
             this.refresh();
-          } else if (+respBody.httpCode > 400) {
-            // TODO open snackbar for error
+          } else if (+respBody.httpCode >= 400) {
+            this.snackbar.open('Error: invalid input', 'DISMISS');
           }
         });
     }
@@ -182,7 +191,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
     this.numTimes = input.length / this.numDays;
     
     var tileIndex = 0;
-    
+        
     this.tiles = new Array<Tile>((this.numDays + 1) * (this.numTimes + 1));
     this.dateArray = new Array<Date>(this.numDays);
     this.timeArray = new Array<MyTime>(this.numTimes);
@@ -409,13 +418,43 @@ export class ViewWeeklyScheduleComponent implements OnInit {
       });
   }
   
+  onExtendDateSubmit(): void {
+    this.extendMessage = '';
+    
+    if (this.extendDateRequest.startDate == '' && this.extendDateRequest.endDate == '') {
+      this.snackbar.open("You must submit a start date or end date", "DISMISS");
+      return;
+    }
+    
+    var newSD = new Date(this.extendDateRequest.startDate);
+    var newED = new Date(this.extendDateRequest.endDate);
+    var parsedSD = (newSD.getMonth() + 1) + '/' + newSD.getDate() + '/' + newSD.getFullYear();
+    var parsedED = (newED.getMonth() + 1) + '/' + newED.getDate() + '/' + newED.getFullYear();
+    
+    var modelToSend = new ExtendDateRequest(this.id, this.extendDateRequest.secretCode || this.secretCode, parsedSD, parsedED);
+    
+    console.log(modelToSend);
+    this.scheduleService.extendDate(modelToSend)
+      .subscribe(resp => {
+        var respBody = JSON.parse(resp.body);
+        if (respBody.httpCode == 200) {
+          this.extendMessage = 'Extended successfully';
+          this.refresh();
+        } else if (+respBody.httpCode >= 400) {
+          this.snackbar.open("Error: invalid input", "DISMISS");
+        }
+      });
+  }
+  
+  
   
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private scheduleService: ScheduleService,
     public createMeetingDialog: MatDialog,
-    public openCloseAllDialog: MatDialog
+    public openCloseAllDialog: MatDialog,
+    public snackbar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -477,6 +516,14 @@ export class Response {
   ) {  }
 }
 
+export class ExtendDateRequest {
+  constructor(
+    public scheduleID: string,
+    public secretCode: string,
+    public startDate: string,
+    public endDate: string
+  ) { }
+}
 
 
 @Component({
@@ -540,7 +587,8 @@ export class OpenCloseAllDialog {
   constructor(
     public dialogRef: MatDialogRef<OpenCloseAllDialog>,
     @Inject(MAT_DIALOG_DATA) public data: OpenCloseAllData,
-    private scheduleService: ScheduleService
+    private scheduleService: ScheduleService,
+    public snackbar: MatSnackBar
   ) { }
   
   date: Date;
@@ -568,7 +616,7 @@ export class OpenCloseAllDialog {
           if (respBody.httpCode == 202) {
             data.backRef.refresh();
           } else {
-            // TODO snackbar should display error
+            this.snackbar.open('Error: invalid input', 'DISMISS');
           }
         });
     } else if (data.type == "date") {
@@ -583,7 +631,7 @@ export class OpenCloseAllDialog {
           if (respBody.httpCode == 202) {
             data.backRef.refresh();
           } else {
-            // TODO snackbar should display error
+            this.snackbar.open('Error: invalid input', 'DISMISS');
           }
         });
     }
@@ -603,7 +651,7 @@ export class OpenCloseAllDialog {
           if (respBody.httpCode == 202) {
             data.backRef.refresh();
           } else {
-            // TODO snackbar should display error
+            this.snackbar.open('Error: invalid input', 'DISMISS');
           }
         });
     } else if (data.type == "date") {
@@ -618,7 +666,7 @@ export class OpenCloseAllDialog {
           if (respBody.httpCode == 202) {
             data.backRef.refresh();
           } else {
-            // TODO snackbar should display error
+            this.snackbar.open('Error: invalid input', 'DISMISS');
           }
         });
     }

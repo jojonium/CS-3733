@@ -64,3 +64,15 @@ div.options {
   height: 500px;
   padding: 20px;
 }
+
+
+.options .mat-expansion-panel-header-title,
+.options .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+.options .mat-expansion-panel-header-description {
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 40%;
+}

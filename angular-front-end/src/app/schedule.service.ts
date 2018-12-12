@@ -6,7 +6,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { CreateScheduleRequest } from './create-schedule/create-schedule-request';
 import { CreateScheduleResponse } from './create-schedule/create-schedule-response';
 import { ViewWeeklyScheduleResponse } from './view-weekly-schedule/view-weekly-schedule-response';
-import { CreateMeetingRequest, Response, CancelMeetingRequest } from './view-weekly-schedule/view-weekly-schedule.component';
+import { CreateMeetingRequest, Response, CancelMeetingRequest, ExtendDateRequest } from './view-weekly-schedule/view-weekly-schedule.component';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +32,7 @@ export class ScheduleService {
   private closeAllTimeSlotDateUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/closealltimeslotsday";
   private deleteScheduleOldUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/deletescheduleold";
   private reportActivityUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/reportactivity";
-
+  private extendDateUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/extenddate";
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -267,6 +267,16 @@ export class ScheduleService {
       catchError(this.handleError<Response>('reportActivity')));
   }
 
+  extendDate(req: ExtendDateRequest) {
+    console.log(`extendDate: attempting to send with ${req}`);
+    
+    return this.http.post<Response>(this.extendDateUrl, req, this.httpOptions).pipe(
+      tap((resp: Response) => {
+        console.log('received response:');
+        console.log(resp);
+      }),
+      catchError(this.handleError<Response>('extendDate')));
+  }
 
   /**
    * Handle Http operation that failed.

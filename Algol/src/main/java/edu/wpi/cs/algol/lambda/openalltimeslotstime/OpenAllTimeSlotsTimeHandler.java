@@ -18,7 +18,7 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.algol.db.TimeSlotDAO;
 
-public class OpenAllTimeSlotTimeHandler implements RequestStreamHandler {
+public class OpenAllTimeSlotsTimeHandler implements RequestStreamHandler {
 
 	public LambdaLogger logger = null;
 
@@ -53,7 +53,7 @@ public class OpenAllTimeSlotTimeHandler implements RequestStreamHandler {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("headers", headerJson);
 
-		OpenAllTimeSlotTimeResponse response = null;
+		OpenAllTimeSlotsTimeResponse response = null;
 
 		// extract body from incoming HTTP POST request. If any error, then return 422
 		// error
@@ -68,7 +68,7 @@ public class OpenAllTimeSlotTimeHandler implements RequestStreamHandler {
 			String method = (String) event.get("httpMethod");
 			if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 				logger.log("Options request");
-				response = new OpenAllTimeSlotTimeResponse("name", 200); // OPTIONS needs a 200 response
+				response = new OpenAllTimeSlotsTimeResponse("name", 200); // OPTIONS needs a 200 response
 				responseJson.put("body", new Gson().toJson(response));
 				processed = true;
 				body = null;
@@ -80,26 +80,26 @@ public class OpenAllTimeSlotTimeHandler implements RequestStreamHandler {
 			}
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
-			response = new OpenAllTimeSlotTimeResponse("Bad Request:" + pe.getMessage(), 422); // unable to process input
+			response = new OpenAllTimeSlotsTimeResponse("Bad Request:" + pe.getMessage(), 422); // unable to process input
 			responseJson.put("body", new Gson().toJson(response));
 			processed = true;
 			body = null;
 		}
 
 		if (!processed) {
-			OpenAllTimeSlotTimeRequest req = new Gson().fromJson(body, OpenAllTimeSlotTimeRequest.class);
+			OpenAllTimeSlotsTimeRequest req = new Gson().fromJson(body, OpenAllTimeSlotsTimeRequest.class);
 
 			logger.log(req.toString());
 
-			OpenAllTimeSlotTimeResponse resp;
+			OpenAllTimeSlotsTimeResponse resp;
 			try {
 				OpenTimeSlots(req.scheduleID, req.secretCode, req.time);
 				logger.log("OpenAllTimeSlotDay worked");
-				resp = new OpenAllTimeSlotTimeResponse(req.scheduleID);
+				resp = new OpenAllTimeSlotsTimeResponse(req.scheduleID);
 				logger.log("TimeSlots successfully opened");
 
 			} catch (Exception e) {
-				resp = new OpenAllTimeSlotTimeResponse("Unable to open timeslots at time " + req.time + " of schedule "
+				resp = new OpenAllTimeSlotsTimeResponse("Unable to open timeslots at time " + req.time + " of schedule "
 						+ req.scheduleID + " because of (" + e.getMessage() + ")", 404);
 			}
 

@@ -1,6 +1,6 @@
 package edu.wpi.cs.algol.lambda.openalltimeslotstime;
 
-public class OpenAllTimeSlotTimeRequest {
+public class OpenAllTimeSlotsTimeRequest {
 	String scheduleID;
 	String secretCode;
 	String time;
@@ -10,7 +10,7 @@ public class OpenAllTimeSlotTimeRequest {
 	 * @param date is date of time slot to open
 	 * @param time is start time of time slot to open
 	 */
-	public OpenAllTimeSlotTimeRequest(String scheduleID, String secretCode, String time) {
+	public OpenAllTimeSlotsTimeRequest(String scheduleID, String secretCode, String time) {
 
 		this.scheduleID = scheduleID;
 		this.secretCode = secretCode;

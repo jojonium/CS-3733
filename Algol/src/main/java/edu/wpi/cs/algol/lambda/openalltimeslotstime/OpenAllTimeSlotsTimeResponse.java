@@ -1,6 +1,6 @@
-package edu.wpi.cs.algol.lambda.openalltimeslotsday;
+package edu.wpi.cs.algol.lambda.openalltimeslotstime;
 
-public class OpenAllTimeSlotDayResponse {
+public class OpenAllTimeSlotsTimeResponse {
 	
 	public String response;
 	public String secretCode;
@@ -8,13 +8,13 @@ public class OpenAllTimeSlotDayResponse {
 	public int httpCode;
 	
 	/* used for errors or other responses that require a message */
-	public OpenAllTimeSlotDayResponse(String response, int code) {
+	public OpenAllTimeSlotsTimeResponse(String response, int code) {
 		this.response = response;
 		this.httpCode= code;
 	}
 	
 	/* used for successful responses */
-	public OpenAllTimeSlotDayResponse(String scheduleID) {
+	public OpenAllTimeSlotsTimeResponse(String scheduleID) {
 		
 		this.scheduleID = scheduleID;
 		this.httpCode = 202;

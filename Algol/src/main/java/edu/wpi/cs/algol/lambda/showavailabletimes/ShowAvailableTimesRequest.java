@@ -1,6 +1,6 @@
 package edu.wpi.cs.algol.lambda.showavailabletimes;
 
-public class ShowAvailableRequest {
+public class ShowAvailableTimesRequest {
 	String scheduleID;
 	String month;
 	String year;
@@ -8,7 +8,7 @@ public class ShowAvailableRequest {
 	String day;
 	String time;
 	
-	public ShowAvailableRequest (String sid, String month, String year, String dayOfWeek, String day, String time) {
+	public ShowAvailableTimesRequest (String sid, String month, String year, String dayOfWeek, String day, String time) {
 		this.scheduleID = sid;
 		this.month = month;
 		this.year = year;

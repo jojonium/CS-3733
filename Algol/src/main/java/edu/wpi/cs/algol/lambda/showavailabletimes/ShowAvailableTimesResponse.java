@@ -4,18 +4,18 @@ import java.util.ArrayList;
 
 import edu.wpi.cs.algol.model.TimeSlot;
 
-public class ShowAvailableResponse {
+public class ShowAvailableTimesResponse {
 	String message;
 	ArrayList<TimeSlot> view;
 	int httpCode;
 	
-	public ShowAvailableResponse (String m, int code) {
+	public ShowAvailableTimesResponse (String m, int code) {
 		this.message = m;
 		this.httpCode = code;
 	}
 	
 	// 200 means success
-	public ShowAvailableResponse (String m, ArrayList<TimeSlot> view) {
+	public ShowAvailableTimesResponse (String m, ArrayList<TimeSlot> view) {
 		this.message = m;
 		this.view = view;
 		this.httpCode = 200;

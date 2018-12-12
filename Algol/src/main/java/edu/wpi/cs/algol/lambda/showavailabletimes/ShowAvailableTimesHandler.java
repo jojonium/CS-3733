@@ -20,7 +20,7 @@ import com.google.gson.Gson;
 import edu.wpi.cs.algol.db.TimeSlotDAO;
 import edu.wpi.cs.algol.model.TimeSlot;
 
-public class ShowAvailableHandler implements RequestStreamHandler {
+public class ShowAvailableTimesHandler implements RequestStreamHandler {
 
 	public LambdaLogger logger = null;
 	public ArrayList<TimeSlot> viewed;
@@ -45,7 +45,7 @@ public class ShowAvailableHandler implements RequestStreamHandler {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("headers", headerJson);
 
-		ShowAvailableResponse response = null;
+		ShowAvailableTimesResponse response = null;
 
 		// extract body from incoming HTTP POST request. If any error, then return 422
 		// error
@@ -60,7 +60,7 @@ public class ShowAvailableHandler implements RequestStreamHandler {
 			String method = (String) event.get("httpMethod");
 			if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 				logger.log("Options request");
-				response = new ShowAvailableResponse("name", 200); // OPTIONS needs a 200 response
+				response = new ShowAvailableTimesResponse("name", 200); // OPTIONS needs a 200 response
 				responseJson.put("body", new Gson().toJson(response));
 				processed = true;
 				body = null;
@@ -72,22 +72,22 @@ public class ShowAvailableHandler implements RequestStreamHandler {
 			}
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
-			response = new ShowAvailableResponse("Bad Request:" + pe.getMessage(), 422); // unable to process input
+			response = new ShowAvailableTimesResponse("Bad Request:" + pe.getMessage(), 422); // unable to process input
 			responseJson.put("body", new Gson().toJson(response));
 			processed = true;
 			body = null;
 		}
 
 		if (!processed) {
-			ShowAvailableRequest req = new Gson().fromJson(body, ShowAvailableRequest.class);
+			ShowAvailableTimesRequest req = new Gson().fromJson(body, ShowAvailableTimesRequest.class);
 			logger.log(req.toString());
 
-			ShowAvailableResponse resp;
+			ShowAvailableTimesResponse resp;
 			try {
 				viewAvailable(req.scheduleID, req.month, req.year, req.dayOfWeek, req.day, req.time);
-				resp = new ShowAvailableResponse("You have succesfully shown the available timeslots.", viewed);
+				resp = new ShowAvailableTimesResponse("You have succesfully shown the available timeslots.", viewed);
 			} catch (Exception e) {
-				resp = new ShowAvailableResponse(
+				resp = new ShowAvailableTimesResponse(
 						"Unable to show timeslots because of (" + e.getMessage() + ")", 400);
 			}
 

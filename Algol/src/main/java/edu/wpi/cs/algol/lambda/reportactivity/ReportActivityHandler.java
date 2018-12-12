@@ -101,6 +101,7 @@ boolean reportActivity (String adminPass, int pastHour) throws Exception {
 					resp = new ReportActivityResponse(schedules);
 					logger.log("\nresponse works, waiting to .tostring\n");
 					/*
+					//logger may be causing the error
 					logger.log(resp.toString());
 					logger.log("\n.tostring worked\n");
 					*/

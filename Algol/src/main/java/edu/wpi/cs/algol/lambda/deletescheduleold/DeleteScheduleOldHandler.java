@@ -33,7 +33,7 @@ public class DeleteScheduleOldHandler implements RequestStreamHandler {
 		// variable setup
 		ScheduleDAO daoS = new ScheduleDAO();
 		try {
-			return daoS.deleteOldSchedules(adminPass, daysOld);
+			return daoS.deleteOldSchedules(adminPass, daysOld);//breaks here
 
 		} catch (Exception e) {
 			throw e;
@@ -99,6 +99,12 @@ public class DeleteScheduleOldHandler implements RequestStreamHandler {
 			}
 			try {
 				int numDeleted = deleteOldSchedules(req.adminPass, req.daysOld);
+				if (logger != null) {
+					logger.log("/n delete old schedule function worked/n");
+				}
+				if (logger != null) {
+					logger.log("/n" + numDeleted + "/n");
+				}
 				if (numDeleted>=0) {
 					logger.log("DeleteScheduleOld worked");
 					resp = new DeleteScheduleOldResponse(numDeleted);

@@ -375,9 +375,8 @@ public class ScheduleDAO {
 			LocalDateTime stampDateTime = currentStamp.toLocalDateTime();
 
 			// creates timestamp pastHour # of hours to be searched
-			LocalDateTime oldStamp = LocalDateTime.of(LocalDate.of(stampDateTime.getYear(),stampDateTime.getMonth(),stampDateTime.getDayOfMonth()),
-					LocalTime.of(stampDateTime.getHour(), stampDateTime.getMinute()).minusHours(pastHour));
-		
+			LocalDateTime oldStamp = stampDateTime.minusHours(pastHour);
+
 
 			// get schedules created in pastHour # of hours 
 			PreparedStatement ps = conn.prepareStatement("SELECT * FROM Schedules WHERE timestamp > ?;");

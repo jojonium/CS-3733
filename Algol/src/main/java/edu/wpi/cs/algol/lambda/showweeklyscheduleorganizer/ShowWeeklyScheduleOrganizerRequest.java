@@ -19,10 +19,10 @@ public class ShowWeeklyScheduleOrganizerRequest {
 		this.dateTime = dt;
 	}*/
 	// not necessary
-	public ShowWeeklyScheduleOrganizerRequest(String scheduleID, String secretCode) {
+	/*public ShowWeeklyScheduleOrganizerRequest(String scheduleID, String secretCode) {
 		this.scheduleID = scheduleID;
 		this.secretCode = secretCode;
-	}
+	}*/
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()

@@ -667,12 +667,14 @@ public class TimeSlotDAO {
 	public ArrayList<TimeSlot> showAvailableTimeSlots(String scheduleID, String month, String year, String dayOfWeek, String day, String time) throws Exception {
 
 		try {
+			ScheduleDAO sDao = new ScheduleDAO();
+			if (sDao.getSchedule(scheduleID) == null) { throw new Exception("Schedule does not exist"); }
 
 			/* Configure input */	// assumes only valid rounded times
 			int inputMonth, inputYear, inputDay;
 			String[] inputTime;
 			int inputHour, inputMinute;
-			String weekday = dayOfWeek;
+			String weekday = dayOfWeek.toUpperCase();
 
 			inputMonth = (!month.isEmpty()) ? Integer.parseInt(month) : -1;
 			inputYear = (!year.isEmpty()) ? Integer.parseInt(year) : -1;
@@ -759,7 +761,7 @@ public class TimeSlotDAO {
 		if (slots.size() > 0) {
 			for (int i = 0; i < slots.size(); i++) {
 				LocalDateTime ldt = slots.get(i).getBeginDateTime();
-				if(ldt.getDayOfMonth() == month && slots.get(i).isOpen()) {
+				if(ldt.getMonthValue() == month && slots.get(i).isOpen()) {
 					filteredSlots.add(slots.get(i));
 				}
 			}

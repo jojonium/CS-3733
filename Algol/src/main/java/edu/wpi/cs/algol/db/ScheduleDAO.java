@@ -88,7 +88,7 @@ public class ScheduleDAO {
 		try {
 			PreparedStatement ps;
 			//			logger.log("made PreparedStatement ps\n");
-			ps = conn.prepareStatement("INSERT INTO Schedules (secretCode, id, name, startDate, endDate, startTime, endTime, duration, timestamp) values(?,?,?,?,?,?,?,?,?) ");
+			ps = conn.prepareStatement("INSERT INTO Schedules (secretCode, id, name, startDate, endDate, startTime, endTime, duration, timestamp) values(?,?,?,?,?,?,?,?,?);");
 			//			logger.log("in addSchedule innitial declaration of conn: " + ps.toString() + "\n");
 			ps.setString(1, schedule.getSecretCode());
 			ps.setString(2, schedule.getId());
@@ -353,7 +353,7 @@ public class ScheduleDAO {
 			while (i < schedules.size()) {
 				Schedule s = schedules.get(i);
 				deleteSchedule(s.getId(), s.getSecretCode());
-
+				i++;
 			}
 
 			return numSchedules;

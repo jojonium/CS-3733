@@ -29,3 +29,30 @@ div.content {
   border-radius: 5px;
   padding: 40px;
 }
+
+span.spacer {
+  width: 40px;
+}
+
+#schedule-list a {
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+#schedule-list a:hover {
+  color: #dddddd;
+}
+
+td {
+  width: 150px;
+}
+
+th {
+  text-align: left;
+  font-size: 1.3em;
+}
+
+tr {
+  width: 300px;
+}

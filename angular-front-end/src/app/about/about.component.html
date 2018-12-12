@@ -1,6 +1,8 @@
-<h1 class="main-heading">Meet the team</h1>
+<!--<h1 class="main-heading">Meet the team</h1>-->
 
 <div class="card-holder">
+  <h1 class="main-heading">Meet the team</h1>
+  
   <mat-card class="about-card">
     <mat-card-header>
       <mat-card-title>Joseph Petitti</mat-card-title>
@@ -73,4 +75,20 @@
       <a mat-button href="https://github.com/AndrewLevy395" target="_blank">GITHUB</a>
     </mat-card-actions>
   </mat-card>
+  
+  <div class="mat-elevation-z5 raised" id="about-text">
+    <h1>About this website</h1>
+    
+    <p>
+    The Algol Meeting Scheduler was created as a final project for CS 3733: Software Engineering, a computer science class at Worcester Polytechnic Institute. Although we did some planning in advance, we completed the entire implementation in three weeks, from November 26 to December 14, 2018.
+    </p>
+    
+    <p>
+    Joe Petitti made the front-end in Angular, a TypeScript-based web application framework developed by Google. The back-end utilizes Amazon Web Services. The web application interfaces with an API set up on AWS, which connects are front-end functions to AWS lambda functions. These lambda functions are Java programs, written primarily by Matt Hagan and Andy Levy, that act as the controllers for our application. The lambda functions are connected to Database Access Objects that use JDBC to connect to a MySQL database, set up and maintained by Justin Cheng, that stores all our data.
+    </p>
+    
+    <p>
+    This project is released as free and open source software, under the terms of an <a routerLink="/license">MIT-style license</a>. All of our source code can be viewed at <a href="https://github.com/jojonium/CS-3733/" target="_blank">GitHub</a>. 
+    </p>
+  </div>
 </div>

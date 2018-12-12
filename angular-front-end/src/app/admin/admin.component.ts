@@ -15,7 +15,7 @@ export class AdminComponent implements OnInit {
   retrieveFinished = false;
   deleteSubmitted = false;
   deleteFinished = false;
-  numDeleted: number;
+  numDeleted = -1;
   scheds: IDSC[];
   
   constructor(
@@ -27,38 +27,51 @@ export class AdminComponent implements OnInit {
   }
   
   onDeleteSubmit() {
+    this.deleteSubmitted = true;
+    this.deleteFinished = false;
+    this.retrieveFinished = false;
+    this.retrieveSubmitted = false;
+    this.numDeleted = -1;
+    this.scheds = null;
     this.scheduleService.deleteScheduleOld(+this.delModel.age, this.delModel.password)
       .subscribe(response => {
         console.log(response);
-        this.deleteSubmitted = true;
         var respBody = JSON.parse(response.body);
         if (respBody.httpCode == 202) {
-          // TODO set numDeleted to the actual response number
-          this.numDeleted = 1839;
-        } else if (+respBody.httpCode > 400) {
+          this.numDeleted = respBody.numDeleted;
+          this.deleteFinished = true;
+        } else if (+respBody.httpCode >= 400) {
           this.snackbar.open('Error, invalid request', 'DISMISS');
+          this.deleteSubmitted = false;
+          this.deleteFinished = false;
         }
-        this.deleteFinished = true;
       });
     console.log(this.delModel);
   }
   
   onRetrieveSubmit() {
+    this.deleteSubmitted = false;
+    this.deleteFinished = false;
+    this.retrieveFinished = false;
+    this.retrieveSubmitted = true;
+    this.numDeleted = -1;
+    this.scheds = null;
     this.scheduleService.reportActivity(+this.retModel.age, this.retModel.password)
       .subscribe(response => {
         console.log(response);
-        this.retrieveSubmitted = true;
         var respBody = JSON.parse(response.body);
         if (respBody.httpCode == 200) {
           // TODO display the actual response schedules
-          this.scheds = new Array<IDSC>(3);
+          this.scheds = new Array<IDSC>(1);
           this.scheds[0] = new IDSC('111111', 'aaaaaa');
-          this.scheds[1] = new IDSC('222222', 'bbbbbb');
-          this.scheds[2] = new IDSC('333333', 'cccccc');
-        } else if (+respBody.httpCode > 400) {
+          //this.scheds[1] = new IDSC('222222', 'bbbbbb');
+          //this.scheds[2] = new IDSC('333333', 'cccccc');
+          this.retrieveFinished = true;
+        } else if (+respBody.httpCode >= 400) {
           this.snackbar.open('Error, invalid request', 'DISMISS');
+          this.retrieveSubmitted = false;
+          this.retrieveFinished = false;
         }
-        this.retrieveFinished = true;
       });
   }
 

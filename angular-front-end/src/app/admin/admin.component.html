@@ -60,11 +60,23 @@
   </mat-card>
 </div>
 
-<div class="content-container" *ngIf="retrieveSubmitted || deleteSubmitted">
+<div class="content-container" *ngIf="retrieveFinished || deleteFinished">
   <div class="mat-elevation-z5 raised content">
-    <h1 *ngIf="numDeleted">Successfully deleted {{numDeleted}} schedules.</h1>
-    {{deleteSubmitted}}
-    <p>lkjfsadlkjaldskfjalkdfjalsdkfj</p>
-
+    <h1 *ngIf="numDeleted >= 0">Successfully deleted {{numDeleted}} schedule<span *ngIf="numDeleted != 1">s</span>.</h1>
+    
+    <div *ngIf="scheds">
+      <h1>Retrieved {{scheds.length}} schedule<span *ngIf="scheds.length != 1">s</span>:</h1>
+      
+      <table id="schedule-list">
+        <tr>
+          <th>Schedule ID</th>
+          <th>Secret code</th>
+        </tr>
+        <tr *ngFor="let s of scheds">
+          <td><a [routerLink]="'/schedule/' + s.scheduleID">{{s.scheduleID}}</a></td>
+          <td>{{s.secretCode}}</td>
+        </tr>
+      </table>
+    </div>
   </div>
 </div>

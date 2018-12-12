@@ -92,13 +92,12 @@ boolean reportActivity (String adminPass, int pastHour) throws Exception {
 			logger.log(req.toString());
 
 			ReportActivityResponse resp;
-			for(Schedule s: schedules) {
 			try {
 				
 				if (reportActivity(req.adminPass, req.pastHour)) {
 					logger.log("ReportActivity worked");
-					resp = new ReportActivityResponse(s.getId(), s.getSecretCode());
-					logger.log("\n Schedule " + s.getId() + " is reported");
+					resp = new ReportActivityResponse(schedules);
+					logger.log(resp.toString());
 				}
 				else {
 					resp = new ReportActivityResponse("Unable to report schedules " + req.pastHour + "hours back", 400);
@@ -111,7 +110,6 @@ boolean reportActivity (String adminPass, int pastHour) throws Exception {
 
 			// compute proper response
 	        responseJson.put("body", new Gson().toJson(resp));  
-		}
 		}
 		
 		logger.log("end result:" + responseJson.toJSONString() + "\n");

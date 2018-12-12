@@ -14,9 +14,9 @@ import org.junit.Test;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.google.gson.Gson;
 
-import edu.wpi.cs.algol.lambda.closealltimeslotsday.CloseAllTimeSlotDayHandler;
-import edu.wpi.cs.algol.lambda.closealltimeslotsday.CloseAllTimeSlotDayRequest;
-import edu.wpi.cs.algol.lambda.closealltimeslotsday.CloseAllTimeSlotDayResponse;
+import edu.wpi.cs.algol.lambda.closealltimeslotsday.CloseAllTimeSlotsDayHandler;
+import edu.wpi.cs.algol.lambda.closealltimeslotsday.CloseAllTimeSlotsDayRequest;
+import edu.wpi.cs.algol.lambda.closealltimeslotsday.CloseAllTimeSlotsDayResponse;
 //import edu.wpi.cs.algol.db.ScheduleDAO;
 //import edu.wpi.cs.algol.model.Schedule;
 
@@ -31,11 +31,11 @@ public class TestCloseAllTimeSlotDay {
 
     @Test
     public void testCloseAllTimeSlotDayMeeting() throws IOException {
-    	CloseAllTimeSlotDayHandler handler = new CloseAllTimeSlotDayHandler();
+    	CloseAllTimeSlotsDayHandler handler = new CloseAllTimeSlotsDayHandler();
 
         //ScheduleDAO sDao = new ScheduleDAO();
         //Schedule s= new Schedule("name", "12/9/2018",  "12/10/2018",  "9:00",  "10:00",  20);
-    	CloseAllTimeSlotDayRequest ar = new CloseAllTimeSlotDayRequest("esrdtf", "potato",  "12/10/2018");
+    	CloseAllTimeSlotsDayRequest ar = new CloseAllTimeSlotsDayRequest("esrdtf", "potato",  "12/10/2018");
         
         //String ccRequest = new Gson().toJson(ar);
         String jsonRequest = new Gson().toJson(ar);
@@ -45,7 +45,7 @@ public class TestCloseAllTimeSlotDay {
 
         handler.handleRequest(input, output, createContext("close"));
 
-        CloseAllTimeSlotDayResponse post = new Gson().fromJson(output.toString(), CloseAllTimeSlotDayResponse.class);
+        CloseAllTimeSlotsDayResponse post = new Gson().fromJson(output.toString(), CloseAllTimeSlotsDayResponse.class);
         //CreateScheduleResponse resp = new Gson().fromJson(post.body, CreateScheduleResponse.class);
         //System.out.println(resp);
         

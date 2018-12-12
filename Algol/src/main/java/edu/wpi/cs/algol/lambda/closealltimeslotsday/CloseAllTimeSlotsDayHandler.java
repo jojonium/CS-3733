@@ -18,7 +18,7 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.algol.db.TimeSlotDAO;
 
-public class CloseAllTimeSlotDayHandler implements RequestStreamHandler {
+public class CloseAllTimeSlotsDayHandler implements RequestStreamHandler {
 
 	public LambdaLogger logger = null;
 
@@ -53,7 +53,7 @@ public class CloseAllTimeSlotDayHandler implements RequestStreamHandler {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("headers", headerJson);
 
-		CloseAllTimeSlotDayResponse response = null;
+		CloseAllTimeSlotsDayResponse response = null;
 
 		// extract body from incoming HTTP POST request. If any error, then return 422
 		// error
@@ -68,7 +68,7 @@ public class CloseAllTimeSlotDayHandler implements RequestStreamHandler {
 			String method = (String) event.get("httpMethod");
 			if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 				logger.log("Options request");
-				response = new CloseAllTimeSlotDayResponse("name", 200); // OPTIONS needs a 200 response
+				response = new CloseAllTimeSlotsDayResponse("name", 200); // OPTIONS needs a 200 response
 				responseJson.put("body", new Gson().toJson(response));
 				processed = true;
 				body = null;
@@ -80,26 +80,26 @@ public class CloseAllTimeSlotDayHandler implements RequestStreamHandler {
 			}
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
-			response = new CloseAllTimeSlotDayResponse("Bad Request:" + pe.getMessage(), 422); // unable to process input
+			response = new CloseAllTimeSlotsDayResponse("Bad Request:" + pe.getMessage(), 422); // unable to process input
 			responseJson.put("body", new Gson().toJson(response));
 			processed = true;
 			body = null;
 		}
 
 		if (!processed) {
-			CloseAllTimeSlotDayRequest req = new Gson().fromJson(body, CloseAllTimeSlotDayRequest.class);
+			CloseAllTimeSlotsDayRequest req = new Gson().fromJson(body, CloseAllTimeSlotsDayRequest.class);
 
 			logger.log(req.toString());
 
-			CloseAllTimeSlotDayResponse resp;
+			CloseAllTimeSlotsDayResponse resp;
 			try {
 				CloseTimeSlots(req.scheduleID, req.secretCode, req.date);
 				logger.log("CloseAllTimeSlotDay worked");
-				resp = new CloseAllTimeSlotDayResponse(req.scheduleID);
+				resp = new CloseAllTimeSlotsDayResponse(req.scheduleID);
 				logger.log("TimeSlots successfully closed");
 
 			} catch (Exception e) {
-				resp = new CloseAllTimeSlotDayResponse("Unable to close timeslots at date " + req.date + " of schedule "
+				resp = new CloseAllTimeSlotsDayResponse("Unable to close timeslots at date " + req.date + " of schedule "
 						+ req.scheduleID + " because of (" + e.getMessage() + ")", 404);
 			}
 

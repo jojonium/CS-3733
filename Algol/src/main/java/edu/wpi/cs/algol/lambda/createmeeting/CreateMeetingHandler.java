@@ -108,7 +108,7 @@ public class CreateMeetingHandler implements RequestStreamHandler {
 			String method = (String) event.get("httpMethod");
 			if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 				logger.log("Options request");
-				response = new CreateMeetingResponse("name", 200); // OPTIONS needs a 200 response
+				response = new CreateMeetingResponse("name", 201); // OPTIONS needs a 201 response
 				responseJson.put("body", new Gson().toJson(response));
 				processed = true;
 				body = null;

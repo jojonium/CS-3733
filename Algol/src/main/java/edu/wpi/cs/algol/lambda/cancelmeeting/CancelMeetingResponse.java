@@ -12,7 +12,7 @@ public class CancelMeetingResponse {
 	// 200 means success
 	public CancelMeetingResponse (String m) {
 		this.message = m;
-		this.httpCode = 200;
+		this.httpCode = 202;
 	}
 	
 	public String toString() {

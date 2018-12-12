@@ -14,7 +14,7 @@ public class CreateMeetingResponse {
 	public CreateMeetingResponse (String m, String password) {
 		this.response = m;
 		this.password = password;
-		this.httpCode = 200;
+		this.httpCode = 201;
 	}
 	
 	public String toString() {

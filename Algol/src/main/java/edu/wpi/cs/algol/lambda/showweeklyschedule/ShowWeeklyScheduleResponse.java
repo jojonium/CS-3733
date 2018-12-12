@@ -18,6 +18,8 @@ public class ShowWeeklyScheduleResponse {
 	public ArrayList<TimeSlot> timeSlots;
 	public String hasPreviousWeek;
 	public String hasNextWeek;
+	public LocalDate trueStartDate;
+	public LocalDate trueEndDate;
 	public int httpCode;
 
 	/* used for errors or other responses that require a message */
@@ -29,7 +31,7 @@ public class ShowWeeklyScheduleResponse {
 
 	/* used for successful responses */
 	public ShowWeeklyScheduleResponse(String name, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime, 
-			int duration, ArrayList<TimeSlot> timeSlots, String hasPreviousWeek, String hasNextWeek) {
+			int duration, ArrayList<TimeSlot> timeSlots, String hasPreviousWeek, String hasNextWeek, LocalDate trueStartDate, LocalDate trueEndDate) {
 		
 		this.name = name;
 		this.startDate = startDate;
@@ -40,6 +42,8 @@ public class ShowWeeklyScheduleResponse {
 		this.timeSlots = timeSlots;
 		this.hasPreviousWeek = hasPreviousWeek;
 		this.hasNextWeek = hasNextWeek;
+		this.trueStartDate = trueStartDate;
+		this.trueEndDate = trueEndDate;
 		this.httpCode = 200;
 	}
 
@@ -50,7 +54,7 @@ public class ShowWeeklyScheduleResponse {
 			return "ShowWeeklyScheduleResponse [name=" + name + ", startDate=" + startDate
 					+ ", endDate=" + endDate + ", startTime=" + startTime + ", endTime=" + endTime + ", duration="
 					+ duration + ", timeSlot=" + timeSlots + ", hasPreviousWeek=" + hasPreviousWeek + 
-					", hasNextWeek=" + hasNextWeek +", httpCode=" + httpCode + "]";
+					", hasNextWeek=" + hasNextWeek +", trueStartDate=" + trueStartDate + ", trueEndDate=" + trueEndDate +", httpCode=" + httpCode + "]";
 		else
 			return "response=\" " + response + ", httpCode=" + httpCode + "]";
 	

@@ -52,10 +52,6 @@ public class TestScheduleDAO {
 			// update
 			sDao.updateSchedule(s);
 			
-			// reportActivity
-			sDao.reportActivity("KnoxMiami1839", 1);
-			sDao.deleteOldSchedules("KnoxMiami1839", 10);
-			
 			// delete schedule
 			boolean b = sDao.deleteSchedule(s.getId(), s.getSecretCode());
 			

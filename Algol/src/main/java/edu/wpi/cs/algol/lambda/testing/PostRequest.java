@@ -6,4 +6,7 @@ public class PostRequest {
 	public PostRequest(String s) {
 		body = s;
 	}
+	public String getBody() {
+		return this.body;
+	}
 }

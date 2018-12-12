@@ -20,13 +20,15 @@ import edu.wpi.cs.algol.lambda.createschedule.CreateScheduleResponse;
 import edu.wpi.cs.algol.lambda.deleteschedule.DeleteScheduleHandler;
 import edu.wpi.cs.algol.lambda.deleteschedule.DeleteScheduleRequest;
 import edu.wpi.cs.algol.lambda.deleteschedule.DeleteScheduleResponse;
+import edu.wpi.cs.algol.lambda.deletescheduleold.DeleteScheduleOldHandler;
+import edu.wpi.cs.algol.lambda.deletescheduleold.DeleteScheduleOldRequest;
+import edu.wpi.cs.algol.lambda.deletescheduleold.DeleteScheduleOldResponse;
 import edu.wpi.cs.algol.lambda.extenddate.ExtendDateHandler;
 import edu.wpi.cs.algol.lambda.extenddate.ExtendDateRequest;
 import edu.wpi.cs.algol.lambda.extenddate.ExtendDateResponse;
 import edu.wpi.cs.algol.lambda.extendtime.ExtendTimeHandler;
 import edu.wpi.cs.algol.lambda.extendtime.ExtendTimeRequest;
 import edu.wpi.cs.algol.lambda.extendtime.ExtendTimeResponse;
-import edu.wpi.cs.algol.lambda.testing.PostRequest;
 //import edu.wpi.cs.algol.model.Schedule;
 import edu.wpi.cs.algol.lambda.testing.PostResponse;
 
@@ -179,11 +181,22 @@ public class TestCreateExtendDeleteSchedule {
 
 		// remember to delete the created schedule from database
 		//sDao.deleteSchedule(resp.getId(), resp.getSecretCode());
+			
 		
-		// PostResponse
-		PostResponse post= new PostResponse("");
-		PostRequest request = new PostRequest("");
-		Assert.assertTrue(post.toString().equals(request.toString()));
+		// Delete old Schedules
+		DeleteScheduleOldHandler deleteOldHanlder= new DeleteScheduleOldHandler();
+		DeleteScheduleOldRequest deleteOldRequest = new DeleteScheduleOldRequest("secret code",10000);
+
+		jsonRequest = new Gson().toJson(deleteOldRequest);
+
+		input = new ByteArrayInputStream(jsonRequest.getBytes());
+		output = new ByteArrayOutputStream();
+
+		deleteOldHanlder.handleRequest(input, output, createContext("deleteold"));
+		PostResponse deleteOldPost = new Gson().fromJson(output.toString(), PostResponse.class);
+		DeleteScheduleOldResponse deleteOldResp = new Gson().fromJson(deleteOldPost.body, DeleteScheduleOldResponse.class);
+
+		Assert.assertEquals(400, deleteOldResp.httpCode);
 	}
 
 

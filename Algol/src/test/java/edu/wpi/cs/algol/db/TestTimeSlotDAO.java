@@ -15,9 +15,6 @@ public class TestTimeSlotDAO {
 	public void testCreation() {
 		try {
 			TimeSlot slot = new TimeSlot(LocalDateTime.now(), "");
-			slot.setSecretCode("asdf");
-			slot.setOpen(false);
-			slot.setRequester("name");
 			assertTrue(!slot.toString().isEmpty());
 			ScheduleDAO sDao = new ScheduleDAO();
 			TimeSlotDAO tDao = new TimeSlotDAO();

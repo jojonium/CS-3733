@@ -7,6 +7,7 @@ import { CreateScheduleRequest } from './create-schedule/create-schedule-request
 import { CreateScheduleResponse } from './create-schedule/create-schedule-response';
 import { ViewWeeklyScheduleResponse } from './view-weekly-schedule/view-weekly-schedule-response';
 import { CreateMeetingRequest, Response, CancelMeetingRequest, ExtendDateRequest } from './view-weekly-schedule/view-weekly-schedule.component';
+import { SearchRequest } from './search/search.component';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,8 @@ export class ScheduleService {
   private deleteScheduleOldUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/deletescheduleold";
   private reportActivityUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/reportactivity";
   private extendDateUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/extenddate";
+  private retrieveScheduleDetailsUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/retrievescheduledetails";
+  private showAvailableTimesUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/showavailabletimes";
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -276,6 +279,30 @@ export class ScheduleService {
         console.log(resp);
       }),
       catchError(this.handleError<Response>('extendDate')));
+  }
+  
+  retrieveScheduleDetails(id: string) {
+    console.log(`retrieveScheduleDetails: attempting to send with id=${id}`);
+    
+    var parameters = {"scheduleID": id};
+    
+    return this.http.post<Response>(this.retrieveScheduleDetailsUrl, parameters, this.httpOptions).pipe(
+      tap((resp: Response) => {
+        console.log('received response:');
+        console.log(resp);
+      }),
+      catchError(this.handleError<Response>('retrieveScheduleDetails')));
+  }
+  
+  showAvailableTimes(model: SearchRequest) {
+    console.log(`showAvailableTimes: attempting to send with ${model}`);
+    
+    return this.http.post<Response>(this.showAvailableTimesUrl, model, this.httpOptions).pipe(
+      tap((resp: Response) => {
+        console.log('received response:');
+        console.log(resp);
+      }),
+      catchError(this.handleError<Response>('showAvailableTimes')));
   }
 
   /**

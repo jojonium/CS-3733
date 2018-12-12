@@ -1,3 +1,71 @@
-<p>
-  search works!
-</p>
+<div class="mat-elevation-z5 form-container raised" id="create-schedule-form">
+
+  <div class="form-container-internal" *ngIf="details">
+
+    <h2>Search for open time slots</h2>
+    
+    <h3>Schedule ID: {{id}}</h3>
+    
+    <p>Select one or more filters</p>
+    
+    <form class="search-form" name="searchForm" (ngSubmit)="onSubmit()" #searchForm="ngForm">
+      <mat-form-field>
+        <mat-select placeholder="Month" name="month" [(ngModel)]="model.month" id="month-input" #monthInput="ngModel">
+          <mat-option>--</mat-option>
+          <mat-option *ngFor="let m of validMonths" [value]="m">
+            {{m}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      
+      <br>
+      
+      <mat-form-field>
+        <mat-select placeholder="Year" name="year" [(ngModel)]="model.year" id="year-input" #yearInput="ngModel">
+          <mat-option>--</mat-option>
+          <mat-option *ngFor="let y of validYears" [value]="y">
+            {{y}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <br>
+      
+      <mat-form-field>
+        <mat-select placeholder="Day of week" name="dayOfWeek" [(ngModel)]="model.dayOfWeek" id="day-of-week-input" #dayOfWeekInput="ngModel">
+          <mat-option>--</mat-option>
+          <mat-option *ngFor="let d of validDays" [value]="d">
+            {{d}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      
+      <br>
+      
+      <mat-form-field>
+        <input matInput type="number" placeholder="Day of month" name="day" [(ngModel)]="model.day" id="day-of-month-input" #dayOfMonthInput="ngModel" min="0" max="31">
+      </mat-form-field>
+      
+      <br>
+      
+      <mat-form-field>
+        <input matInput type="time" placeholder="Time" name="timeInput" [(ngModel)]="model.time" id="time-input" #timeInput="ngModel">
+      </mat-form-field>
+      
+      <br>
+      
+      <div class="button-container">
+        <button mat-raised-button color="primary" type="submit" [disabled]="submitted">
+        <i class="material-icons">search</i>
+        SEARCH</button>
+      </div>
+        
+    
+    </form>
+  </div> <!-- form-container-internal -->
+
+  <mat-progress-bar [mode]="progressBarMode"></mat-progress-bar>
+
+</div> <!-- form-container -->
+
+<app-timeslot-list [timeSlots]="timeSlots"></app-timeslot-list>

@@ -18,7 +18,6 @@ const appRoutes: Routes = [
   { path: 'schedule/:id', component: ViewWeeklyScheduleComponent },
   { path: 'schedule', component: ViewScheduleFormComponent },
   { path: 'search/:id', component: SearchComponent },
-  { path: 'search', component: SearchComponent },
   { path: 'about', component: AboutComponent },
   { path: 'deleted', component: DeletedComponent },
   { path: 'admin', component: AdminComponent },

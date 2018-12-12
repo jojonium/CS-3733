@@ -61,7 +61,6 @@ export class AdminComponent implements OnInit {
         console.log(response);
         var respBody = JSON.parse(response.body);
         if (respBody.httpCode == 200 || respBody.httpCode == 404) {
-          // TODO display the actual response schedules
           this.scheds = respBody.RPOS;
           this.retrieveFinished = true;
         } else if (+respBody.httpCode >= 400) {

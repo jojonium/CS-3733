@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import edu.wpi.cs.algol.db.ScheduleDAO;
 import edu.wpi.cs.algol.lambda.reportactivity.ReportActivityRequest;
 import edu.wpi.cs.algol.lambda.reportactivity.ReportActivityResponse;
+import edu.wpi.cs.algol.lambda.reportactivity.ReportActivityObject;
 import edu.wpi.cs.algol.model.Schedule;
 
 public class ReportActivityHandler implements RequestStreamHandler {
@@ -34,6 +35,7 @@ boolean reportActivity (String adminPass, int pastHour) throws Exception {
 		ScheduleDAO daoS = new ScheduleDAO();
 		try {
 			schedules = daoS.reportActivity(adminPass, pastHour);
+			if (logger != null) { logger.log("\n schedules not null, returning true\n"); }
 			return true;
 		} catch (Exception e) {
 			throw e;
@@ -97,7 +99,11 @@ boolean reportActivity (String adminPass, int pastHour) throws Exception {
 				if (reportActivity(req.adminPass, req.pastHour)) {
 					logger.log("ReportActivity worked");
 					resp = new ReportActivityResponse(schedules);
+					logger.log("\nresponse works, waiting to .tostring\n");
+					/*
 					logger.log(resp.toString());
+					logger.log("\n.tostring worked\n");
+					*/
 				}
 				else {
 					resp = new ReportActivityResponse("Unable to report schedules " + req.pastHour + "hours back", 400);

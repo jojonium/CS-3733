@@ -366,7 +366,7 @@ public class ScheduleDAO {
 	// method to get schedules created in the past n hours (pastHour)
 	public ArrayList<Schedule> reportActivity (String adminPass, int pastHour) throws Exception {
 		try {
-			if (!adminPass.equals("KnoxMiami1839")) { throw new Exception();}
+			if (!adminPass.equals("KnoxMiami1839")) { throw new Exception("Incorrect Admin Password");}
 			ArrayList<Schedule> schedules = new ArrayList<Schedule>();			
 
 			// gets timestamp for request made
@@ -375,9 +375,8 @@ public class ScheduleDAO {
 			LocalDateTime stampDateTime = currentStamp.toLocalDateTime();
 
 			// creates timestamp pastHour # of hours to be searched
-			LocalDateTime oldStamp = LocalDateTime.of(LocalDate.of(stampDateTime.getYear(),stampDateTime.getMonth(),stampDateTime.getDayOfMonth()),
-					LocalTime.of(stampDateTime.getHour(), stampDateTime.getMinute()).minusHours(pastHour));
-		
+			LocalDateTime oldStamp = stampDateTime.minusHours(pastHour);
+
 
 			// get schedules created in pastHour # of hours 
 			PreparedStatement ps = conn.prepareStatement("SELECT * FROM Schedules WHERE timestamp > ?;");

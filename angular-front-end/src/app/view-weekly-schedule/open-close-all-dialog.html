@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>Open/close all time slots by {{data.type}}</h1>
+
+<form>
+  <div mat-dialog-content>    
+    <h2>{{data.pretty}}</h2>    
+  </div>
+  <div mat-dialog-actions style="display: flex; justify-content: flex-end; margin: 0">
+    <mat-progress-spinner diameter="60" mode="indeterminate" *ngIf="submitted"></mat-progress-spinner>
+    <button mat-raised-button type="button" (click)="closeOpenCloseAllDialog()" style="margin-left: 10px;">{{closeButton}}</button>
+    <button mat-raised-button type="submit" (click)="closeAll(data)" color="primary" style="margin-left: 5px;" [disabled]="submitted">CLOSE</button>
+    <button mat-raised-button type="submit" (click)="openAll(data)" color="primary" style="margin-left: 5px;" [disabled]="submitted">OPEN</button>
+  </div>
+</form>

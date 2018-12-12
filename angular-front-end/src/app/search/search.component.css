@@ -1,0 +1,29 @@
+div.form-container {
+  width: 400px;
+  margin: 20px;
+  border-radius: 5px;
+  max-height: 638px;
+}
+
+div.form-container-internal {
+  padding: 40px;
+}
+
+#create-schedule-form mat-form-field {
+  width: 100%;
+}
+
+mat-form-field {
+  margin-bottom: 10px;
+}
+
+div.button-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+div.top-container {
+  max-width: 1000px;
+  display: flex;
+  justify-content: center;
+}

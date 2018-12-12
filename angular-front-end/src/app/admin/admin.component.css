@@ -1,0 +1,54 @@
+#main-heading {
+  width: 800px;
+  margin: 0;
+  padding: 40px 0 0 60px;
+}
+
+mat-card {
+  margin: 20px;
+  width: 350px;
+}
+
+div#card-container {
+  display: flex;
+  justify-content: space-between;
+  width: 800px;
+  margin: 20px;
+  padding: 20px;
+}
+
+div.content-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+div.content {
+  width: 600px;
+  margin: 20px;
+  border-radius: 5px;
+  padding: 40px;
+}
+
+span.spacer {
+  width: 40px;
+}
+
+#schedule-list a {
+  font-weight: bold;
+  color: #e71f5a;
+  text-decoration: none;
+}
+
+td {
+  width: 150px;
+}
+
+th {
+  text-align: left;
+  font-size: 1.3em;
+}
+
+tr {
+  width: 300px;
+}

@@ -243,7 +243,14 @@ public class ShowWeeklyScheduleNormalHandler implements RequestStreamHandler {
 				LocalDate endOfWeek = LocalDate.of(lastts.getBeginDateTime().getYear(), lastts.getBeginDateTime().getMonth(), lastts.getBeginDateTime().getDayOfMonth());
 				LocalDate startOfWeek = LocalDate.of(firstts.getBeginDateTime().getYear(),firstts.getBeginDateTime().getMonth() , firstts.getBeginDateTime().getDayOfMonth());
 				logger.log("Retrieving endOfWeek date: " + endOfWeek.toString() + "\n");
-				resp = new ShowWeeklyScheduleResponse(s.getName(),startOfWeek,endOfWeek,LocalTime.of(firstts.getBeginDateTime().getHour(), firstts.getBeginDateTime().getMinute()),LocalTime.of(lastts.getBeginDateTime().getHour(), lastts.getBeginDateTime().getMinute()),s.getDuration(), ts);
+				
+				// enable/disable scrolling through weeks
+				boolean hasPreviousWeek = startOfWeek.plusDays(-3).isAfter(s.getStartDate().plusDays(-1));
+				boolean hasNextWeek = endOfWeek.plusDays(3).isBefore(s.getEndDate().plusDays(1)); 
+			
+				resp = new ShowWeeklyScheduleResponse(s.getName(),startOfWeek,endOfWeek,LocalTime.of(firstts.getBeginDateTime().getHour(), 
+						firstts.getBeginDateTime().getMinute()),LocalTime.of(lastts.getBeginDateTime().getHour(), 
+								lastts.getBeginDateTime().getMinute()),s.getDuration(), ts, String.valueOf(hasPreviousWeek), String.valueOf(hasNextWeek),s.getStartDate(),s.getEndDate());
 				logger.log("ShowWeeklySchedule response: " + resp.toString() + "\n");
 			} catch (Exception e) {
 				resp = new ShowWeeklyScheduleResponse(

@@ -17,6 +17,7 @@ public class CreateScheduleRequest {
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.duration = duration;
+		
 	}
 
 

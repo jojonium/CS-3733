@@ -15,7 +15,7 @@ public class CloseTimeSlotResponse {
 	/* used for successful responses */
 	public CloseTimeSlotResponse(String sid) {
 		this.scheduleID = sid;
-		this.httpCode = 202;
+		this.httpCode = 200;
 	}
 
 	public String toString(){

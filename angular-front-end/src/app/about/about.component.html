@@ -1,0 +1,94 @@
+<!--<h1 class="main-heading">Meet the team</h1>-->
+
+<div class="card-holder">
+  <h1 class="main-heading">Meet the team</h1>
+  
+  <mat-card class="about-card">
+    <mat-card-header>
+      <mat-card-title>Joseph Petitti</mat-card-title>
+      <mat-card-subtitle>Team Lead</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image src="assets/joseph-petitti-portrait.jpg" alt="A photo of Joseph Petitti">
+    <mat-card-content>
+      <p>
+      Joseph Petitti is the fearless leader of Team Algol. He wrote the entire front-end (the
+      website you're looking at now) in TypeScript for Google's Angular framework, set up much of
+      the AWS back-end, designed and deployed the API, and spent far too many late nights debugging
+      and testing.
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <a mat-button href="https://josephpetitti.com" target="_blank">WEBSITE</a>
+      <a mat-button href="https://github.com/jojonium" target="_blank">GITHUB</a>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-card class="about-card">
+    <mat-card-header>
+      <mat-card-title>Justin Cheng</mat-card-title>
+      <mat-card-subtitle>Database Master</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image src="assets/justin-cheng-portrait.jpg" alt="A photo of Justin Cheng">
+    <mat-card-content>
+      <p>
+      Justin Cheng set up the relational database for the project in AWS, wrote the database access objects, and wrote and tested several of the lambda functions. He was our database expert and wrote all the SQL statements and queries necessary for this web app to work.
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <a mat-button href="https://justcheng.com/" target="_blank">WEBSITE</a>
+      <a mat-button href="https://github.com/jchengz" target="_blank">GITHUB</a>
+    </mat-card-actions>
+  </mat-card>
+  
+  <mat-card class="about-card">
+    <mat-card-header>
+      <mat-card-title>Matthew Hagan</mat-card-title>
+      <mat-card-subtitle>Lambda Lord</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image src="assets/matthew-hagan-portrait.jpg" alt="A photo of Matthew Hagan">
+    <mat-card-content>
+      <p>
+      Matt Hagan was responsible for getting the initial AWS storage, configurations, and domain set up. As time went on he transitioned to being the EBC Controller lead for this project, working primarily with the Lambdas to ensure that the boundary and entity control flow ran smoothly.
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <a mat-button href="http://doublediamond.io/" target="_blank">WEBSITE</a>
+      <a mat-button href="https://github.com/subbassbro" target="_blank">GITHUB</a>
+    </mat-card-actions>
+  </mat-card>
+  
+  <mat-card class="about-card">
+    <mat-card-header>
+      <mat-card-title>Andrew Levy</mat-card-title>
+      <mat-card-subtitle>Lambda Lord</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image src="assets/andrew-levy-portrait.jpg" alt="A photo of Andrew Levy">
+    <mat-card-content>
+      <p>
+      Andrew Levy designed the Algol team logo, as well as some of the HTML of the early project. He
+      kept us on track by writing weekly progress reports. He also wrote, tested, and debugged many
+      of the lambda functions. Also, Andy wanted everyone to know that he has hamsters.
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <a mat-button href="http://www.andrew-levy.com/" target="_blank">WEBSITE</a>
+      <a mat-button href="https://github.com/AndrewLevy395" target="_blank">GITHUB</a>
+    </mat-card-actions>
+  </mat-card>
+  
+  <div class="mat-elevation-z5 raised" id="about-text">
+    <h1>About this website</h1>
+    
+    <p>
+    The Algol Meeting Scheduler was created as a final project for CS 3733: Software Engineering, a computer science class at Worcester Polytechnic Institute. Although we did some planning in advance, we completed the entire implementation in three weeks, from November 26 to December 14, 2018.
+    </p>
+    
+    <p>
+    Joe Petitti made the front-end in Angular, a TypeScript-based web application framework developed by Google. The back-end utilizes Amazon Web Services. The web application interfaces with an API set up on AWS, which connects our front-end functions to AWS lambda functions. These lambda functions are Java programs, written primarily by Matt Hagan and Andy Levy, that act as the controllers for our application. The lambda functions are connected to Database Access Objects that use JDBC to connect to a MySQL database, set up and maintained by Justin Cheng, that stores all our data.
+    </p>
+    
+    <p>
+    This project is released as free and open source software, under the terms of an <a routerLink="/license">MIT-style license</a>. All of our source code can be viewed on <a href="https://github.com/jojonium/CS-3733/" target="_blank">GitHub</a>. 
+    </p>
+  </div>
+</div>

@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-
+import java.time.LocalDate;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -109,7 +109,24 @@ public class CreateScheduleHandler implements RequestStreamHandler {
 
 			CreateScheduleResponse resp;
 			try {
-				if (createSchedule(req.name, req.startDate, req.endDate, req.startTime, req.endTime, req.duration)) {
+				
+				int startYear, startMonth, startDay, endYear, endMonth, endDay;
+				String[] dateStartArray = req.startDate.split("/");
+				startMonth = Integer.parseInt(dateStartArray[0]);
+				startDay = Integer.parseInt(dateStartArray[1]);
+				startYear = Integer.parseInt(dateStartArray[2]);
+
+				String[] dateEndArray = req.endDate.split("/");
+				endMonth = Integer.parseInt(dateEndArray[0]);
+				endDay = Integer.parseInt(dateEndArray[1]);
+				endYear = Integer.parseInt(dateEndArray[2]);
+				LocalDate start = LocalDate.of(startYear, startMonth, startDay);
+				LocalDate end = LocalDate.of(endYear, endMonth, endDay);
+			
+				if (end.isAfter(start.plusYears(1))) {
+					resp = new CreateScheduleResponse("Unable to create schedule " + req.name + ": start date and end date may not be more than 1 year apart. Error: 400 \n", 400);
+				}
+				else if (createSchedule(req.name, req.startDate, req.endDate, req.startTime, req.endTime, req.duration)) {
 					logger.log("createSchedule miraculously turned true");
 					resp = new CreateScheduleResponse(s.getSecretCode(), s.getId());
 					logger.log("Successful creation of schedule");

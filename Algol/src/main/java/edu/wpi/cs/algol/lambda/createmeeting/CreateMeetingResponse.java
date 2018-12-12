@@ -1,23 +1,27 @@
 package edu.wpi.cs.algol.lambda.createmeeting;
 
 public class CreateMeetingResponse {
-	String message;
+	public String response;
 	String password;
-	int httpCode;
+	public int httpCode;
 	
 	public CreateMeetingResponse (String m, int code) {
-		this.message = m;
+		this.response = m;
 		this.httpCode = code;
 	}
 	
 	// 200 means success
 	public CreateMeetingResponse (String m, String password) {
-		this.message = m;
+		this.response = m;
 		this.password = password;
-		this.httpCode = 200;
+		this.httpCode = 201;
 	}
 	
 	public String toString() {
-		return "message: " + message + "secret code:" + password;
+		return "message: " + response + "secret code:" + password;
+	}
+	
+	public String getPassword() {
+		return password;
 	}
 }

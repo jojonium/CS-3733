@@ -1,0 +1,82 @@
+<h1 id="main-heading">Administrative controls</h1>
+
+<div id="card-container">
+  <mat-card>
+    <mat-card-title>Retrieve schedules</mat-card-title>
+    <mat-card-subtitle>Retrieve schedules made in the past N hours</mat-card-subtitle>
+    <mat-card-content>
+      <form name="retrieveSchedulesForm" (ngSubmit)="onRetrieveSubmit()" #retrieveSchedulesForm="ngForm">
+        
+        <mat-form-field [hideRequiredMarker]="true">
+          <input matInput type="number" placeholder="Age (hours)" name="retrieveAge" [(ngModel)]="retModel.age" required id="retrieve-age-input" #retrieveAgeInput="ngModel">
+          <mat-error *ngIf="retrieveAgeInput.hasError('required')">
+              Age is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        
+        <br>
+        
+        <mat-form-field [hideRequiredMarker]="true">
+          <input matInput type="password" placeholder="Admin Password" name="retrievePassword" [(ngModel)]="retModel.password" required id="retrieve-password-input" #retrievePasswordInput="ngModel">
+          <mat-error *ngIf="retrievePasswordInput.hasError('required')">
+            Password is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        
+        <br>
+        
+        <button mat-raised-button color="primary" type="submit" [disabled]="!retrieveSchedulesForm.form.valid || (retrieveSubmitted && !retrieveFinished)">RETRIEVE SCHEDULES</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-title>Delete schedules</mat-card-title>
+    <mat-card-subtitle>Delete schedules older than N days old from the system</mat-card-subtitle>
+    <mat-card-content>
+      <form name="deleteSchedulesForm" (ngSubmit)="onDeleteSubmit()" #deleteSchedulesForm="ngForm">
+        
+        <mat-form-field [hideRequiredMarker]="true">
+          <input matInput type="number" placeholder="Age (days)" name="deleteAge" [(ngModel)]="delModel.age" required id="delete-age-input" #deleteAgeInput="ngModel">
+          <mat-error *ngIf="deleteAgeInput.hasError('required')">
+            Age is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        
+        <br>
+        
+        <mat-form-field [hideRequiredMarker]="true">
+          <input matInput type="password" placeholder="Admin Password" name="deletePassword" [(ngModel)]="delModel.password" required id="delete-password-input" #deletePasswordInput="ngModel">
+          <mat-error *ngIf="deletePasswordInput.hasError('required')">
+            Password is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        
+        <br>
+        
+        <button mat-raised-button color="primary" type="submit" [disabled]="!deleteSchedulesForm.form.valid || (deleteSubmitted && !deleteFinished)">DELETE SCHEDULES</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="content-container" *ngIf="retrieveFinished || deleteFinished">
+  <div class="mat-elevation-z5 raised content">
+    <h1 *ngIf="numDeleted >= 0">Successfully deleted {{numDeleted}} schedule<span *ngIf="numDeleted != 1">s</span>.</h1>
+    
+    <div *ngIf="scheds">
+      <h1>Retrieved {{scheds.length}} schedule<span *ngIf="scheds.length != 1">s</span>:</h1>
+      
+      <table id="schedule-list">
+        <tr>
+          <th>Schedule ID</th>
+          <th>Secret code</th>
+        </tr>
+        <tr *ngFor="let s of scheds">
+          <td><a [routerLink]="'/schedule/' + s.scheduleID">{{s.scheduleID}}</a></td>
+          <td>{{s.secretCode}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

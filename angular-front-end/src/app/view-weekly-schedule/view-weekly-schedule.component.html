@@ -6,13 +6,19 @@
   <div *ngIf="!errorMessage">
     <h1 *ngIf="week">{{week.name}}<span *ngIf="secretCode" color="primary"> — Organizer Mode</span></h1>
 
-    <p *ngIf="week">Click on an open time slot to schedule a meeting</p>
+    <p *ngIf="week && !secretCode">Click on an open time slot to schedule a meeting</p>
+    
+    <p *ngIf="secretCode">Click on a time slot to toggle it between open and closed</p>
+    
+    <p *ngIf="secretCode">Click on a time or date to open/close all time slots for that time/date</p>
     
     <mat-grid-list *ngIf="week" [cols]="numDays + 1" rowHeight="100px">
       <mat-grid-tile
           *ngFor="let tile of tiles; let i = index"
           [attr.data-index]="i"
-          (click)="timeSlotClick(tile.text, i)"
+          (click)="timeSlotClick(tile.text, tile.text2, i)"
+          [matTooltip]="tile.tooltip"
+          matTooltipShowDelay="1000"
           [ngClass]="tile.class">{{tile.text}}<br>{{tile.text2}}
       </mat-grid-tile>
     </mat-grid-list>
@@ -20,17 +26,23 @@
   
   <div *ngIf="errorMessage">
     <h2>{{errorMessage}}</h2>
+    
+    <p>This could be because you have an invalid schedule ID, date, or secret code</p>
   </div>
   
 </div>
 
 <div class="button-container" *ngIf="week && !errorMessage">
-  <button mat-raised-button color="primary" type="button" (click)="goToPreviousWeek()">
+  <button mat-raised-button color="primary" type="button" (click)="goToPreviousWeek()" [disabled]="!hasPreviousWeek">
     <i class="material-icons">navigate_before</i>
     PREVIOUS WEEK
   </button>
-    
-  <button mat-raised-button color="primary" type="button" (click)="goToNextWeek()">
+  <a mat-raised-button [routerLink]="['/search', this.id]">
+  <i class="material-icons">search</i>
+  SEARCH FOR OPEN TIMESLOTS
+  </a>
+  
+  <button mat-raised-button color="primary" type="button" (click)="goToNextWeek()" [disabled]="!hasNextWeek">
     NEXT WEEK
     <i class="material-icons">navigate_next</i>
   </button>
@@ -44,7 +56,7 @@
           Show my meeting
         </mat-panel-title>
         <mat-panel-description>
-          View or cancel a meeting based on its secret code
+          View or cancel a meeting
         </mat-panel-description>
       </mat-expansion-panel-header>
       
@@ -68,10 +80,10 @@
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Edit this schedule
+          Show all meetings
         </mat-panel-title>
         <mat-panel-description>
-          Options for organizers
+          Open organizer view
         </mat-panel-description>
       </mat-expansion-panel-header>
       
@@ -85,8 +97,63 @@
       
       <mat-action-row>
         <button mat-button type="button" color="warn" (click)="deleteSchedule(sscInput.value)">DELETE SCHEDULE</button>
-        <button mat-button type="button" (click)="getTimeSlotsOrganizer(sscInput.value)">VIEW PARTICIPANTS</button>
+        <button mat-button type="button" (click)="leaveOrganizerMode()" *ngIf="secretCode">LEAVE ORGANIZER MODE</button>
+        <button mat-button type="button" (click)="getTimeSlotsOrganizer(sscInput.value)" *ngIf="!secretCode" #secretCodeInput>ORGANIZER MODE</button>
       </mat-action-row>
+      
+    </mat-expansion-panel>
+    
+    
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Alter dates
+        </mat-panel-title>
+        <mat-panel-description>
+          Extend start or end dates
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      
+      <p>You can push the starting date back, push the ending date forward, or both. The secret code for this schedule is required to make this change.</p>
+      
+      <p>Note: if you're already in organizer mode the secret code is optional.</p>
+      
+      <form name="extendDateForm" (ngSubmit)="onExtendDateSubmit()" #extendDateForm="ngForm" *ngIf="week">
+        <mat-form-field>
+          <input matInput name="newStartDate" [(ngModel)]="extendDateRequest.startDate" [value]="extendDateRequest.startDate" [matDatepicker]="newStartDatePicker"  [max]="getDate(week.trueStartDate)" [matDatepickerFilter]="weekendFilter" placeholder="New start date" maxlength="10" id="new-start-date-input" #newStartDateInput="ngModel">
+          <mat-datepicker-toggle matSuffix [for]="newStartDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #newStartDatePicker></mat-datepicker>
+          <mat-error *ngIf="!newStartDateInput.valid">
+            A valid new start date is <strong>required</strong>.
+          </mat-error>
+        </mat-form-field>
+        
+        &nbsp;
+        
+        <mat-form-field>
+          <input matInput name="newEndDate" [(ngModel)]="extendDateRequest.endDate" [matDatepicker]="newEndDatePicker"  [min]="getDate(week.trueEndDate)" [matDatepickerFilter]="weekendFilter" placeholder="New end date" maxlength="10" id="new-end-date-input" #newEndDateInput="ngModel">
+          <mat-datepicker-toggle matSuffix [for]="newEndDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #newEndDatePicker></mat-datepicker>
+          <mat-error *ngIf="!newEndDateInput.valid">
+            A valid new end date is <strong>required</strong>.
+          </mat-error>
+        </mat-form-field>
+        
+        &nbsp;
+        
+        <mat-form-field>
+          <input matInput placeholder="Secret code" name="secretCode" [(ngModel)]="extendDateRequest.secretCode" minlength="6" maxlength="6" id="secret-code-input" #secretCodeInput="ngModel">
+          <mat-error *ngIf="secretCodeInput.hasError('minlength') && !secretCodeInput.hasError('required')">
+            Secret codes are exactly <strong>6</strong> characters long.
+          </mat-error>
+        </mat-form-field>
+        
+        &nbsp;
+        
+        <button mat-raised-button color="primary" type="submit" [disabled]="!extendDateForm.form.valid">SUBMIT</button>
+      </form>
+      
+      <p *ngIf="extendMessage">{{extendMessage}}</p>
     </mat-expansion-panel>
   </mat-accordion>
 </div>

@@ -1,6 +1,6 @@
 package edu.wpi.cs.algol.lambda.createschedule;
 public class CreateScheduleResponse {
-	String response;
+	public String response;
 	String secretCode;
 	String id;
 	int httpCode;
@@ -18,7 +18,26 @@ public class CreateScheduleResponse {
 		this.httpCode = 201;
 	}
 
-	public String toString(){
-		return ("Schedule " + response + " was sucsessfully created.");
+	/**
+	 * @return the secretCode
+	 */
+	public String getSecretCode() {
+		return secretCode;
 	}
+
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * @return the httpCode
+	 */
+	public int getHttpCode() {
+		return httpCode;
+	}
+	
+	
 }

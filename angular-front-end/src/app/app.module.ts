@@ -17,15 +17,24 @@ import { RouterModule, Routes } from '@angular/router'
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTableModule } from '@angular/material/table';
 
 
 import { AppComponent } from './app.component';
 import { CreateScheduleComponent, DialogFailure, DialogSuccess } from './create-schedule/create-schedule.component';
-import { ViewWeeklyScheduleComponent, CreateMeetingDialog } from './view-weekly-schedule/view-weekly-schedule.component';
+import { ViewWeeklyScheduleComponent, CreateMeetingDialog, OpenCloseAllDialog } from './view-weekly-schedule/view-weekly-schedule.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ViewScheduleFormComponent } from './view-schedule-form/view-schedule-form.component';
 import { DeletedComponent } from './deleted/deleted.component';
+import { AboutComponent } from './about/about.component';
+import { AdminComponent } from './admin/admin.component';
+import { LicenseComponent } from './license/license.component';
+import { SearchComponent } from './search/search.component';
+import { TimeslotListComponent, CreateMeetingDialog2 } from './timeslot-list/timeslot-list.component';
 
 
 @NgModule({
@@ -35,10 +44,17 @@ import { DeletedComponent } from './deleted/deleted.component';
     DialogFailure,
     DialogSuccess,
     CreateMeetingDialog,
+    CreateMeetingDialog2,
+    OpenCloseAllDialog,
     ViewWeeklyScheduleComponent,
     PageNotFoundComponent,
     ViewScheduleFormComponent,
-    DeletedComponent
+    DeletedComponent,
+    AboutComponent,
+    AdminComponent,
+    LicenseComponent,
+    SearchComponent,
+    TimeslotListComponent
   ],
   imports: [
     BrowserModule,
@@ -51,6 +67,10 @@ import { DeletedComponent } from './deleted/deleted.component';
     MatToolbarModule,
     MatGridListModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
+    MatTableModule,
+    MatSnackBarModule,
+    MatIconModule,
     MatExpansionModule,
     FormsModule,
     ReactiveFormsModule,
@@ -63,7 +83,9 @@ import { DeletedComponent } from './deleted/deleted.component';
   entryComponents: [
     DialogFailure,
     DialogSuccess,
-    CreateMeetingDialog
+    CreateMeetingDialog,
+    CreateMeetingDialog2,
+    OpenCloseAllDialog
   ],
   providers: [
   ],

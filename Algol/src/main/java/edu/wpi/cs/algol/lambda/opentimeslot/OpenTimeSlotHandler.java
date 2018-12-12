@@ -94,10 +94,13 @@ public class OpenTimeSlotHandler implements RequestStreamHandler {
 
 			OpenTimeSlotResponse resp;
 			try {
-				OpenTimeSlot(req.scheduleID, req.secretCode, req.date, req.time);
+				if (OpenTimeSlot(req.scheduleID, req.secretCode, req.date, req.time)) {
 				logger.log("OpenTimeSlot worked");
 				resp = new OpenTimeSlotResponse(req.scheduleID);
 				logger.log("TimeSlot successfully opened");
+				}
+				else
+					resp = new OpenTimeSlotResponse("Unable to open timeslot at given time for schedule: " + req.scheduleID, 400);
 
 			} catch (Exception e) {
 				resp = new OpenTimeSlotResponse("Unable to open time slot at " + req.time + " at date " + req.date + " of schedule " + req.scheduleID + " because of (" + e.getMessage() + ")", 404);

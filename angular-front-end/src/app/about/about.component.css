@@ -1,0 +1,35 @@
+.card-holder {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1000px;
+  justify-content: center;
+  margin: 0;
+}
+
+.about-card {
+  flex-grow: 1;
+  max-width: 42%;
+  margin: 2%;
+}
+
+.card-holder h1.main-heading {
+  width: 96%;
+  margin: 2%;
+}
+
+div#about-container {
+  display: flex;
+  justify-content: center;
+}
+
+div#about-text {
+  width: 96%;
+  margin: 2%;
+  border-radius: 5px;
+  padding: 40px;
+}
+
+#about-text a {
+  color: #e71f5a;
+  text-decoration: none;
+}

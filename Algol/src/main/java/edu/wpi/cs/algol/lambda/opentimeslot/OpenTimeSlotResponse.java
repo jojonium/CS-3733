@@ -17,7 +17,7 @@ public class OpenTimeSlotResponse {
 	public OpenTimeSlotResponse(String scheduleID) {
 		
 		this.scheduleID = scheduleID;
-		this.httpCode = 202;
+		this.httpCode = 200;
 		
 	}
 	

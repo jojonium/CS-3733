@@ -1,8 +1,8 @@
 package edu.wpi.cs.algol.lambda.cancelmeeting;
 
 public class CancelMeetingResponse {
-	String message;
-	int httpCode;
+	public String message;
+	public int httpCode;
 	
 	public CancelMeetingResponse (String m, int code) {
 		this.message = m;
@@ -12,7 +12,7 @@ public class CancelMeetingResponse {
 	// 200 means success
 	public CancelMeetingResponse (String m) {
 		this.message = m;
-		this.httpCode = 200;
+		this.httpCode = 202;
 	}
 	
 	public String toString() {

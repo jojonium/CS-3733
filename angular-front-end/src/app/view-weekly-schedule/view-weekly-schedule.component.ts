@@ -173,7 +173,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
       this.scheduleService.cancelMeeting(modelToSend)
         .subscribe(resp => {
           var respBody = JSON.parse(resp.body);
-          if (respBody.httpCode == 200) {
+          if (respBody.httpCode == 202) {
             console.log(respBody);
             this.refresh();
           } else if (+respBody.httpCode >= 400) {
@@ -383,7 +383,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
             .subscribe(cancelResponse => {
               console.log(`ViewWeeklyScheduleComponent received response: ${cancelResponse}`);
               responseBody = JSON.parse(cancelResponse.body);
-              if (responseBody.httpCode == 200) { // success
+              if (responseBody.httpCode == 202) { // success
                 console.log("RESPONSE BODY:");
                 console.log(responseBody);
                 this.vsMessage = "Meeting cancelled";

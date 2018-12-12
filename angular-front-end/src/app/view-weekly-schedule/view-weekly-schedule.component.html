@@ -37,7 +37,11 @@
     <i class="material-icons">navigate_before</i>
     PREVIOUS WEEK
   </button>
-    
+  <a mat-raised-button [routerLink]="['/search', this.id]">
+  <i class="material-icons">search</i>
+  SEARCH FOR OPEN TIMESLOTS
+  </a>
+  
   <button mat-raised-button color="primary" type="button" (click)="goToNextWeek()" [disabled]="!hasNextWeek">
     NEXT WEEK
     <i class="material-icons">navigate_next</i>
@@ -116,7 +120,7 @@
       
       <form name="extendDateForm" (ngSubmit)="onExtendDateSubmit()" #extendDateForm="ngForm" *ngIf="week">
         <mat-form-field>
-          <input matInput name="newStartDate" [(ngModel)]="extendDateRequest.startDate" [value]="extendDateRequest.startDate" [matDatepicker]="newStartDatePicker"  [max]="getDate(week.startDate)" [matDatepickerFilter]="weekendFilter" placeholder="New start date" maxlength="10" id="new-start-date-input" #newStartDateInput="ngModel">
+          <input matInput name="newStartDate" [(ngModel)]="extendDateRequest.startDate" [value]="extendDateRequest.startDate" [matDatepicker]="newStartDatePicker"  [max]="getDate(week.trueStartDate)" [matDatepickerFilter]="weekendFilter" placeholder="New start date" maxlength="10" id="new-start-date-input" #newStartDateInput="ngModel">
           <mat-datepicker-toggle matSuffix [for]="newStartDatePicker"></mat-datepicker-toggle>
           <mat-datepicker #newStartDatePicker></mat-datepicker>
           <mat-error *ngIf="!newStartDateInput.valid">
@@ -127,7 +131,7 @@
         &nbsp;
         
         <mat-form-field>
-          <input matInput name="newEndDate" [(ngModel)]="extendDateRequest.endDate" [matDatepicker]="newEndDatePicker"  [min]="getDate(week.endDate)" [matDatepickerFilter]="weekendFilter" placeholder="New end date" maxlength="10" id="new-end-date-input" #newEndDateInput="ngModel">
+          <input matInput name="newEndDate" [(ngModel)]="extendDateRequest.endDate" [matDatepicker]="newEndDatePicker"  [min]="getDate(week.trueEndDate)" [matDatepickerFilter]="weekendFilter" placeholder="New end date" maxlength="10" id="new-end-date-input" #newEndDateInput="ngModel">
           <mat-datepicker-toggle matSuffix [for]="newEndDatePicker"></mat-datepicker-toggle>
           <mat-datepicker #newEndDatePicker></mat-datepicker>
           <mat-error *ngIf="!newEndDateInput.valid">

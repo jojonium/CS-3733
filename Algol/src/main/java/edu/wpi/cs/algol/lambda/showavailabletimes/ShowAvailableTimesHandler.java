@@ -86,6 +86,7 @@ public class ShowAvailableTimesHandler implements RequestStreamHandler {
 			try {
 				viewAvailable(req.scheduleID, req.month, req.year, req.dayOfWeek, req.day, req.time);
 				resp = new ShowAvailableTimesResponse("You have succesfully shown the available timeslots.", viewed);
+				logger.log(resp.toString());
 			} catch (Exception e) {
 				resp = new ShowAvailableTimesResponse(
 						"Unable to show timeslots because of (" + e.getMessage() + ")", 400);

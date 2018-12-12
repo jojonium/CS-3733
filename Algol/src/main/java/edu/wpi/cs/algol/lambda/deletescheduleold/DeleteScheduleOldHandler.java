@@ -99,6 +99,7 @@ public class DeleteScheduleOldHandler implements RequestStreamHandler {
 			}
 			try {
 				int numDeleted = deleteOldSchedules(req.adminPass, req.daysOld);
+				
 				if (numDeleted>=0) {
 					logger.log("DeleteScheduleOld worked");
 					resp = new DeleteScheduleOldResponse(numDeleted);

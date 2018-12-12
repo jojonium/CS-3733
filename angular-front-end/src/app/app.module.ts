@@ -31,6 +31,7 @@ import { ViewScheduleFormComponent } from './view-schedule-form/view-schedule-fo
 import { DeletedComponent } from './deleted/deleted.component';
 import { AboutComponent } from './about/about.component';
 import { AdminComponent } from './admin/admin.component';
+import { LicenseComponent } from './license/license.component';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { AdminComponent } from './admin/admin.component';
     ViewScheduleFormComponent,
     DeletedComponent,
     AboutComponent,
-    AdminComponent
+    AdminComponent,
+    LicenseComponent
   ],
   imports: [
     BrowserModule,

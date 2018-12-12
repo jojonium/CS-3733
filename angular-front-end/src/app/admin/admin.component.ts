@@ -60,7 +60,7 @@ export class AdminComponent implements OnInit {
       .subscribe(response => {
         console.log(response);
         var respBody = JSON.parse(response.body);
-        if (respBody.httpCode == 200) {
+        if (respBody.httpCode == 200 || respBody.httpCode == 404) {
           // TODO display the actual response schedules
           this.scheds = new Array<IDSC>(1);
           this.scheds[0] = new IDSC('111111', 'aaaaaa');

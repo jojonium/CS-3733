@@ -10,6 +10,7 @@ import { ViewScheduleFormComponent } from './view-schedule-form/view-schedule-fo
 import { DeletedComponent } from './deleted/deleted.component';
 import { AboutComponent } from './about/about.component';
 import { AdminComponent } from './admin/admin.component';
+import { LicenseComponent } from './license/license.component';
 
 const appRoutes: Routes = [
   { path: 'schedule/:id/:date', component: ViewWeeklyScheduleComponent },
@@ -18,6 +19,7 @@ const appRoutes: Routes = [
   { path: 'about', component: AboutComponent },
   { path: 'deleted', component: DeletedComponent },
   { path: 'admin', component: AdminComponent },
+  { path: 'license', component: LicenseComponent },
   { path: '', pathMatch: 'full', component: CreateScheduleComponent },
   { path: '**', component: PageNotFoundComponent },
 ];

@@ -36,12 +36,8 @@ span.spacer {
 
 #schedule-list a {
   font-weight: bold;
-  color: white;
+  color: #e71f5a;
   text-decoration: none;
-}
-
-#schedule-list a:hover {
-  color: #dddddd;
 }
 
 td {

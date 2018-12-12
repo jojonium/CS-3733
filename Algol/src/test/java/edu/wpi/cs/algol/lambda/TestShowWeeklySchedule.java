@@ -5,8 +5,6 @@ import java.io.ByteArrayOutputStream;
 //import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,6 +14,7 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.algol.db.ScheduleDAO;
 import edu.wpi.cs.algol.lambda.showweeklyschedule.*;
+import edu.wpi.cs.algol.lambda.testing.PostResponse;
 import edu.wpi.cs.algol.model.Schedule;
 
 public class TestShowWeeklySchedule {
@@ -29,7 +28,7 @@ public class TestShowWeeklySchedule {
 	@Test
 	public void testShowWeeklySchedule() throws Exception{
 		ScheduleDAO sDao = new ScheduleDAO();
-		Schedule s= new Schedule("name", "12/9/2018",  "12/10/2018",  "9:00",  "10:00",  20);
+		Schedule s= new Schedule("name", "12/10/2018",  "12/11/2018",  "9:00",  "10:00",  20);
 		sDao.addSchedule(s);
 		ShowWeeklyScheduleNormalHandler handler = new ShowWeeklyScheduleNormalHandler();
 
@@ -40,27 +39,28 @@ public class TestShowWeeklySchedule {
 		InputStream input = new ByteArrayInputStream(jsonRequest.getBytes());
 		OutputStream output = new ByteArrayOutputStream();
 
-		handler.handleRequest(input, output, createContext("create"));
+		handler.handleRequest(input, output, createContext("show"));
+		
+		PostResponse post = new Gson().fromJson(output.toString(), PostResponse.class);
+		ShowWeeklyScheduleResponse resp = new Gson().fromJson(post.body, ShowWeeklyScheduleResponse.class);
 
-		ShowWeeklyScheduleResponse post = new Gson().fromJson(output.toString(), ShowWeeklyScheduleResponse.class);
+		Assert.assertEquals(200, resp.httpCode);
 
-		Assert.assertEquals(post.response, post.response);
+		ar = new ShowWeeklyScheduleRequest("","12-10-2018");
 
-		ShowWeeklyScheduleRequest ar2 = new ShowWeeklyScheduleRequest(s.getId(),"12-9-2018");
+		jsonRequest = new Gson().toJson(ar);
 
-		String jsonRequest2 = new Gson().toJson(ar2);
+		input = new ByteArrayInputStream(jsonRequest.getBytes());
+		output = new ByteArrayOutputStream();
 
-		InputStream input2 = new ByteArrayInputStream(jsonRequest2.getBytes());
-		OutputStream output2 = new ByteArrayOutputStream();
+		handler.handleRequest(input, output, createContext("show"));
+		post = new Gson().fromJson(output.toString(), PostResponse.class);
+		resp = new Gson().fromJson(post.body, ShowWeeklyScheduleResponse.class);
+		
+		Assert.assertEquals(400, resp.httpCode);
 
-		handler.handleRequest(input2, output2, createContext("create"));
-		ShowWeeklyScheduleResponse post2 = new Gson().fromJson(output2.toString(), ShowWeeklyScheduleResponse.class);
 		sDao.deleteSchedule(s.getId(), s.getSecretCode());
-		Assert.assertEquals(post2.response, post2.response);
-		//Successfull output not working, filler
-		ShowWeeklyScheduleResponse res = new ShowWeeklyScheduleResponse("", LocalDate.now(), LocalDate.now(), LocalTime.now(), LocalTime.now(), 
-				20, null, "", "");
-		Assert.assertTrue(!res.toString().isEmpty());
+
 	}
 
 }

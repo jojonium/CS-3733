@@ -366,7 +366,7 @@ public class ScheduleDAO {
 	// method to get schedules created in the past n hours (pastHour)
 	public ArrayList<Schedule> reportActivity (String adminPass, int pastHour) throws Exception {
 		try {
-			if (!adminPass.equals("KnoxMiami1839")) { throw new Exception();}
+			if (!adminPass.equals("KnoxMiami1839")) { throw new Exception("Incorrect Admin Password");}
 			ArrayList<Schedule> schedules = new ArrayList<Schedule>();			
 
 			// gets timestamp for request made

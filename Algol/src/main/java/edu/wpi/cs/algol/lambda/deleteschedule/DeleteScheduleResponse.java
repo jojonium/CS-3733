@@ -1,10 +1,10 @@
 package edu.wpi.cs.algol.lambda.deleteschedule;
 
 public class DeleteScheduleResponse {
-	public String response;
-	public String scheduleID;
-	public int httpCode;
-	
+	String response;
+	String scheduleID;
+	int httpCode;
+
 	/* used for errors or other responses that require a message */
 	public DeleteScheduleResponse(String response, int code) {
 		this.response = response;
@@ -14,7 +14,7 @@ public class DeleteScheduleResponse {
 	/* used for successful responses */
 	public DeleteScheduleResponse(String sid) {
 		this.scheduleID = sid;
-		this.httpCode = 202;
+		this.httpCode = 200;
 	}
 
 	public String toString(){
@@ -23,4 +23,13 @@ public class DeleteScheduleResponse {
 		else
 			return ("Delete schedule null error \n");
 	}
+
+	/**
+	 * @return the httpCode
+	 */
+	public int getHttpCode() {
+		return httpCode;
+	}
+	
+	
 }

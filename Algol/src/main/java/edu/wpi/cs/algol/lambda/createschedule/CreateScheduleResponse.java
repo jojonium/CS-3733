@@ -18,7 +18,26 @@ public class CreateScheduleResponse {
 		this.httpCode = 201;
 	}
 
-	public String toString(){
-		return ("Schedule " + response + " was successfully created.");
+	/**
+	 * @return the secretCode
+	 */
+	public String getSecretCode() {
+		return secretCode;
 	}
+
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * @return the httpCode
+	 */
+	public int getHttpCode() {
+		return httpCode;
+	}
+	
+	
 }

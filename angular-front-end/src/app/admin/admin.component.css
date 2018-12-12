@@ -1,14 +1,31 @@
 #main-heading {
   width: 800px;
-  margin: 20px;
-  padding: 20px;
+  margin: 0;
+  padding: 40px 0 0 60px;
 }
 
 mat-card {
   margin: 20px;
-  flex-grow: 1;
+  width: 350px;
 }
 
 div#card-container {
   display: flex;
+  justify-content: space-between;
+  width: 800px;
+  margin: 20px;
+  padding: 20px;
+}
+
+div.content-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+div.content {
+  width: 600px;
+  margin: 20px;
+  border-radius: 5px;
+  padding: 40px;
 }

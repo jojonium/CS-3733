@@ -19,6 +19,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 import { AppComponent } from './app.component';
@@ -59,6 +60,7 @@ import { AdminComponent } from './admin/admin.component';
     MatGridListModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
+    MatSnackBarModule,
     MatIconModule,
     MatExpansionModule,
     FormsModule,

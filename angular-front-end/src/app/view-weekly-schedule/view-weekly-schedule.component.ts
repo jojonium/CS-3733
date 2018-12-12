@@ -93,6 +93,10 @@ export class ViewWeeklyScheduleComponent implements OnInit {
     let d = this.dateArray[(index % (this.numDays + 1)) - 1];
     let t = this.timeArray[Math.floor(index / (this.numDays + 1)) - 1];
       
+    console.log(this.timeArray);
+    console.log((index % (this.numDays + 1)) - 1);
+    console.log(Math.floor(index / (this.numDays + 1)) - 1);
+    
     if (text == "Open") {
       if (this.secretCode) {  // organizer close timeslot
         this.scheduleService.closeTimeSlot(this.id, this.secretCode, this.prettyPrintDate(d), (t.hour + ':' + t.minute))
@@ -130,6 +134,28 @@ export class ViewWeeklyScheduleComponent implements OnInit {
             //TODO open snackbar for error message
           }
         });
+    } else if (this.secretCode && index >= 1 && index <= this.numDays) { // close/open all by day
+      var openCloseData = {
+        date: d,
+        time: t,
+        pretty: text + ' ' + text2,
+        type: "date",
+        scheduleID: this.id,
+        secretCode: this.secretCode,
+        backRef: this
+      }
+      this.openOpenCloseAllDialog(openCloseData);
+    } else if (this.secretCode && index > this.numDays && index % (this.numDays + 1) == 0) { // organizer close/open all by time
+      var openCloseData = {
+        date: d,
+        time: t,
+        pretty: text,
+        type: "time",
+        scheduleID: this.id,
+        secretCode: this.secretCode,
+        backRef: this
+      }
+      this.openOpenCloseAllDialog(openCloseData);      
     } else if (text != "Open" && this.secretCode) {      
       var dateString = (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear(); // 12/5/2018
       var timeString = t.hour + ":" + t.minute;
@@ -145,28 +171,6 @@ export class ViewWeeklyScheduleComponent implements OnInit {
             // TODO open snackbar for error
           }
         });
-    } else if (this.secretCode && index >= 1 && index <= this.numDays) { // close/open all by day
-      var openCloseData = {
-        date: d,
-        time: t,
-        pretty: text + ' ' + text2,
-        type: "date",
-        scheduleID: this.id,
-        secretCode: this.secretCode,
-        backRef: this
-      }
-      this.openOpenCloseAllDialog(openCloseData);
-    } else if (this.secretCode && index > 0 && index % (this.numDays + 1) == 0) { // organizer close/open all by time
-      var openCloseData = {
-        date: d,
-        time: t,
-        pretty: text,
-        type: "time",
-        scheduleID: this.id,
-        secretCode: this.secretCode,
-        backRef: this
-      }
-      this.openOpenCloseAllDialog(openCloseData);      
     }
   }
   

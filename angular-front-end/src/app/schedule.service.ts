@@ -26,10 +26,10 @@ export class ScheduleService {
   private deleteScheduleUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/deleteschedule";
   private closeTimeSlotUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/closetimeslot";
   private openTimeSlotUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/opentimeslot";
-  private openAllTimeSlotTimeUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/openalltimeslottime";
-  private closeAllTimeSlotTimeUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/closealltimeslottime";
-  private openAllTimeSlotDateUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/openalltimeslotdate";
-  private closeAllTimeSlotDateUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/closealltimeslotdate";
+  private openAllTimeSlotTimeUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/openalltimeslotstime";
+  private closeAllTimeSlotTimeUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/closealltimeslotstime";
+  private openAllTimeSlotDateUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/openalltimeslotsday";
+  private closeAllTimeSlotDateUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/closealltimeslotsday";
   private deleteScheduleOldUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/deletescheduleold";
   private reportActivityUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/reportactivity";
 

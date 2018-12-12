@@ -18,6 +18,7 @@
           [attr.data-index]="i"
           (click)="timeSlotClick(tile.text, tile.text2, i)"
           [matTooltip]="tile.tooltip"
+          matTooltipShowDelay="1000"
           [ngClass]="tile.class">{{tile.text}}<br>{{tile.text2}}
       </mat-grid-tile>
     </mat-grid-list>

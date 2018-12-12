@@ -25,7 +25,7 @@
         
         <br>
         
-        <button mat-raised-button color="primary" type="submit" [disabled]="!retrieveSchedulesForm.form.valid || retrieveSubmitted">RETRIEVE SCHEDULES</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!retrieveSchedulesForm.form.valid || (retrieveSubmitted && !retrieveFinished)">RETRIEVE SCHEDULES</button>
       </form>
     </mat-card-content>
   </mat-card>
@@ -54,8 +54,17 @@
         
         <br>
         
-        <button mat-raised-button color="primary" type="submit" [disabled]="!deleteSchedulesForm.form.valid || deleteSubmitted">DELETE SCHEDULES</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!deleteSchedulesForm.form.valid || (deleteSubmitted && !deleteFinished)">DELETE SCHEDULES</button>
       </form>
     </mat-card-content>
   </mat-card>
+</div>
+
+<div class="content-container" *ngIf="retrieveSubmitted || deleteSubmitted">
+  <div class="mat-elevation-z5 raised content">
+    <h1 *ngIf="numDeleted">Successfully deleted {{numDeleted}} schedules.</h1>
+    {{deleteSubmitted}}
+    <p>lkjfsadlkjaldskfjalkdfjalsdkfj</p>
+
+  </div>
 </div>

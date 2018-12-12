@@ -302,6 +302,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
         return this.scheduleService.getSchedule(this.id, this.reqDate);
       })
     ).subscribe(vwsResponse => {
+      this.errorMessage = '';
       this.week = JSON.parse(vwsResponse.body);
       if (this.week.httpCode == '200') {
         console.log(this.week);
@@ -317,6 +318,7 @@ export class ViewWeeklyScheduleComponent implements OnInit {
     
     this.scheduleService.getScheduleOrganizer(this.id, this.secretCode, this.reqDate)
       .subscribe(vwsResponse => {
+        this.errorMessage = '';
         this.week = JSON.parse(vwsResponse.body);
         if (this.week.httpCode == '200') {
           console.log(this.week);
@@ -510,7 +512,7 @@ export class CreateMeetingDialog {
         var responseBody = JSON.parse(cmResponse.body);
         this.finished = true;
         this.closeButton = "CLOSE";
-        if (responseBody.httpCode == 200 ) {          // success
+        if (responseBody.httpCode == 201 ) {          // success
           console.log("RESPONSE BODY:");
           console.log(responseBody);
           this.header = "Meeting created"

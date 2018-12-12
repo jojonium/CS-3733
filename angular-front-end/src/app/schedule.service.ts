@@ -30,6 +30,8 @@ export class ScheduleService {
   private closeAllTimeSlotTimeUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/closealltimeslottime";
   private openAllTimeSlotDateUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/openalltimeslotdate";
   private closeAllTimeSlotDateUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/closealltimeslotdate";
+  private deleteScheduleOldUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/deletescheduleold";
+  private reportActivityUrl = "https://24f2jgxv5i.execute-api.us-east-2.amazonaws.com/Alpha/reportactivity";
 
 
   httpOptions = {
@@ -236,8 +238,35 @@ export class ScheduleService {
       }),
       catchError(this.handleError<Response>('closeAllTimeSlotDate')));
   }
-
+  
+  deleteScheduleOld(daysOld: number, adminPass: string) {
+    console.log(`deleteScheduleOld: attempting to send with daysOld=${daysOld}, adminPass=${adminPass}`);
     
+    var parameters = {"adminPass": adminPass, "daysOld": daysOld};
+    console.log(parameters);
+    
+    return this.http.post<Response>(this.deleteScheduleOldUrl, parameters, this.httpOptions).pipe(
+      tap((resp: Response) => {
+        console.log('received response:');
+        console.log(resp);
+      }),
+      catchError(this.handleError<Response>('deleteScheduleOld')));
+  }
+  
+  reportActivity(pastHour: number, adminPass: string) {
+    console.log(`reportActivity: attempting to send with pastHour=${pastHour}, adminPass=${adminPass}`);
+    
+    var parameters = {"adminPass": adminPass, "pastHour": pastHour};
+    console.log(parameters);
+    
+    return this.http.post<Response>(this.reportActivityUrl, parameters, this.httpOptions).pipe(
+      tap((resp: Response) => {
+        console.log('received response:');
+        console.log(resp);
+      }),
+      catchError(this.handleError<Response>('reportActivity')));
+  }
+
 
   /**
    * Handle Http operation that failed.

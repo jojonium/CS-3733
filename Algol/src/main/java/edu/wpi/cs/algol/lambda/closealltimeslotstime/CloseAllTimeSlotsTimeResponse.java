@@ -1,6 +1,6 @@
 package edu.wpi.cs.algol.lambda.closealltimeslotstime;
 
-public class CloseAllTimeSlotTimeResponse {
+public class CloseAllTimeSlotsTimeResponse {
 	
 	public String response;
 	public String secretCode;
@@ -8,13 +8,13 @@ public class CloseAllTimeSlotTimeResponse {
 	public int httpCode;
 	
 	/* used for errors or other responses that require a message */
-	public CloseAllTimeSlotTimeResponse(String response, int code) {
+	public CloseAllTimeSlotsTimeResponse(String response, int code) {
 		this.response = response;
 		this.httpCode= code;
 	}
 	
 	/* used for successful responses */
-	public CloseAllTimeSlotTimeResponse(String scheduleID) {
+	public CloseAllTimeSlotsTimeResponse(String scheduleID) {
 		
 		this.scheduleID = scheduleID;
 		this.httpCode = 202;

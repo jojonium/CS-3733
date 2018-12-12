@@ -681,7 +681,7 @@ public class TimeSlotDAO {
 			
 			// gets month as string, sets to int
 			Calendar cal = Calendar.getInstance();
-			cal.setTime(new SimpleDateFormat("MMM", Locale.ENGLISH).parse(month));
+			if(!month.isEmpty()) {cal.setTime(new SimpleDateFormat("MMM", Locale.ENGLISH).parse(month));}
 			
 			inputMonth = (!month.isEmpty()) ? cal.get(Calendar.MONTH)+1 : -1;
 			inputYear = (!year.isEmpty()) ? Integer.parseInt(year) : -1;

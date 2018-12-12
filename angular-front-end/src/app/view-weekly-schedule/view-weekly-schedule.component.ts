@@ -563,7 +563,7 @@ export class CreateMeetingDialog {
         var responseBody = JSON.parse(cmResponse.body);
         this.finished = true;
         this.closeButton = "CLOSE";
-        if (responseBody.httpCode == 201 ) {          // success
+        if (responseBody.httpCode == 200 ) {          // success
           console.log("RESPONSE BODY:");
           console.log(responseBody);
           this.header = "Meeting created"

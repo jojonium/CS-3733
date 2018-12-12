@@ -179,6 +179,8 @@ public class ScheduleDAO {
 	public boolean adjustDates(String id, String secretCode, String startDate, String endDate) throws Exception {
 		try {
 			if (this.getSchedule(id).getSecretCode().equals(secretCode)){
+				
+				if(!this.getSchedule(id).getSecretCode().equals(secretCode)) { throw new Exception(); }
 				PreparedStatement ps = conn.prepareStatement("UPDATE Schedules SET startDate=?, endDate=? WHERE id=?;");
 
 				LocalDate sameStartDate = this.getSchedule(id).getStartDate();

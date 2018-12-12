@@ -80,8 +80,11 @@ public class ExtendDateHandler implements RequestStreamHandler {
 
 			ExtendDateResponse resp;
 			try {
-				extendDate(req.scheduleID, req.secretCode, req.startDate, req.endDate);
-				resp = new ExtendDateResponse("You have succesfully extended the date.");
+				if (extendDate(req.scheduleID, req.secretCode, req.startDate, req.endDate)) {
+					resp = new ExtendDateResponse("You have succesfully extended the date.");
+				}
+				else
+					throw new Exception();
 			} catch (Exception e) {
 				resp = new ExtendDateResponse(
 						"Unable to extend date because of (" + e.getMessage() + ")", 400);

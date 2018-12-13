@@ -426,10 +426,20 @@ export class ViewWeeklyScheduleComponent implements OnInit {
       return;
     }
     
-    var newSD = new Date(this.extendDateRequest.startDate);
-    var newED = new Date(this.extendDateRequest.endDate);
-    var parsedSD = (newSD.getMonth() + 1) + '/' + newSD.getDate() + '/' + newSD.getFullYear();
-    var parsedED = (newED.getMonth() + 1) + '/' + newED.getDate() + '/' + newED.getFullYear();
+    var parsedSD: string;
+    var parsedED: string;
+    if (this.extendDateRequest.startDate == '') {
+      parsedSD = '';
+    } else {
+      var newSD = new Date(this.extendDateRequest.startDate);
+      parsedSD = (newSD.getMonth() + 1) + '/' + newSD.getDate() + '/' + newSD.getFullYear();
+    }
+    if (this.extendDateRequest.endDate == '') {
+      parsedED = '';
+    } else {
+      var newED = new Date(this.extendDateRequest.endDate);
+      parsedED = (newED.getMonth() + 1) + '/' + newED.getDate() + '/' + newED.getFullYear();
+    }
     
     var modelToSend = new ExtendDateRequest(this.id, this.extendDateRequest.secretCode || this.secretCode, parsedSD, parsedED);
     

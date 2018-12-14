@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en-US">
+	<head>
+		<meta charset="utf-8">
+		<title>Klotski</title>
+		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+		<script src="klotski.js"></script>
+	</head>
+	<body>
+	
+	<!-- Header -->
+		<header>
+			<h1>Klotski</h1>
+		</header>
+		
+	<!-- Main -->
+		<main>
+			<div id="message"></div>
+			<div style="float: left; width: 150px">
+			<button id="reset" onclick="reset()">Reset Puzzle</button>
+			</div>
+			<div style="float: right">
+			<button id="config-1" class="config" onclick="config(1)" style="background-color: #34d058">Configuration 1</button>
+			<button id="config-2" class="config" onclick="config(2)">Configuration 2</button>
+			<button id="config-3" class="config" onclick="config(3)">Configuration 3</button>
+			<button id="config-4" class="config" onclick="config(4)">Configuration 4</button>
+			</div>
+
+			<center id="canvas-holder"></center>
+
+			
+			<center id="score-holder">
+			<h2>Moves: <span id="moves"></span></h2>
+			<h2 id="game-over"></h2>
+			<button id="play-again" style="display: none" onclick="reset()">Play Again?</button>
+			</center>
+			
+			<h2>Instructions</h2>
+			
+			<p>The goal of this game is to release the large 2x2 tile from the board through the opening 
+			   centered on the bottom. To select a piece, click on it. Then it can be moved in any
+			   direction with the arrow keys, WASD, or HJKL. You can also click and drag to with the 
+			   mouse to move pieces. Only the large 2x2 tile can leave the board, so you must plan 
+			   carefully to complete the puzzle in the fewest moves.</p>
+		</main>
+		
+		
+		<style>
+			button.config {
+				width: 150px;
+				display: block;
+				margin: 5px;
+			}
+
+			#canvas {
+				border: 1px solid black;
+				margin: 15px;
+			}
+			
+			#canvas-holder {
+				overflow: auto;
+				max-height: 800px;
+				min-height: 400px;
+				margin-top: 20px;
+			}
+			
+			#message {
+				font-size: 80px;
+				color: #ffff00;
+				font-weight: 700;
+				position: absolute;
+				width: 20%;
+				left: 40%;
+				top: 400px;
+				transform: rotate(-15deg);
+				text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+				user-select: none;
+			}
+			
+			#score-holder {
+				position: relative;
+				top: -20px;
+				margin: 0, 0, 0, 0;
+			}
+			
+			body {
+              width: 800px;
+              margin: 0 auto;
+            }
+            
+            header h1 {
+              text-align: center;
+            }
+            
+            html {
+              background-color: #2c2c2c;
+            }
+            
+            body {
+                background-color: #353535;
+                padding: 20px;
+                font-family: sans-serif;
+            }
+            
+            h1, p, h2 {
+                color: white;
+            }
+		</style>
+	</body>
+</html>

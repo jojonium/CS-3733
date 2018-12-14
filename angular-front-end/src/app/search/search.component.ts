@@ -59,7 +59,7 @@ export class SearchComponent implements OnInit {
   setup() {
     let startMonth = this.details.startDate.month - 1;
     let endMonth = this.details.endDate.month;
-    this.validMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].slice(startMonth, endMonth);
+    this.validMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']; //.slice(startMonth, endMonth);
     
     let startYear = this.details.startDate.year;
     let endYear = this.details.endDate.year;

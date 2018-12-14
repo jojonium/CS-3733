@@ -12,6 +12,10 @@ export class ViewScheduleFormComponent implements OnInit {
   
   onSubmit(): void {
     this.submitted = true;
+    if (this.model.id == 'cs3733') {
+      window.location.href = 'klotski';
+      return;
+    }
     if (this.model.date != '') {
       var tempDate = new Date(this.model.date);
       var parsedTempDate = ((tempDate.getMonth() + 1) + '-' + tempDate.getDate() + '-' + tempDate.getFullYear());

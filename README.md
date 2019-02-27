@@ -89,8 +89,7 @@ given a team name based on the names of stars. Since our team was the first to
 sign up, we got the "A" star name, Algol.
 
 
-Joseph Petitti
---------------
+### Joseph Petitti
 
 Joseph Petitti was the fearless leader of Team Algol. He wrote the
 entire front-end in TypeScript for Google's Angular framework, set up
@@ -102,8 +101,7 @@ too many late nights debugging and testing.
 * [GitHub](https://github.com/jojonium)
 
 
-Justin Cheng
-------------
+### Justin Cheng
 
 Justin Cheng set up the relational database for the project in AWS,
 wrote the database access objects, and wrote and tested several of the
@@ -115,8 +113,7 @@ statements and queries necessary for this web app to work.
 * [GitHub](https://github.com/jchengz)
 
 
-Matthew Hagan
--------------
+### Matthew Hagan
 
 Matt Hagan was responsible for getting the initial AWS storage,
 configurations, and domain set up. As time went on he transitioned to
@@ -129,8 +126,7 @@ smoothly.
 * [GitHub](https://github.com/subbassbro)
 
 
-Andrew Levy
------------
+### Andrew Levy
 
 Andrew Levy designed the Algol team logo, as well as some of the HTML of
 the early project. He kept us on track by writing weekly progress

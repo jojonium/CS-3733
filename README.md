@@ -10,8 +10,6 @@ About
 
 ![The front page of our web app](images/algol-front-page.png)
 
-The front page of the Algol meeting scheduler
-
 This project was done for CS 3733: Software Engineering. It was
 completed by a [team](#team) of four students in about three weeks. The
 goal was to create a fully functional web application, including a
@@ -45,7 +43,6 @@ are scheduled for.
 
 ![Standard schedule view](images/algol-schedule-view.png)
 
-The schedule view that participants can see
 
 ### Participants
 
@@ -75,8 +72,6 @@ RDS, through JDBC.
 
 ![The view for searching for open time slots](images/algol-search-view.png)
 
-The view from which participants can search for open time slots
-
 ### Front-End
 
 The front-end was done in Google's Angular framework, using Google's
@@ -94,8 +89,6 @@ given a team name based on the names of stars. Since our team was the first to
 sign up, we got the "A" star name, Algol.
 
 
-![Joseph Petitti](images/joseph-petitti-portrait.jpg)
-
 Joseph Petitti
 --------------
 
@@ -109,8 +102,6 @@ too many late nights debugging and testing.
 * [GitHub](https://github.com/jojonium)
 
 
-![Justin Cheng](images/justin-cheng-portrait.jpg)
-
 Justin Cheng
 ------------
 
@@ -123,8 +114,6 @@ statements and queries necessary for this web app to work.
 
 * [GitHub](https://github.com/jchengz)
 
-
-![Matthew Hagan](images/matthew-hagan-portrait.jpg)
 
 Matthew Hagan
 -------------
@@ -140,8 +129,6 @@ smoothly.
 * [GitHub](https://github.com/subbassbro)
 
 
-![Andrew Levy](images/andrew-levy-portrait.jpg)
-
 Andrew Levy
 -----------
 
@@ -150,6 +137,6 @@ the early project. He kept us on track by writing weekly progress
 reports. He also wrote, tested, and debugged many of the lambda
 functions. Also, Andy wanted everyone to know that he has hamsters.
 
-*[Website](http://andrew-levy.com)
+* [Website](http://andrew-levy.com)
 
-*[GitHub](https://github.com/AndrewLevy395)
+* [GitHub](https://github.com/AndrewLevy395)
